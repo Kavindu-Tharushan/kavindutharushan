@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>Flappy Bird</title>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+
+    body {
+      font-family: 'Geist Mono', monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      background-color: var(--bg-color);
+    }
+
+    h1, h2, h3 { font-weight: 700; }
+    h1 { margin-top: 0; }
+    h2 { margin-top: 2rem; }
+
+    a { color: var(--text-color); text-decoration: none; }
+    a:hover { opacity: .6; }
+
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    nav a {
+      margin-right: 1rem;
+      opacity: .4;
+    }
+
+    nav a.active { opacity: 1; }
+
+    .theme-toggle {
+      cursor: pointer;
+      opacity: .4;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-family: 'Geist Mono', monospace;
+      font-size: .75rem;
+      padding: 0;
+    }
+
+    .theme-toggle:hover { opacity: 1; }
+
+    /* ── Page layout ── */
+    .page-header p {
+      opacity: 0.8;
+      margin-top: 0.75rem;
+      margin-bottom: 2rem;
+      max-width: 70ch;
+    }
+
+    /* ── Prose sections ── */
+    .section { margin-bottom: 2rem; }
+
+    .section p {
+      margin-top: 0.5rem;
+      opacity: 0.8;
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      line-height: 1.7;
+    }
+
+    code { font-family: 'Geist Mono', monospace; font-size: 0.7rem; }
+
+    /* ── Concept table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--border-color);
+      font-size: 0.7rem;
+    }
+
+    th { font-weight: 700; }
+
+    /* ── Game canvas wrapper ── */
+    .game-figure {
+      margin: 0;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem;
+    }
+
+    #game-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--bg-color);
+      cursor: default;
+    }
+
+    .game-figcaption {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .game-score {
+      font-weight: 700;
+      min-width: 6ch;
+    }
+
+    .game-controls-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-color);
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 0.2rem 0.55rem;
+      cursor: pointer;
+      line-height: 1.6;
+    }
+
+    .btn:hover { opacity: 0.6; }
+    .btn.active {
+      background: var(--text-color);
+      color: var(--bg-color);
+    }
+
+    /* ── Flap button ── */
+    #flap-btn {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-color);
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 0.2rem 0.9rem;
+      cursor: pointer;
+      line-height: 1.6;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #flap-btn:active,
+    #flap-btn.pressed {
+      background: var(--text-color);
+      color: var(--bg-color);
+    }
+
+    /* ── Speed label ── */
+    .speed-label { opacity: 0.5; }
+
+    /* ── Status line ── */
+    .game-status {
+      text-align: center;
+      opacity: 0.5;
+      font-size: 0.65rem;
+      margin-top: 0.3rem;
+    }
+
+    /* ── Sidenote style ── */
+    .sidenote {
+      border-left: 2px solid var(--border-color);
+      padding-left: 0.75rem;
+      opacity: 0.65;
+      margin: 0.75rem 0;
+      font-size: 0.7rem;
+    }
+
+    /* ── Section divider ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Nav -->
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <a href="/">[/]</a>
+        <a href="/blog.html">[/blog]</a>
+        <a href="/photos.html">[/photos]</a>
+        <a href="/resume.html">[/resume]</a>
+        <a href="/notes.html">[/notes]</a>
+        <a href="/coolstuff.html" class="active">[/cool stuff]</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display:none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ── Title ── -->
+    <div class="page-header">
+      <h1>Flappy Bird</h1>
+      <p>
+        One of the most addictive games ever made. Tap to flap and keep the bird airborne
+        while squeezing through gaps between pipes. Gravity pulls you down constantly —
+        every tap is a tiny burst of upward velocity against an endless fall.
+        Simple rules, brutally hard.
+      </p>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 1 — Physics
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Physics: Gravity and Velocity</h2>
+      <p>
+        The bird has a single vertical position <code>y</code> and a vertical velocity <code>vy</code>.
+        Every frame, gravity is added to <code>vy</code>, which is then added to <code>y</code>.
+        A tap sets <code>vy</code> to a fixed negative (upward) value — that's the entire physics model.
+      </p>
+      <pre><code>const GRAVITY  = 0.35   // added to vy each frame
+const FLAP_VEL = -6.5   // vy on tap (negative = up)
+
+vy += GRAVITY
+y  += vy</code></pre>
+      <div class="sidenote">
+        The bird never moves horizontally — the world scrolls left instead. Keeping the bird
+        at a fixed x-coordinate simplifies collision detection considerably.
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 2 — Pipes
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Pipes: Scrolling Obstacles</h2>
+      <p>
+        Pipes spawn at the right edge at a random gap position and scroll left at a fixed speed.
+        Each pipe is just two rectangles — a top slab and a bottom slab — with a gap in between.
+        When a pipe leaves the left edge it is removed; a new one is queued at a fixed interval.
+      </p>
+      <pre><code>const PIPE_SPEED  = 2.4   // pixels per frame
+const PIPE_WIDTH  = 30    // px
+const GAP_HEIGHT  = 110   // px between top and bottom pipe
+const PIPE_EVERY  = 90    // frames between spawns
+
+pipe.x -= PIPE_SPEED      // scroll each frame
+if (pipe.x + PIPE_WIDTH < 0) pipes.shift()  // cull</code></pre>
+      <div class="sidenote">
+        Gap position is randomised between 20 % and 70 % of canvas height so it's always reachable
+        but never trivially easy.
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 3 — Collision
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Collision Detection</h2>
+      <p>The game ends in two cases, both checked every frame before drawing.</p>
+      <pre><code>// Floor / ceiling collision
+if (bird.y - BIRD_R < 0 || bird.y + BIRD_R > H) die()
+
+// Pipe collision (AABB vs circle approximation)
+const inX = bird.x + BIRD_R > pipe.x &&
+            bird.x - BIRD_R < pipe.x + PIPE_WIDTH
+const inGap = bird.y - BIRD_R > pipe.gapTop &&
+              bird.y + BIRD_R < pipe.gapTop + GAP_HEIGHT
+if (inX && !inGap) die()</code></pre>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 4 — Scoring
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Scoring</h2>
+      <p>
+        One point is awarded each time the bird's x-coordinate passes a pipe's right edge.
+        A boolean flag on each pipe prevents double-counting.
+      </p>
+      <pre><code>if (!pipe.scored && bird.x > pipe.x + PIPE_WIDTH) {
+  pipe.scored = true
+  score++
+}</code></pre>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         THE GAME
+    ══════════════════════════════════════ -->
+    <hr>
+
+    <div class="section">
+      <h2>Play</h2>
+      <p>Space or ↑ on desktop. Flap button on mobile. Hit Start to play.</p>
+    </div>
+
+    <section aria-label="Flappy Bird game" style="margin-bottom: 2rem;">
+      <figure class="game-figure">
+        <canvas id="game-canvas" width="800" height="400"></canvas>
+
+        <figcaption class="game-figcaption">
+          <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+            <span class="game-score">score: <span id="score-display">0</span></span>
+            <span class="speed-label">difficulty:</span>
+            <button class="btn" id="btn-easy"   data-diff="easy">easy</button>
+            <button class="btn active" id="btn-normal" data-diff="normal">normal</button>
+            <button class="btn" id="btn-hard"   data-diff="hard">hard</button>
+          </div>
+          <div class="game-controls-row">
+            <button class="btn" id="start-btn">Start</button>
+            <button id="flap-btn">flap ↑</button>
+          </div>
+        </figcaption>
+
+        <div class="game-status" id="game-status">space or ↑ to flap · pass pipes to score</div>
+      </figure>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         SECTION 5 — Concepts at a glance
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Concepts at a Glance</h2>
+      <table>
+        <thead>
+          <tr><th>Concept</th><th>Implementation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Physics</td><td>vy += gravity each frame; tap sets vy to FLAP_VEL</td></tr>
+          <tr><td>Game loop</td><td>requestAnimationFrame, cancelled on game over</td></tr>
+          <tr><td>Pipes</td><td>Array of {x, gapTop, scored}, scrolled left each frame</td></tr>
+          <tr><td>Input</td><td>keydown (Space / ↑) + Flap button + canvas tap</td></tr>
+          <tr><td>Rendering</td><td>canvas.getContext("2d") draw calls each frame</td></tr>
+          <tr><td>Collision</td><td>Floor/ceiling bounds + per-pipe AABB vs circle</td></tr>
+          <tr><td>Scoring</td><td>Flag set when bird x passes pipe right edge</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
+  <script>
+    // ── Theme toggle ──────────────────────────────────────
+    (function () {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      theme === 'dark'
+        ? document.documentElement.classList.add('dark')
+        : document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', theme);
+    })();
+
+    function initThemeToggle() {
+      const btn  = document.getElementById('themeToggle');
+      const sun  = document.querySelector('.theme-toggle-light');
+      const moon = document.querySelector('.theme-toggle-dark');
+
+      function syncIcons() {
+        const dark = document.documentElement.classList.contains('dark');
+        if (sun)  sun.style.display  = dark ? 'none'   : 'inline';
+        if (moon) moon.style.display = dark ? 'inline' : 'none';
+      }
+      syncIcons();
+      btn?.addEventListener('click', () => {
+        const dark = document.documentElement.classList.contains('dark');
+        dark
+          ? (document.documentElement.classList.remove('dark'), localStorage.setItem('theme', 'light'))
+          : (document.documentElement.classList.add('dark'),    localStorage.setItem('theme', 'dark'));
+        syncIcons();
+      });
+    }
+    initThemeToggle();
+
+    // ── Flappy Bird game ──────────────────────────────────
+    (function () {
+      const canvas   = document.getElementById('game-canvas');
+      const ctx      = canvas.getContext('2d');
+      const scoreEl  = document.getElementById('score-display');
+      const statusEl = document.getElementById('game-status');
+      const startBtn = document.getElementById('start-btn');
+      const flapBtn  = document.getElementById('flap-btn');
+
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // ── Difficulty presets ─────────────────────────────
+      const PRESETS = {
+        easy:   { gravity: 0.28, flapVel: -6.8, pipeSpeed: 2.0, gapHeight: 130 },
+        normal: { gravity: 0.35, flapVel: -6.5, pipeSpeed: 2.4, gapHeight: 110 },
+        hard:   { gravity: 0.42, flapVel: -6.2, pipeSpeed: 3.1, gapHeight:  90 },
+      };
+
+      let diff = 'normal';
+      let cfg  = { ...PRESETS[diff] };
+
+      const BIRD_X    = 120;
+      const BIRD_R    = 8;
+      const PIPE_W    = 30;
+      const PIPE_EVERY = 90;   // frames
+
+      let rafId   = null;
+      let phase   = 'idle';   // idle | running | dead
+      let frame   = 0;
+
+      const g = {
+        bird:  { y: H / 2, vy: 0 },
+        pipes: [],
+        score: 0,
+      };
+
+      // ── Helpers ────────────────────────────────────────
+      function fg(alpha) {
+        const dark = document.documentElement.classList.contains('dark');
+        return dark
+          ? `rgba(229,229,229,${alpha})`
+          : `rgba(0,0,0,${alpha})`;
+      }
+
+      function bgColor() {
+        return getComputedStyle(document.documentElement)
+          .getPropertyValue('--bg-color').trim() || '#fff';
+      }
+
+      function spawnPipe() {
+        const minGapTop = H * 0.15;
+        const maxGapTop = H * 0.65;
+        const gapTop = minGapTop + Math.random() * (maxGapTop - minGapTop);
+        g.pipes.push({ x: W + PIPE_W, gapTop, scored: false });
+      }
+
+      function initGame() {
+        g.bird  = { y: H / 2, vy: 0 };
+        g.pipes = [];
+        g.score = 0;
+        frame   = 0;
+        cfg     = { ...PRESETS[diff] };
+        spawnPipe();
+      }
+
+      // ── Flap ───────────────────────────────────────────
+      function flap() {
+        if (phase === 'idle' || phase === 'dead') { startGame(); return; }
+        g.bird.vy = cfg.flapVel;
+      }
+
+      // ── Game loop ──────────────────────────────────────
+      function loop() {
+        update();
+        render();
+        if (phase === 'running') rafId = requestAnimationFrame(loop);
+      }
+
+      function update() {
+        frame++;
+
+        // Physics
+        g.bird.vy += cfg.gravity;
+        g.bird.y  += g.bird.vy;
+
+        // Floor / ceiling
+        if (g.bird.y - BIRD_R < 0 || g.bird.y + BIRD_R > H) {
+          endGame(); return;
+        }
+
+        // Spawn pipes
+        if (frame % PIPE_EVERY === 0) spawnPipe();
+
+        // Update pipes
+        for (let i = g.pipes.length - 1; i >= 0; i--) {
+          const p = g.pipes[i];
+          p.x -= cfg.pipeSpeed;
+
+          // Cull off-screen
+          if (p.x + PIPE_W < 0) { g.pipes.splice(i, 1); continue; }
+
+          // Scoring
+          if (!p.scored && BIRD_X > p.x + PIPE_W) {
+            p.scored = true;
+            g.score++;
+            scoreEl.textContent = g.score;
+          }
+
+          // Collision
+          const inX   = BIRD_X + BIRD_R > p.x && BIRD_X - BIRD_R < p.x + PIPE_W;
+          const inGap = g.bird.y - BIRD_R > p.gapTop &&
+                        g.bird.y + BIRD_R < p.gapTop + cfg.gapHeight;
+          if (inX && !inGap) { endGame(); return; }
+        }
+      }
+
+      // ── Rendering ──────────────────────────────────────
+      function render() {
+        // Background
+        ctx.fillStyle = bgColor();
+        ctx.fillRect(0, 0, W, H);
+
+        // Subtle horizontal guide lines
+        ctx.strokeStyle = fg(0.05);
+        ctx.lineWidth   = 0.5;
+        for (let y = 0; y <= H; y += 20) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+        }
+
+        // Pipes
+        ctx.fillStyle = fg(0.85);
+        for (const p of g.pipes) {
+          // Top pipe
+          ctx.fillRect(p.x, 0, PIPE_W, p.gapTop);
+          // Bottom pipe
+          const botTop = p.gapTop + cfg.gapHeight;
+          ctx.fillRect(p.x, botTop, PIPE_W, H - botTop);
+          // Pipe caps (slightly wider)
+          const capH = 8, capW = PIPE_W + 6;
+          ctx.fillRect(p.x - 3, p.gapTop - capH, capW, capH);
+          ctx.fillRect(p.x - 3, botTop, capW, capH);
+        }
+
+        // Bird — small filled circle with a subtle wing detail
+        const bx = BIRD_X, by = g.bird.y;
+        // Body
+        ctx.fillStyle = fg(0.9);
+        ctx.beginPath();
+        ctx.arc(bx, by, BIRD_R, 0, Math.PI * 2);
+        ctx.fill();
+        // Eye
+        ctx.fillStyle = bgColor();
+        ctx.beginPath();
+        ctx.arc(bx + 3, by - 2, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+        // Beak
+        ctx.fillStyle = fg(0.6);
+        ctx.beginPath();
+        ctx.moveTo(bx + BIRD_R - 1, by);
+        ctx.lineTo(bx + BIRD_R + 5, by + 1);
+        ctx.lineTo(bx + BIRD_R - 1, by + 3);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function renderDead() {
+        render();
+        ctx.fillStyle = fg(0.04);
+        ctx.fillRect(0, 0, W, H);
+        ctx.save();
+        ctx.font = '700 11px "Geist Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = fg(0.5);
+        ctx.fillText(`game over · ${g.score} pts`, W / 2, H / 2);
+        ctx.restore();
+      }
+
+      function renderIdle() {
+        ctx.fillStyle = bgColor();
+        ctx.fillRect(0, 0, W, H);
+        ctx.save();
+        ctx.font = '700 11px "Geist Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = fg(0.3);
+        ctx.fillText('press start', W / 2, H / 2);
+        ctx.restore();
+      }
+      renderIdle();
+
+      // ── Start / End ────────────────────────────────────
+      function startGame() {
+        if (rafId) cancelAnimationFrame(rafId);
+        initGame();
+        scoreEl.textContent = '0';
+        phase = 'running';
+        startBtn.textContent = 'Restart';
+        statusEl.textContent = 'space or ↑ to flap · pass pipes to score';
+        rafId = requestAnimationFrame(loop);
+      }
+
+      function endGame() {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId  = null;
+        phase  = 'dead';
+        startBtn.textContent = 'Restart';
+        statusEl.textContent = `game over · score: ${g.score} · press restart`;
+        renderDead();
+      }
+
+      // ── Input ──────────────────────────────────────────
+      document.addEventListener('keydown', e => {
+        if (e.key === ' ' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          flap();
+        }
+      });
+
+      // Flap button
+      const fireFlap = () => {
+        flap();
+        flapBtn.classList.add('pressed');
+        setTimeout(() => flapBtn.classList.remove('pressed'), 120);
+      };
+      flapBtn.addEventListener('click', fireFlap);
+      flapBtn.addEventListener('touchstart', e => { e.preventDefault(); fireFlap(); }, { passive: false });
+
+      // Canvas tap / click
+      canvas.addEventListener('click',      flap);
+      canvas.addEventListener('touchstart', e => { e.preventDefault(); flap(); }, { passive: false });
+
+      // Start / restart
+      startBtn.addEventListener('click', startGame);
+
+      // Difficulty buttons
+      document.querySelectorAll('[data-diff]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          diff = btn.dataset.diff;
+          document.querySelectorAll('[data-diff]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (phase === 'running') startGame();
+        });
+      });
+
+      // Re-render on theme change
+      new MutationObserver(() => {
+        if (phase === 'idle') renderIdle();
+        else if (phase === 'dead') renderDead();
+        else render();
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    })();
+  </script> <br>
+  <a class="back-link" href="/coolstuff.html">[go back to /cool stuff]</a>
+</body>
+</html>

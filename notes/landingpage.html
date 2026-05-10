@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Landing Page - Kavindu Tharushan</title>
+    <script>
+        const theme = (() => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) return localStorage.getItem('theme');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+            return 'light';
+        })();
+        if (theme === 'light') document.documentElement.classList.remove('dark');
+        else document.documentElement.classList.add('dark');
+        window.localStorage.setItem('theme', theme);
+    </script>
+    <style>
+        :root{--bg-color:#fff;--text-color:#000;--border-color:#afafaf;--code-bg:#f5f5f5;--subtle:#e8e8e8}
+        .dark{--bg-color:#0a0a0a;--text-color:#e5e5e5;--border-color:#404040;--code-bg:#1a1a1a;--subtle:#222}
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{overflow-y:scroll;background-color:var(--bg-color)}
+        body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;background-color:var(--bg-color)}
+        a{color:var(--text-color);text-decoration:none}
+        a:hover{opacity:.6}
+        nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
+        nav a{margin-right:1rem;opacity:.4}
+        nav a.active{opacity:1}
+        .theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}
+        .theme-toggle:hover{opacity:1}
+        .back{font-size:11px;opacity:.4;display:inline-block;margin-bottom:1.2rem}
+        h1.title{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:.5rem}
+        .meta{font-size:11px;opacity:.35;margin-bottom:2rem}
+        .divider{height:1px;background:var(--border-color);margin:2rem 0;opacity:.4}
+        .prose{font-size:14px;line-height:1.85}
+        .prose p{margin-bottom:1.1rem;opacity:.88}
+        .prose h2{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.4;margin:2.5rem 0 .7rem;border-bottom:1px solid var(--subtle);padding-bottom:.4rem}
+        .prose ul{padding-left:1.2rem;margin-bottom:1rem}
+        .prose li{margin-bottom:.3rem;font-size:14px;opacity:.88}
+        .prose strong{font-weight:700}
+        pre{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto}
+        pre code{font-size:11px;line-height:1.7;opacity:.85}
+        code{font-family:Geist Mono,monospace;font-size:11px;background:var(--code-bg);padding:1px 5px;border-radius:3px;border:1px solid var(--subtle)}
+        table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:12px}
+        th{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--border-color);opacity:.45;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+        td{padding:.5rem .7rem;border-bottom:1px solid var(--subtle);opacity:.85;vertical-align:top}
+        tr:last-child td{border-bottom:none}
+        /* wireframe */
+        .wireframe{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0;font-size:11px}
+        .wf-section{padding:.6rem 1rem;border-bottom:1px solid var(--subtle);cursor:pointer;transition:background .15s;display:flex;justify-content:space-between;align-items:center}
+        .wf-section:last-child{border-bottom:none}
+        .wf-section:hover{background:var(--code-bg)}
+        .wf-section.selected{background:var(--code-bg);border-left:2px solid var(--text-color)}
+        .wf-label{font-weight:700}
+        .wf-hint{font-size:10px;opacity:.35}
+        .wf-detail{padding:.9rem 1rem;background:var(--code-bg);border-top:1px solid var(--subtle);font-size:12px;line-height:1.6;opacity:.85;display:none}
+        .wf-detail.show{display:block}
+        /* fold sim */
+        .fold-sim{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0}
+        .fold-controls{display:flex;gap:.5rem;padding:.8rem 1rem;border-bottom:1px solid var(--subtle);background:var(--code-bg);flex-wrap:wrap}
+        .fold-btn{font-family:Geist Mono,monospace;font-size:11px;padding:3px 10px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.5}
+        .fold-btn.active{opacity:1;border-color:var(--text-color)}
+        .fold-body{padding:1rem}
+        .fold-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        .fold-section-label{font-size:10px;opacity:.35;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+        .fold-items{list-style:none;padding:0}
+        .fold-items li{font-size:12px;padding:3px 0;opacity:.7}
+        /* effects */
+        .effects-nav{display:flex;gap:.4rem;flex-wrap:wrap;margin:.8rem 0}
+        .effect-btn{font-family:Geist Mono,monospace;font-size:10px;padding:3px 10px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.5}
+        .effect-btn.active{opacity:1;border-color:var(--text-color)}
+        .effect-preview{height:100px;border:1px solid var(--subtle);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--code-bg)}
+        .effect-desc{font-size:12px;opacity:.65;margin-top:.6rem;line-height:1.6}
+        /* animations */
+        @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .grad-text{font-size:1.6rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6,#06b6d4,#a855f7);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradShift 3s ease infinite}
+        @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+        .shimmer-btn{position:relative;padding:.55rem 1.4rem;border-radius:6px;border:none;cursor:pointer;font-family:Geist Mono,monospace;font-size:13px;font-weight:700;background:linear-gradient(90deg,#111 40%,#555 50%,#111 60%);background-size:200%;color:#fff;animation:shimmer 2s linear infinite}
+        @property --angle{syntax:'<angle>';initial-value:0deg;inherits:false}
+        @keyframes beamRotate{0%{--angle:0deg}100%{--angle:360deg}}
+        .border-beam-wrap{padding:1px;border-radius:8px;background:conic-gradient(from var(--angle),transparent 70%,#a855f7,#3b82f6,transparent);animation:beamRotate 2s linear infinite}
+        .border-beam-inner{background:var(--code-bg);border-radius:7px;padding:.4rem 1.2rem;font-size:13px;font-weight:700}
+        .ticker-num{font-size:2.2rem;font-weight:700;font-variant-numeric:tabular-nums}
+        @keyframes marqueeAnim{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .marquee-track{overflow:hidden;width:100%}
+        .marquee-inner{display:flex;gap:2rem;animation:marqueeAnim 7s linear infinite;white-space:nowrap}
+        .marquee-item{font-size:12px;opacity:.5;flex-shrink:0}
+        footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border-color);opacity:.6;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+                <a href="/">[/]</a>
+                <a href="/blog.html">[/blog]</a>
+                <a href="/photos.html">[/photos]</a>
+                <a href="/resume.html">[/resume]</a>
+                <a href="/notes.html" class="active">[/notes]</a>
+                <a href="/coolstuff.html">[/cool stuff]</a>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-toggle-light">[☀]</span>
+                <span class="theme-toggle-dark" style="display:none">[☾]</span>
+            </button>
+        </div>
+    </nav>
+    <script>
+        const s=document.getElementById('themeToggle'),tl=document.querySelector('.theme-toggle-light'),td=document.querySelector('.theme-toggle-dark');
+        function syncToggle(){const d=document.documentElement.classList.contains('dark');tl.style.display=d?'none':'inline';td.style.display=d?'inline':'none';}
+        syncToggle();
+        s.addEventListener('click',()=>{document.documentElement.classList.contains('dark')?(document.documentElement.classList.remove('dark'),localStorage.setItem('theme','light')):(document.documentElement.classList.add('dark'),localStorage.setItem('theme','dark'));syncToggle();});
+    </script>
+
+    <main>
+        <a href="/notes.html" class="back">← /notes</a>
+        <h1 class="title">Landing Page</h1>
+        <div class="meta">2026.03.02 &nbsp;·&nbsp; 8 min read</div>
+
+        <div class="prose">
+            <p>With AI growing increasingly powerful, the barrier to building has essentially vanished. Anyone can be a maker now. In that world, your landing page is no longer just a digital brochure — it is your pitch, your storefront, and often your only shot at a first impression before someone moves on.</p>
+            <p>A landing page is a lie — in the best possible way. It shows your product in its most optimistic form: the clearest headline you can write, the most believable proof you can show, the most frictionless path to one action. It is not the product. It is the argument that the product is worth trying.</p>
+
+            <h2>What a landing page actually is</h2>
+            <p>A landing page is a focused web page with a single conversion goal: a sign-up, a purchase, a download, a demo request. Unlike a homepage — which tries to serve every visitor — a landing page arrives with a specific audience already in mind.</p>
+<pre><code>// Homepage: general entry point
+// Tries to answer: "Who are you?"
+
+// Landing page: targeted entry point
+// Tries to answer: "Why should I try this?"
+// Audience: a visitor with a specific intent</code></pre>
+            <p>Success is measured as a conversion rate — the percentage of visitors who complete the one target action. Everything on the page either helps that number or hurts it.</p>
+
+            <h2>The anatomy</h2>
+            <p>Every effective landing page is built from the same sections, in the same order. Click any row to see what it does and why it matters.</p>
+        </div>
+
+        <div class="wireframe">
+            <div class="wf-section" onclick="selectWf(this,'Navbar','Navigation sits at the top but should be minimal on landing pages. Remove outbound links — every exit is a lost conversion. Keep only your logo and the primary CTA button.')">
+                <span class="wf-label">Navbar</span><span class="wf-hint">click to read →</span>
+            </div>
+            <div class="wf-section" onclick="selectWf(this,'Hero','The most important section. Everything above the fold. Your headline must communicate the core value in under five seconds. Sub-headline adds who-it\'s-for context. One CTA captures intent. Hero copy is responsible for ~80% of whether a visitor keeps reading.')">
+                <span class="wf-label">Hero</span><span class="wf-hint">click to read →</span>
+            </div>
+            <div class="wf-section" onclick="selectWf(this,'Social Proof','Trust is expensive to build — social proof borrows it. Logos from companies the visitor recognises, or testimonials with specific numeric claims. Placement matters: this must appear early, before the visitor has already decided to leave.')">
+                <span class="wf-label">Social Proof</span><span class="wf-hint">click to read →</span>
+            </div>
+            <!-- Fixed Features Section -->
+<div class="wf-section" onclick="selectWf(this,'Features','Details for visitors who are already interested. Feature copy should always answer &quot;so what does that mean for me?&quot; — not describe the capability itself, but the outcome it enables.')">
+    <span class="wf-label">Features</span><span class="wf-hint">click to read →</span>
+</div>
+
+<!-- Fixed Testimonials Section -->
+<div class="wf-section" onclick="selectWf(this,'Testimonials','Specific, human proof. The most effective testimonials name a real outcome: &quot;We reduced onboarding time by 40%&quot; beats &quot;Great product, highly recommend.&quot; Vague praise carries no weight.')">
+    <span class="wf-label">Testimonials</span><span class="wf-hint">click to read →</span>
+</div>
+            <div class="wf-section" onclick="selectWf(this,'Footer CTA','A second chance to convert visitors who scrolled all the way down. Repeat the primary CTA. Visitors who reach the footer are high-intent — they read everything and still did not leave.')">
+                <span class="wf-label">Footer CTA</span><span class="wf-hint">click to read →</span>
+            </div>
+            <div class="wf-detail" id="wf-detail"></div>
+        </div>
+
+        <div class="prose">
+            <h2>Above the fold</h2>
+            <p>The fold is the line below which a visitor cannot see without scrolling. On the web it is not fixed — it shifts with screen size, resolution, and zoom. The only safe assumption: your hero must make the full argument before a single scroll happens.</p>
+<pre><code>const foldHeight = {
+  mobile:  640,   // px — only navbar + hero guaranteed visible
+  laptop:  768,
+  desktop: 1080,
+}
+
+// The practical rule:
+// assume the fold sits right below your hero</code></pre>
+            <p>Switch viewports below to see which sections land above the fold on each device.</p>
+        </div>
+
+        <div class="fold-sim">
+            <div class="fold-controls">
+                <button class="fold-btn active" onclick="setViewport('mobile',this)">mobile 360px</button>
+                <button class="fold-btn" onclick="setViewport('laptop',this)">laptop 768px</button>
+                <button class="fold-btn" onclick="setViewport('desktop',this)">desktop 1080px</button>
+            </div>
+            <div class="fold-body">
+                <div class="fold-col">
+                    <div>
+                        <div class="fold-section-label">above fold</div>
+                        <ul class="fold-items" id="fold-above"></ul>
+                    </div>
+                    <div>
+                        <div class="fold-section-label">below fold</div>
+                        <ul class="fold-items" id="fold-below"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>Writing the hero</h2>
+            <p>The hero is a five-second interview. Most visitors decide to stay or leave based on what loads in the viewport. A hero contains exactly three things:</p>
+            <ul>
+                <li><strong>Headline</strong> — one sentence stating the outcome the product delivers. Not the features. Not the process. The outcome.</li>
+                <li><strong>Sub-headline</strong> — one or two sentences of context: who it's for, how it works, why now.</li>
+                <li><strong>Primary CTA</strong> — one button. The single action you most want the visitor to take.</li>
+            </ul>
+<pre><code>// Weak: feature-led
+const weak = "AI-powered task management with integrations"
+
+// Strong: outcome-led
+const strong = "Your team ships faster. Without the meetings."
+
+// Weak tells you what the product does.
+// Strong tells you what your life looks like after.</code></pre>
+
+            <h2>Social proof</h2>
+            <p>Trust is expensive to build from scratch. Social proof borrows it from parties the visitor already trusts.</p>
+            <table>
+                <tr><th>Format</th><th>Works when</th></tr>
+                <tr><td>Company logos</td><td>Recognisable names are available</td></tr>
+                <tr><td>Testimonial quotes</td><td>Specific, numeric claims are possible</td></tr>
+                <tr><td>Usage numbers</td><td>Numbers are large enough to be meaningful</td></tr>
+                <tr><td>Press mentions</td><td>Publication is known to the target audience</td></tr>
+            </table>
+
+            <h2>Magic UI effects</h2>
+            <p>Magic UI is an open-source library of 150+ animated components built on React, TypeScript, Tailwind, and Motion. Step through the effects below — each preview is built from scratch using CSS keyframes.</p>
+        </div>
+
+        <div style="margin:1.5rem 0">
+            <div class="effects-nav">
+                <button class="effect-btn active" onclick="setEffect('gradient',this)">Gradient Text</button>
+                <button class="effect-btn" onclick="setEffect('shimmer',this)">Shimmer Button</button>
+                <button class="effect-btn" onclick="setEffect('beam',this)">Border Beam</button>
+                <button class="effect-btn" onclick="setEffect('ticker',this)">Number Ticker</button>
+                <button class="effect-btn" onclick="setEffect('marquee',this)">Marquee</button>
+            </div>
+            <div class="effect-preview" id="effect-preview"></div>
+            <div class="effect-desc" id="effect-desc"></div>
+        </div>
+
+        <div class="prose">
+<pre><code># Install via shadcn CLI
+npx shadcn@latest add "https://magicui.design/r/shimmer-button"
+npx shadcn@latest add "https://magicui.design/r/text-animate"
+npx shadcn@latest add "https://magicui.design/r/number-ticker"</code></pre>
+
+            <h2>The physics of attention</h2>
+            <p>Animation works by co-opting a hard-wired reflex. The human visual system is tuned to detect motion. Moving elements capture attention with almost no cognitive cost to the viewer. Used well, this is powerful. Used carelessly, it destroys credibility.</p>
+<pre><code>// Good: one animated element in a field of still ones
+const ctaShimmers          = true
+const heroGradientAnimates = true
+const everythingElseStatic = true   // ← this is the constraint
+
+// Bad: ambient motion everywhere
+const backgroundParticles  = true   // ← pulls eye from CTA
+const cardsHoverSway       = true   // ← visual noise</code></pre>
+            <p>The practical rule: animate at most one or two elements per viewport. Give everything else room to breathe.</p>
+
+            <h2>Conversion rate is a design problem</h2>
+            <p>Most teams treat conversion rate as a marketing problem. It is more accurately a design problem. Visitors convert when the page removes every reason not to.</p>
+            <table>
+                <tr><th>Failure</th><th>What it signals to the visitor</th></tr>
+                <tr><td>Weak headline</td><td>"I don't understand what this does"</td></tr>
+                <tr><td>No social proof</td><td>"I have no reason to trust this"</td></tr>
+                <tr><td>Multiple CTAs</td><td>"I don't know what they want me to do"</td></tr>
+                <tr><td>Feature-led copy</td><td>"So what does that mean for me?"</td></tr>
+                <tr><td>No fold awareness</td><td>"I didn't know there was more to see"</td></tr>
+            </table>
+            <p>The page does not need to be beautiful to convert. It needs to be clear.</p>
+        </div>
+    </main>
+
+    <div class="divider"></div>
+    <footer>
+        <div>
+            <a href="mailto:kvndu@outlook.com" style="margin-right:1rem">email</a>
+            <a href="https://www.linkedin.com/in/kvndu/" target="_blank" rel="noopener noreferrer" style="margin-right:1rem">linkedin</a>
+            <a href="https://www.instagram.com/kvndu/" target="_blank" rel="noopener noreferrer">instagram</a>
+        </div>
+        <div>@ 2026 Kavindu Tharushan</div>
+    </footer>
+
+    <script>
+        function selectWf(el, title, desc) {
+            document.querySelectorAll('.wf-section').forEach(s => s.classList.remove('selected'));
+            el.classList.add('selected');
+            const d = document.getElementById('wf-detail');
+            d.innerHTML = '<strong>' + title + '</strong><br><span style="opacity:.75">' + desc + '</span>';
+            d.classList.add('show');
+        }
+
+        const foldData = {
+            mobile:  { above: ['Navbar','Hero'], below: ['Social Proof','Features','Testimonials','Footer CTA'] },
+            laptop:  { above: ['Navbar','Hero','Social Proof'], below: ['Features','Testimonials','Footer CTA'] },
+            desktop: { above: ['Navbar','Hero','Social Proof','Features'], below: ['Testimonials','Footer CTA'] },
+        };
+        function setViewport(vp, btn) {
+            document.querySelectorAll('.fold-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const data = foldData[vp];
+            document.getElementById('fold-above').innerHTML = data.above.map(i => '<li>' + i + '</li>').join('');
+            document.getElementById('fold-below').innerHTML = data.below.map(i => '<li>' + i + '</li>').join('');
+        }
+        setViewport('mobile', document.querySelector('.fold-btn'));
+
+        const effects = {
+            gradient: {
+                html: '<span class="grad-text">Design Engineers</span>',
+                desc: 'Animates <code>background-position</code> on a wide gradient clipped to text using <code>background-clip: text</code>. No SVG, no canvas — pure CSS keyframe.'
+            },
+            shimmer: {
+                html: '<button class="shimmer-btn">Get Started</button>',
+                desc: 'A light gradient shifts left-to-right using <code>background-size: 200%</code> and a <code>background-position</code> keyframe animated at constant speed.'
+            },
+            beam: {
+                html: '<div class="border-beam-wrap"><div class="border-beam-inner">Border Beam</div></div>',
+                desc: 'A <code>conic-gradient</code> rotates via a CSS <code>@property</code>-animated custom property <code>--angle</code>. The inner div sits on top with matching background.'
+            },
+            ticker: {
+                html: '<span class="ticker-num" id="ticker-el">0</span>',
+                desc: 'An <code>IntersectionObserver</code> triggers a cubic-eased <code>requestAnimationFrame</code> count-up when the element enters the viewport.'
+            },
+            marquee: {
+                html: '<div class="marquee-track"><div class="marquee-inner"><span class="marquee-item">Navbar</span><span class="marquee-item">Hero</span><span class="marquee-item">Social Proof</span><span class="marquee-item">Features</span><span class="marquee-item">Testimonials</span><span class="marquee-item">Footer CTA</span><span class="marquee-item">Navbar</span><span class="marquee-item">Hero</span><span class="marquee-item">Social Proof</span><span class="marquee-item">Features</span><span class="marquee-item">Testimonials</span><span class="marquee-item">Footer CTA</span></div></div>',
+                desc: 'A duplicated list animates via <code>translateX</code> at constant speed. Duplication makes the loop seamless — when the first copy exits, the second is already in place.'
+            },
+        };
+        let tickerInterval = null;
+        function setEffect(key, btn) {
+            document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (tickerInterval) { clearInterval(tickerInterval); tickerInterval = null; }
+            const e = effects[key];
+            document.getElementById('effect-preview').innerHTML = e.html;
+            document.getElementById('effect-desc').innerHTML = e.desc;
+            if (key === 'ticker') {
+                let val = 0; const target = 12847;
+                tickerInterval = setInterval(() => {
+                    val = Math.min(val + Math.ceil((target - val) / 8), target);
+                    const el = document.getElementById('ticker-el');
+                    if (el) el.textContent = val.toLocaleString();
+                    if (val >= target) { clearInterval(tickerInterval); tickerInterval = null; }
+                }, 40);
+            }
+        }
+        setEffect('gradient', document.querySelector('.effect-btn'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Projects by Kavindu Tharushan">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>Kavindu Tharushan - Cool Stuff</title>
+  <script>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    })();
+    theme === 'dark'
+      ? document.documentElement.classList.add('dark')
+      : document.documentElement.classList.remove('dark');
+    window.localStorage.setItem('theme', theme);
+  </script>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { overflow-y: scroll; background-color: var(--bg-color); }
+
+    body {
+      font-family: 'Geist Mono', monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--bg-color);
+    }
+
+    h1, h2, h3, h4, h5, h6 { font-weight: 700; }
+    h1 { margin-top: 0; }
+
+    a { color: var(--text-color); text-decoration: none; }
+    a:hover { opacity: .6; }
+
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    nav a { margin-right: 1rem; opacity: .4; }
+    nav a.active { opacity: 1; }
+
+    .theme-toggle {
+      cursor: pointer; opacity: .4; background: none; border: none;
+      color: var(--text-color); font-family: 'Geist Mono', monospace;
+      font-size: .75rem; padding: 0;
+    }
+    .theme-toggle:hover { opacity: 1; }
+
+    .project-card {
+      display: block;
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      transition: opacity 0.15s;
+    }
+    .project-card:hover { opacity: 0.85; }
+    .project-card figure { margin: 0; }
+    .project-card canvas { display: block; width: 100%; height: auto; }
+
+    .project-card figcaption {
+      padding: 0.4rem 0.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <a href="/">[/]</a>
+        <a href="/blog.html">[/blog]</a>
+        <a href="/photos.html">[/photos]</a>
+        <a href="/resume.html">[/resume]</a>
+        <a href="/notes.html">[/notes]</a>
+        <a href="/projects.html" class="active">[/cool stuff]</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display: none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Cool Stuff</h1>
+    <p style="opacity: 0.8; margin-bottom: 2rem;">Click a preview to view the full project.</p>
+
+    <a href="coolstuff/snake.html" class="project-card" aria-label="Play Snake Game">
+      <figure>
+        <canvas id="snake-preview" width="800" height="400"></canvas>
+        <figcaption>
+          <span style="font-weight: 700;">Grid</span>
+          <span style="opacity:0.5;">2026</span>
+        </figcaption>
+      </figure>
+    </a>
+
+    <a href="coolstuff/space.html" class="project-card" aria-label="Play Void — space shooter">
+      <figure>
+        <canvas id="space-preview" width="800" height="400"></canvas>
+        <figcaption>
+          <span style="font-weight: 700;">Void</span>
+          <span style="opacity:0.5;">2026</span>
+        </figcaption>
+      </figure>
+    </a>
+
+    <a href="coolstuff/flappy.html" class="project-card" aria-label="Play Flappy Bird">
+      <figure>
+        <canvas id="flappy-preview" width="800" height="400"></canvas>
+        <figcaption>
+          <span style="font-weight: 700;">Flappy</span>
+          <span style="opacity:0.5;">2026</span>
+        </figcaption>
+      </figure>
+    </a>
+  </main>
+
+  <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: 0.6; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a>
+      <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+      <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+    </div>
+    <div>@ 2026 Kavindu Tharushan</div>
+  </footer>
+
+  <script>
+    /* ── Theme toggle ── */
+    (function () {
+      const btn  = document.getElementById('themeToggle');
+      const sun  = document.querySelector('.theme-toggle-light');
+      const moon = document.querySelector('.theme-toggle-dark');
+
+      function sync() {
+        const d = document.documentElement.classList.contains('dark');
+        if (sun)  sun.style.display  = d ? 'none'   : 'inline';
+        if (moon) moon.style.display = d ? 'inline' : 'none';
+      }
+      sync();
+      btn?.addEventListener('click', () => {
+        const d = document.documentElement.classList.contains('dark');
+        document.documentElement.classList.toggle('dark', !d);
+        localStorage.setItem('theme', d ? 'light' : 'dark');
+        sync();
+      });
+    })();
+
+    /* ── Snake preview ── */
+    (function () {
+      const canvas = document.getElementById('snake-preview');
+      const ctx    = canvas.getContext('2d');
+      const cell   = 16;
+      const cols   = Math.floor(canvas.width  / cell);
+      const rows   = Math.floor(canvas.height / cell);
+
+      let snake     = [{ x: Math.floor(cols / 2), y: Math.floor(rows / 2) }];
+      let direction = { x: 1, y: 0 };
+      let food      = rndFood();
+      let frame     = 0;
+
+      function rndFood() {
+        return { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) };
+      }
+
+      function isDark() { return document.documentElement.classList.contains('dark'); }
+
+      function draw() {
+        const bg = isDark() ? '#0a0a0a' : '#fff';
+        const fg = isDark() ? 'rgba(229,229,229,' : 'rgba(0,0,0,';
+
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Grid
+        ctx.strokeStyle = fg + '0.05)';
+        ctx.lineWidth = 0.5;
+        for (let x = 0; x <= cols; x++) {
+          ctx.beginPath(); ctx.moveTo(x * cell, 0); ctx.lineTo(x * cell, canvas.height); ctx.stroke();
+        }
+        for (let y = 0; y <= rows; y++) {
+          ctx.beginPath(); ctx.moveTo(0, y * cell); ctx.lineTo(canvas.width, y * cell); ctx.stroke();
+        }
+
+        // Food
+        ctx.fillStyle = fg + '0.5)';
+        ctx.beginPath();
+        ctx.arc(food.x * cell + cell / 2, food.y * cell + cell / 2, cell / 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Snake
+        const len = snake.length;
+        snake.forEach((seg, i) => {
+          const a = 0.25 + (1 - i / len) * 0.75;
+          ctx.fillStyle = fg + a + ')';
+          ctx.fillRect(seg.x * cell + 1, seg.y * cell + 1, cell - 2, cell - 2);
+        });
+
+        // AI tick every 3 frames
+        if (frame++ % 3 === 0) {
+          const head = { ...snake[0] };
+          if (head.x < food.x)      direction = { x: 1, y: 0 };
+          else if (head.x > food.x) direction = { x: -1, y: 0 };
+          else if (head.y < food.y) direction = { x: 0, y: 1 };
+          else                       direction = { x: 0, y: -1 };
+
+          head.x = (head.x + direction.x + cols) % cols;
+          head.y = (head.y + direction.y + rows) % rows;
+          snake.unshift(head);
+
+          if (head.x === food.x && head.y === food.y) {
+            food = rndFood();
+          } else {
+            snake.pop();
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ── Space preview ── */
+    (function () {
+      const canvas = document.getElementById('space-preview');
+      const ctx    = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+
+      // Stars
+      const stars = Array.from({ length: 70 }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        r: Math.random() * 1.2 + 0.3,
+        a: Math.random() * 0.35 + 0.05,
+        speed: Math.random() * 0.25 + 0.05,
+      }));
+
+      // Demo asteroids
+      function randBetween(lo, hi) { return lo + Math.random() * (hi - lo); }
+
+      function makeAst() {
+        const sides = Math.floor(randBetween(6, 10));
+        const r = randBetween(14, 36);
+        const verts = Array.from({ length: sides }, (_, i) => {
+          const a = (i / sides) * Math.PI * 2;
+          const rv = r * randBetween(0.70, 1.20);
+          return { x: Math.cos(a) * rv, y: Math.sin(a) * rv };
+        });
+        const angle = Math.random() * Math.PI * 2;
+        const speed = randBetween(0.4, 1.0);
+        const edge  = Math.floor(Math.random() * 4);
+        let x, y;
+        if (edge === 0)      { x = Math.random() * W; y = -50; }
+        else if (edge === 1) { x = W + 50; y = Math.random() * H; }
+        else if (edge === 2) { x = Math.random() * W; y = H + 50; }
+        else                 { x = -50; y = Math.random() * H; }
+        return { x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, r, rot: 0, rotSpeed: randBetween(-0.02, 0.02), verts };
+      }
+
+      let asteroids = Array.from({ length: 8 }, makeAst);
+
+      // Demo ship (auto-pilot: circles slowly)
+      const ship = { angle: 0 };
+      let frame = 0;
+      const bullets = [];
+
+      function isDark() { return document.documentElement.classList.contains('dark'); }
+      function fg(a)    { return isDark() ? `rgba(229,229,229,${a})` : `rgba(0,0,0,${a})`; }
+      function bg()     { return isDark() ? '#0a0a0a' : '#fff'; }
+
+      function draw() {
+        frame++;
+
+        // Ship circles
+        const cx = W / 2, cy = H / 2 - 20;
+        const orbitR = 80;
+        const speed  = 0.008;
+        ship.angle  += speed;
+        const sx = cx + Math.cos(ship.angle) * orbitR;
+        const sy = cy + Math.sin(ship.angle) * orbitR;
+
+        // Auto-fire every 20 frames toward nearest asteroid
+        if (frame % 20 === 0 && asteroids.length > 0) {
+          let closest = null, bestD = Infinity;
+          for (const a of asteroids) {
+            const d = Math.hypot(a.x - sx, a.y - sy);
+            if (d < bestD) { bestD = d; closest = a; }
+          }
+          if (closest) {
+            const ba = Math.atan2(closest.y - sy, closest.x - sx);
+            bullets.push({ x: sx, y: sy, vx: Math.cos(ba) * 7, vy: Math.sin(ba) * 7, life: 60 });
+          }
+        }
+
+        // Clear
+        ctx.fillStyle = bg();
+        ctx.fillRect(0, 0, W, H);
+
+        // Stars
+        for (const s of stars) {
+          s.y += s.speed;
+          if (s.y > H) s.y = 0;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = fg(s.a);
+          ctx.fill();
+        }
+
+        // Grid
+        ctx.strokeStyle = fg(0.04);
+        ctx.lineWidth = 0.5;
+        const gs = 40;
+        for (let x = 0; x <= W; x += gs) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+        }
+        for (let y = 0; y <= H; y += gs) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+        }
+
+        // Bullets
+        for (let i = bullets.length - 1; i >= 0; i--) {
+          const b = bullets[i];
+          b.x += b.vx; b.y += b.vy; b.life--;
+          if (b.life <= 0) { bullets.splice(i, 1); continue; }
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, 2, 0, Math.PI * 2);
+          ctx.fillStyle = fg(0.9);
+          ctx.fill();
+
+          // Hit check
+          for (let j = asteroids.length - 1; j >= 0; j--) {
+            if (Math.hypot(asteroids[j].x - b.x, asteroids[j].y - b.y) < asteroids[j].r) {
+              asteroids.splice(j, 1);
+              bullets.splice(i, 1);
+              asteroids.push(makeAst());
+              break;
+            }
+          }
+        }
+
+        // Asteroids
+        for (const a of asteroids) {
+          a.x += a.vx; a.y += a.vy; a.rot += a.rotSpeed;
+          if (a.x < -80) a.x = W + 80;
+          if (a.x > W + 80) a.x = -80;
+          if (a.y < -80) a.y = H + 80;
+          if (a.y > H + 80) a.y = -80;
+
+          ctx.save();
+          ctx.translate(a.x, a.y);
+          ctx.rotate(a.rot);
+          ctx.beginPath();
+          ctx.moveTo(a.verts[0].x, a.verts[0].y);
+          for (let k = 1; k < a.verts.length; k++) ctx.lineTo(a.verts[k].x, a.verts[k].y);
+          ctx.closePath();
+          ctx.strokeStyle = fg(0.7);
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = fg(0.04);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Ship
+        const shipAngle = ship.angle + Math.PI / 2 + Math.PI;
+        const sr = 12;
+        ctx.save();
+        ctx.translate(sx, sy);
+        ctx.rotate(shipAngle);
+        ctx.beginPath();
+        ctx.moveTo(0, -sr);
+        ctx.lineTo(-sr * 0.65, sr * 0.75);
+        ctx.lineTo(0, sr * 0.35);
+        ctx.lineTo(sr * 0.65, sr * 0.75);
+        ctx.closePath();
+        ctx.strokeStyle = fg(0.95);
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.fillStyle = fg(0.07);
+        ctx.fill();
+
+        if (frame % 6 < 4) {
+          ctx.fillStyle = fg(0.5);
+          ctx.fillRect(-3, sr * 0.4, 6, 4);
+        }
+        ctx.restore();
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    /* ── Flappy Bird preview ── */
+    (function () {
+      const canvas = document.getElementById('flappy-preview');
+      const ctx    = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+
+      const GRAVITY    = 0.32;
+      const FLAP_VEL   = -6.2;
+      const PIPE_SPEED = 2.2;
+      const PIPE_W     = 30;
+      const GAP_H      = 115;
+      const BIRD_X     = 140;
+      const BIRD_R     = 8;
+
+      function isDark() { return document.documentElement.classList.contains('dark'); }
+      function fg(a)    { return isDark() ? `rgba(229,229,229,${a})` : `rgba(0,0,0,${a})`; }
+      function bgColor(){ return isDark() ? '#0a0a0a' : '#fff'; }
+
+      // Bird state
+      const bird = { y: H / 2, vy: 0 };
+
+      // Pipes
+      const pipes = [];
+      function spawnPipe() {
+        const minTop = H * 0.15;
+        const maxTop = H * 0.65;
+        const gapTop = minTop + Math.random() * (maxTop - minTop);
+        pipes.push({ x: W + PIPE_W, gapTop });
+      }
+      spawnPipe();
+
+      let frame = 0;
+      // Auto-flap: decide based on whether bird is above or below the gap centre
+      function autoFlap() {
+        const pipe = pipes.find(p => p.x + PIPE_W > BIRD_X) || null;
+        if (!pipe) return;
+        const gapCentre = pipe.gapTop + GAP_H / 2;
+        // Flap if bird is below gap centre and not already moving up fast
+        if (bird.y > gapCentre - 10 && bird.vy > -2) {
+          bird.vy = FLAP_VEL;
+        }
+      }
+
+      function draw() {
+        frame++;
+
+        // Auto-pilot flap logic every frame
+        autoFlap();
+
+        // Physics
+        bird.vy += GRAVITY;
+        bird.y  += bird.vy;
+
+        // Clamp to canvas bounds (loop preview — no death)
+        if (bird.y - BIRD_R < 0)  { bird.y = BIRD_R;      bird.vy = 1; }
+        if (bird.y + BIRD_R > H)  { bird.y = H - BIRD_R;  bird.vy = FLAP_VEL; }
+
+        // Spawn pipes
+        if (frame % 100 === 0) spawnPipe();
+
+        // Update & cull pipes
+        for (let i = pipes.length - 1; i >= 0; i--) {
+          pipes[i].x -= PIPE_SPEED;
+          if (pipes[i].x + PIPE_W < 0) pipes.splice(i, 1);
+        }
+
+        // ── Draw ──────────────────────────────
+        ctx.fillStyle = bgColor();
+        ctx.fillRect(0, 0, W, H);
+
+        // Subtle horizontal guide lines (matches snake/space grid feel)
+        ctx.strokeStyle = fg(0.05);
+        ctx.lineWidth   = 0.5;
+        for (let y = 0; y <= H; y += 20) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+        }
+
+        // Pipes
+        ctx.fillStyle = fg(0.85);
+        for (const p of pipes) {
+          // Top slab
+          ctx.fillRect(p.x, 0, PIPE_W, p.gapTop);
+          // Bottom slab
+          const botTop = p.gapTop + GAP_H;
+          ctx.fillRect(p.x, botTop, PIPE_W, H - botTop);
+          // Caps
+          const capH = 8, capW = PIPE_W + 6;
+          ctx.fillRect(p.x - 3, p.gapTop - capH, capW, capH);
+          ctx.fillRect(p.x - 3, botTop, capW, capH);
+        }
+
+        // Bird body
+        ctx.fillStyle = fg(0.9);
+        ctx.beginPath();
+        ctx.arc(BIRD_X, bird.y, BIRD_R, 0, Math.PI * 2);
+        ctx.fill();
+        // Eye
+        ctx.fillStyle = bgColor();
+        ctx.beginPath();
+        ctx.arc(BIRD_X + 3, bird.y - 2, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+        // Beak
+        ctx.fillStyle = fg(0.6);
+        ctx.beginPath();
+        ctx.moveTo(BIRD_X + BIRD_R - 1, bird.y);
+        ctx.lineTo(BIRD_X + BIRD_R + 5, bird.y + 1);
+        ctx.lineTo(BIRD_X + BIRD_R - 1, bird.y + 3);
+        ctx.closePath();
+        ctx.fill();
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>

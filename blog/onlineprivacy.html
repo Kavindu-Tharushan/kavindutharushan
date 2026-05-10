@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Thoughts on the vanishing line between public and private, and why digital silence is becoming a luxury.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>The Price of Being Seen</title>
+  <script>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+    window.localStorage.setItem('theme', theme);
+  </script>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+    body {
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--bg-color);
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+    }
+    h1 {
+      margin-top: 2rem;
+    }
+    h1:first-child {
+      margin-top: 0;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    a:hover {
+      opacity: .6;
+    }
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav a {
+      margin-right: 1rem;
+      opacity: .4;
+    }
+    nav a.active {
+      opacity: 1;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      opacity: .4;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      opacity: 1;
+    }
+    .back-link {
+      opacity: .6;
+      margin-top: 3rem;
+      display: inline-block;
+    }
+    .back-link:hover {
+      opacity: 1;
+    }
+    .prose {
+      line-height: 1.6;
+    }
+    .prose h2,
+    .prose h3,
+    .prose h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .prose p {
+      margin-bottom: 1rem;
+    }
+    .prose strong {
+      font-weight: 700;
+    }
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      opacity: .6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer a {
+      margin-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <a href="../">[/]</a>
+        <a href="../blog.html" class="active">[/blog]</a>
+        <a href="../photos.html">[/photos]</a>
+        <a href="../resume.html">[/resume]</a>
+        <a href="../notes.html">[/notes]</a>
+        <a href="../coolstuff.html">[/cool stuff]</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display: none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+  <main>
+    <article>
+      <h1>The Price of Being Seen</h1>
+      <p style="opacity: 0.6; margin-bottom: 2rem;">May 15, 2026</p>
+      <div class="prose">
+        <p>We have grown comfortable with a strange bargain. In exchange for free maps, instant messaging, and cloud storage, we have traded away the right to be unobserved. Online privacy is often treated as a technical setting or a legal disclaimer, but it is actually about something much more fundamental: the ability to exist without being analyzed.</p>
+
+        <h2 id="the-myth-of-nothing-to-hide">The myth of "nothing to hide"</h2>
+        <p>The most common argument against privacy is: "I have nothing to hide, so why should I care?" This misses the point. Privacy isn't about hiding something wrong; it's about protecting the space where you can be yourself. When you know you are being watched—even by an algorithm—your behavior changes. You become more performative, more cautious, and less authentic.</p>
+        <p>Privacy is the power to selectively reveal yourself to the world. When that power is taken away by tracking cookies and data brokers, we lose the freedom to grow and change without our past constantly being used to predict our future.</p>
+
+        <h2 id="data-as-a-permanent-record">Data as a permanent record</h2>
+        <p>In the physical world, conversations fade. Moments are forgotten. In the digital world, everything is permanent. Every search query, every "like," and every GPS coordinate is stored in a database. These fragments are then stitched together to create a "digital twin" of you—a profile that companies use to influence what you buy, what you see, and how you think.</p>
+        <p>The danger isn't just a single data leak; it's the cumulative weight of this record. Decisions are being made about us—our creditworthiness, our employability, our interests—based on data we often didn't even realize we were generating.</p>
+
+        <h2 id="the-invisible-tracking-web">The invisible tracking web</h2>
+        <p>It’s no longer just about the apps we choose to use. The web is covered in invisible trackers. Even if you don't have a specific account, companies can track you across different websites to build a shadow profile. Our privacy is being chipped away not by one large event, but by a thousand tiny, daily interactions.</p>
+        <p>Choosing privacy-conscious tools—browsers that block trackers, encrypted messaging, and local storage—isn't about being paranoid. It’s about setting a boundary. It’s a way of saying that my digital life is not a resource to be mined.</p>
+
+        <h2 id="reclaiming-digital-agency">Reclaiming digital agency</h2>
+        <p>Complete privacy in 2026 is impossible, but agency is still within reach. Reclaiming your privacy means being intentional. It means choosing tools because they respect your data, not just because they are convenient. It means realizing that "free" usually means you are the fuel for the engine.</p>
+        <p>We don't need to live in the woods and throw our phones in a river. We just need to stop accepting the surveillance-for-service trade as an inevitability.</p>
+
+        <p>Digital silence is becoming a luxury.<br>
+        <em>Protect yours while you still can.</em></p>
+      </div>
+      <a class="back-link" href="/blog.html">[go back to /blog]</a>
+    </article>
+  </main>
+  <footer>
+    <div>
+      <a href="mailto:kvndu@outlook.com">email</a>
+      <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer">youtube</a>
+      <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer">github</a>
+    </div>
+    <div>@ 2026 Kavindu Tharushan</div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('themeToggle');
+      const lightIcon = document.querySelector('.theme-toggle-light');
+      const darkIcon = document.querySelector('.theme-toggle-dark');
+
+      const updateIcons = () => {
+        const darkMode = document.documentElement.classList.contains('dark');
+        if (lightIcon && darkIcon) {
+          lightIcon.style.display = darkMode ? 'none' : 'inline';
+          darkIcon.style.display = darkMode ? 'inline' : 'none';
+        }
+      };
+
+      updateIcons();
+
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcons();
+      });
+    });
+  </script>
+</body>
+</html>

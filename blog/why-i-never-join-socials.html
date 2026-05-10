@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="A small gesture that changed how I see photography, presence and what it means to capture a moment.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>Why I Never Join Social Media</title>
+  <script>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+    window.localStorage.setItem('theme', theme);
+  </script>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+    body {
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--bg-color);
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+    }
+    h1 {
+      margin-top: 2rem;
+    }
+    h1:first-child {
+      margin-top: 0;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    a:hover {
+      opacity: .6;
+    }
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav a {
+      margin-right: 1rem;
+      opacity: .4;
+    }
+    nav a.active {
+      opacity: 1;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      opacity: .4;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      opacity: 1;
+    }
+    .back-link {
+      opacity: .6;
+      margin-top: 3rem;
+      display: inline-block;
+    }
+    .back-link:hover {
+      opacity: 1;
+    }
+    .prose {
+      line-height: 1.6;
+    }
+    .prose h2,
+    .prose h3,
+    .prose h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .prose p {
+      margin-bottom: 1rem;
+    }
+    .prose ul,
+    .prose ol {
+      margin-bottom: 1rem;
+      padding-left: 2rem;
+    }
+    .prose strong {
+      font-weight: 700;
+    }
+    .prose code {
+      background: var(--code-bg);
+      padding: .2rem .4rem;
+    }
+    .prose pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .prose pre code {
+      background: none;
+      padding: 0;
+    }
+    .prose img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #000;
+    }
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      opacity: .6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer a {
+      margin-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+   <a href="../">[/]</a>
+        <a href="../blog.html" class="active">[/blog]</a>
+        <a href="../photos.html">[/photos]</a>
+        <a href="../resume.html">[/resume]</a>
+        <a href="../notes.html">[/notes]</a>
+        <a href="../coolstuff.html">[/cool stuff]</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display: none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+  <main>
+    <article>
+  <h1>Why I Never Join Social Media</h1>
+  <p style="opacity: 0.6; margin-bottom: 2rem;">May 10, 2026</p>
+  <div class="prose">
+    <p>I have used almost every major social media platform out there — Facebook, Instagram, TikTok, Twitter. I was never a creator on any of them. No posts, no content, no personal brand. I was purely a consumer. And after years of scrolling, I decided to quit all of it for good.</p>
+
+    <h2 id="too-much-toxic-content">Too much toxic content</h2>
+    <p>By 2023, Instagram was the only platform I still used regularly. But over time, the content got worse. Racist posts kept appearing in my feed no matter how many times I dismissed them. The algorithm was surfacing outrage because outrage keeps people engaged — and I was tired of being on the receiving end of it.</p>
+    <p>Twitter had the same problem, made worse after Elon Musk's takeover. The platform shifted heavily toward political arguments and bad-faith debates. It stopped feeling like a place worth being in. By the end of 2024, I quit both — for my mental health.</p>
+
+    <h2 id="these-platforms-are-built-to-trap-you">These platforms are built to trap you</h2>
+    <p>What most people do not realize is that the addictive feeling is not a side effect — it is the product. Infinite scrolling, red notification badges, algorithmically timed content drops — these are deliberate design decisions made to keep you on the app as long as possible. The more time you spend, the more money they make.</p>
+    <p>Social media also does not actually make you more social. It gives you the feeling of connection without the substance of it. Seeing someone's holiday photos is not the same as talking to them. Liking a post is not the same as being present in someone's life. The platforms simulate closeness while quietly replacing it.</p>
+
+    <h2 id="privacy-and-ai">Privacy and AI</h2>
+    <p>Another reason I have no interest in returning is privacy. Big tech companies now use the content people post online — photos, captions, interactions — to train AI models. What you share publicly is no longer just seen by your followers. It becomes training data for systems built by companies you have no relationship with and never agreed to work with.</p>
+    <p>That changes the calculation entirely. Staying off social media is also a way of keeping my data out of pipelines I never consented to.</p>
+
+    <h2 id="what-i-actually-use">What I actually use</h2>
+    <p>The one platform I kept is YouTube. Whether it counts as social media is debatable, but I use it more like a search engine than a feed. I look for specific things, watch them, and move on. There is no pressure to post, no algorithm punishing inactivity, no performance required.</p>
+    <p>That distinction matters. Consuming with intention feels completely different from mindless scrolling.</p>
+
+    <h2 id="not-a-rejection-just-a-choice">Not a rejection, just a choice</h2>
+    <p>I am not saying everyone should quit. A lot of people use these platforms well. But for me, the cost always outweighed the benefit. The toxicity, the manipulation, the privacy concerns — none of it was worth what I was getting in return.</p>
+    <p>Less noise. More privacy. Better mental health.<br>
+    <em>Turns out those were reason enough.</em></p>
+  </div>
+  <a class="back-link" href="/blog.html">[go back to /blog]</a>
+    </article>
+  </main>
+  <footer>
+    <div>
+      <a href="mailto:kvndu@outlook.com">email</a>
+      <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer">youtube</a>
+      <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer">github</a>
+    </div>
+    <div>@ 2026 Kavindu Tharushan</div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('themeToggle');
+      const lightIcon = document.querySelector('.theme-toggle-light');
+      const darkIcon = document.querySelector('.theme-toggle-dark');
+
+      const updateIcons = () => {
+        const darkMode = document.documentElement.classList.contains('dark');
+        if (lightIcon && darkIcon) {
+          lightIcon.style.display = darkMode ? 'none' : 'inline';
+          darkIcon.style.display = darkMode ? 'inline' : 'none';
+        }
+      };
+
+      updateIcons();
+
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcons();
+      });
+    });
+  </script>
+</body>
+</html>

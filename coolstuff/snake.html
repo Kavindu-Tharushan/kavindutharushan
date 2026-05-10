@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>Snake</title>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+
+    body {
+      font-family: 'Geist Mono', monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      background-color: var(--bg-color);
+    }
+
+    h1, h2, h3 { font-weight: 700; }
+    h1 { margin-top: 0; }
+    h2 { margin-top: 2rem; }
+
+    a { color: var(--text-color); text-decoration: none; }
+    a:hover { opacity: .6; }
+
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    nav a {
+      margin-right: 1rem;
+      opacity: .4;
+    }
+
+    nav a.active { opacity: 1; }
+
+    .theme-toggle {
+      cursor: pointer;
+      opacity: .4;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-family: 'Geist Mono', monospace;
+      font-size: .75rem;
+      padding: 0;
+    }
+
+    .theme-toggle:hover { opacity: 1; }
+
+    /* ── Page layout ── */
+    .page-header p {
+      opacity: 0.8;
+      margin-top: 0.75rem;
+      margin-bottom: 2rem;
+      max-width: 70ch;
+    }
+
+    /* ── Prose sections ── */
+    .section { margin-bottom: 2rem; }
+
+    .section p {
+      margin-top: 0.5rem;
+      opacity: 0.8;
+    }
+
+    /* ── Code blocks ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border-color);
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      line-height: 1.7;
+    }
+
+    code { font-family: 'Geist Mono', monospace; font-size: 0.7rem; }
+
+    /* ── Concept table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--border-color);
+      font-size: 0.7rem;
+    }
+
+    th { font-weight: 700; }
+
+    /* ── Game canvas wrapper ── */
+    .game-figure {
+      margin: 0;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem;
+    }
+
+    #game-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--bg-color);
+      cursor: default;
+    }
+
+    .game-figcaption {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .game-score {
+      font-weight: 700;
+      min-width: 6ch;
+    }
+
+    .game-controls-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-color);
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 0.2rem 0.55rem;
+      cursor: pointer;
+      line-height: 1.6;
+    }
+
+    .btn:hover { opacity: 0.6; }
+    .btn.active {
+      background: var(--text-color);
+      color: var(--bg-color);
+    }
+
+    /* ── D-pad ── */
+    .dpad {
+      display: grid;
+      grid-template-areas:
+        ". up ."
+        "left down right";
+      grid-template-columns: repeat(3, 1.8rem);
+      grid-template-rows: repeat(2, 1.8rem);
+      gap: 2px;
+      margin-left: auto;
+    }
+
+    .dpad button {
+      font-family: 'Geist Mono', monospace;
+      font-size: 0.65rem;
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 1;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .dpad button:active,
+    .dpad button.pressed { background: var(--text-color); color: var(--bg-color); }
+
+    .dpad .up    { grid-area: up; }
+    .dpad .left  { grid-area: left; }
+    .dpad .down  { grid-area: down; }
+    .dpad .right { grid-area: right; }
+
+    /* ── Speed buttons ── */
+    .speed-label { opacity: 0.5; }
+
+    /* ── Status line ── */
+    .game-status {
+      text-align: center;
+      opacity: 0.5;
+      font-size: 0.65rem;
+      margin-top: 0.3rem;
+    }
+
+    /* ── Sidenote style ── */
+    .sidenote {
+      border-left: 2px solid var(--border-color);
+      padding-left: 0.75rem;
+      opacity: 0.65;
+      margin: 0.75rem 0;
+      font-size: 0.7rem;
+    }
+
+    /* ── Section divider ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border-color);
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Nav (matches your existing site) -->
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <a href="/">[/]</a>
+        <a href="/blog.html">[/blog]</a>
+        <a href="/photos.html">[/photos]</a>
+        <a href="/resume.html">[/resume]</a>
+        <a href="/notes.html">[/notes]</a>
+        <a href="/coolstuff.html" class="active">[/cool stuff]</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display:none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ── Title ── -->
+    <div class="page-header">
+      <h1>Snake</h1>
+      <p>
+        One of the most recognisable games ever made. A line grows longer every time it eats food,
+        and the challenge is to keep steering it without hitting a wall or biting your own tail.
+        Simple rules, surprisingly deep.
+      </p>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 1 — The Board
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>The Board: a 2D Grid</h2>
+      <p>
+        Every Snake implementation starts with the same question: how do I represent the playing field?
+        The answer is a 2D coordinate system. Each cell is addressed by <code>(x, y)</code> where
+        <code>x</code> increases to the right and <code>y</code> increases downward.
+      </p>
+      <pre><code>const COLS = 40   // columns
+const ROWS = 20   // rows
+const CELL = 20   // pixels per cell</code></pre>
+      <div class="sidenote">
+        The board is COLS × ROWS cells. Every game object — snake segments, food — is stored
+        as a list of (x, y) points. (0, 0) is always the top-left corner.
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 2 — Movement
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Movement: Directions and the Game Loop</h2>
+      <p>
+        The snake jumps one full cell per <strong>tick</strong>. Each tick the game reads
+        the queued direction, computes a new head position, prepends it to the snake array,
+        and removes the last segment unless food was eaten.
+      </p>
+      <pre><code>const delta = {
+  RIGHT: { x:  1, y:  0 },
+  LEFT:  { x: -1, y:  0 },
+  DOWN:  { x:  0, y:  1 },
+  UP:    { x:  0, y: -1 },
+}
+
+snake.unshift(newHead)   // grow head
+snake.pop()              // shrink tail (unless food eaten)</code></pre>
+      <div class="sidenote">
+        You cannot reverse direction in a single step — the input queue rejects inputs
+        that are the direct opposite of the current heading.
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 3 — Collision
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Collision Detection</h2>
+      <p>The game ends in two cases, both checked after computing the new head but before drawing.</p>
+      <pre><code>// Wall collision
+if (newHead.x < 0 || newHead.x >= COLS ||
+    newHead.y < 0 || newHead.y >= ROWS) gameOver()
+
+// Self collision (tail excluded — it moves away this tick)
+if (snake.slice(0, -1).some(s =>
+    s.x === newHead.x && s.y === newHead.y)) gameOver()</code></pre>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         SECTION 4 — Food
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Food and Growing</h2>
+      <p>
+        Food is placed at a random cell not occupied by the snake. When the head lands on food,
+        the tail is <em>not</em> popped — the snake stays one cell longer. Each food adds one point.
+      </p>
+      <pre><code>function randomFood(snake) {
+  let p
+  do {
+    p = { x: rand(COLS), y: rand(ROWS) }
+  } while (snake.some(s => s.x === p.x && s.y === p.y))
+  return p
+}</code></pre>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         THE GAME
+    ══════════════════════════════════════ -->
+    <hr>
+
+    <div class="section">
+      <h2>Play</h2>
+      <p>Arrow keys or WASD on desktop. D-pad on mobile. Hit Start to play.</p>
+    </div>
+
+    <section aria-label="Snake game" style="margin-bottom: 2rem;">
+      <figure class="game-figure">
+        <canvas id="game-canvas" width="800" height="400"></canvas>
+
+        <figcaption class="game-figcaption">
+          <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+            <span class="game-score">score: <span id="score-display">0</span></span>
+            <span class="speed-label">speed:</span>
+            <button class="btn" id="btn-slow"  data-speed="200">slow</button>
+            <button class="btn active" id="btn-mid"  data-speed="120">normal</button>
+            <button class="btn" id="btn-fast" data-speed="60">fast</button>
+          </div>
+          <div class="game-controls-row">
+            <button class="btn" id="start-btn">Start</button>
+            <div class="dpad" id="dpad">
+              <button class="up"    data-dir="UP">↑</button>
+              <button class="left"  data-dir="LEFT">←</button>
+              <button class="down"  data-dir="DOWN">↓</button>
+              <button class="right" data-dir="RIGHT">→</button>
+            </div>
+          </div>
+        </figcaption>
+
+        <div class="game-status" id="game-status">↑↓←→ or WASD · eat food to grow</div>
+      </figure>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         SECTION 5 — Concepts at a glance
+    ══════════════════════════════════════ -->
+    <div class="section">
+      <h2>Concepts at a Glance</h2>
+      <table>
+        <thead>
+          <tr><th>Concept</th><th>Implementation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Board</td><td>COLS × ROWS grid, each cell addressed by (x, y)</td></tr>
+          <tr><td>Game loop</td><td>setInterval at configurable ms, cleared on game over</td></tr>
+          <tr><td>Movement</td><td>Unshift new head, pop tail each tick</td></tr>
+          <tr><td>Input</td><td>keydown listener + queued nextDir per tick</td></tr>
+          <tr><td>Rendering</td><td>canvas.getContext("2d") draw calls each tick</td></tr>
+          <tr><td>Collision</td><td>Arithmetic bounds check + Array.some overlap check</td></tr>
+          <tr><td>Food</td><td>do-while random placement avoiding snake cells</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════ -->
+  <script>
+    // ── Theme toggle ──────────────────────────────────────
+    (function () {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      theme === 'dark'
+        ? document.documentElement.classList.add('dark')
+        : document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', theme);
+    })();
+
+    function initThemeToggle() {
+      const btn  = document.getElementById('themeToggle');
+      const sun  = document.querySelector('.theme-toggle-light');
+      const moon = document.querySelector('.theme-toggle-dark');
+
+      function syncIcons() {
+        const dark = document.documentElement.classList.contains('dark');
+        if (sun)  sun.style.display  = dark ? 'none'   : 'inline';
+        if (moon) moon.style.display = dark ? 'inline' : 'none';
+      }
+      syncIcons();
+      btn?.addEventListener('click', () => {
+        const dark = document.documentElement.classList.contains('dark');
+        dark
+          ? (document.documentElement.classList.remove('dark'), localStorage.setItem('theme', 'light'))
+          : (document.documentElement.classList.add('dark'),    localStorage.setItem('theme', 'dark'));
+        syncIcons();
+      });
+    }
+    initThemeToggle();
+
+    // ── Snake game ────────────────────────────────────────
+    (function () {
+      const canvas   = document.getElementById('game-canvas');
+      const ctx      = canvas.getContext('2d');
+      const scoreEl  = document.getElementById('score-display');
+      const statusEl = document.getElementById('game-status');
+      const startBtn = document.getElementById('start-btn');
+
+      const COLS = 40;
+      const ROWS = 20;
+      const CELL = canvas.width / COLS;   // 20px
+
+      let intervalId = null;
+      let speed      = 120;               // ms per tick
+      let phase      = 'idle';            // idle | running | dead
+
+      const g = {
+        snake:   [],
+        dir:     'RIGHT',
+        nextDir: 'RIGHT',
+        food:    { x: 30, y: 10 },
+        score:   0,
+      };
+
+      const DELTA = {
+        RIGHT: { x:  1, y:  0 },
+        LEFT:  { x: -1, y:  0 },
+        DOWN:  { x:  0, y:  1 },
+        UP:    { x:  0, y: -1 },
+      };
+
+      const OPPOSITE = { RIGHT: 'LEFT', LEFT: 'RIGHT', UP: 'DOWN', DOWN: 'UP' };
+
+      function initSnake() {
+        g.snake = [
+          { x: 5, y: 10 },
+          { x: 4, y: 10 },
+          { x: 3, y: 10 },
+        ];
+        g.dir     = 'RIGHT';
+        g.nextDir = 'RIGHT';
+        g.score   = 0;
+        g.food    = randomFood();
+      }
+
+      function randomFood() {
+        let p;
+        do {
+          p = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
+        } while (g.snake.some(s => s.x === p.x && s.y === p.y));
+        return p;
+      }
+
+      function tick() {
+        g.dir = g.nextDir;
+        const head    = g.snake[0];
+        const d       = DELTA[g.dir];
+        const newHead = { x: head.x + d.x, y: head.y + d.y };
+
+        // Wall collision
+        if (newHead.x < 0 || newHead.x >= COLS || newHead.y < 0 || newHead.y >= ROWS) {
+          endGame(); return;
+        }
+        // Self collision
+        if (g.snake.slice(0, -1).some(s => s.x === newHead.x && s.y === newHead.y)) {
+          endGame(); return;
+        }
+
+        g.snake.unshift(newHead);
+        if (newHead.x === g.food.x && newHead.y === g.food.y) {
+          g.score++;
+          scoreEl.textContent = g.score;
+          g.food = randomFood();
+        } else {
+          g.snake.pop();
+        }
+        render();
+      }
+
+      function endGame() {
+        clearInterval(intervalId);
+        intervalId = null;
+        phase = 'dead';
+        startBtn.textContent = 'Restart';
+        statusEl.textContent = `game over · score: ${g.score} · press restart`;
+        renderDead();
+      }
+
+      function startGame() {
+        clearInterval(intervalId);
+        initSnake();
+        scoreEl.textContent = '0';
+        phase = 'running';
+        startBtn.textContent = 'Restart';
+        statusEl.textContent = '↑↓←→ or WASD · eat food to grow';
+        render();
+        intervalId = setInterval(tick, speed);
+      }
+
+      // ── Rendering ──────────────────────────────────────
+      function fg(alpha) {
+        const dark = document.documentElement.classList.contains('dark');
+        return dark
+          ? `rgba(229,229,229,${alpha})`
+          : `rgba(0,0,0,${alpha})`;
+      }
+
+      function render() {
+        const W = canvas.width, H = canvas.height;
+        ctx.fillStyle = getComputedStyle(document.documentElement)
+          .getPropertyValue('--bg-color').trim() || '#fff';
+        ctx.fillRect(0, 0, W, H);
+
+        // Grid
+        ctx.strokeStyle = fg(0.06);
+        ctx.lineWidth   = 0.5;
+        for (let x = 0; x <= COLS; x++) {
+          ctx.beginPath(); ctx.moveTo(x * CELL, 0); ctx.lineTo(x * CELL, H); ctx.stroke();
+        }
+        for (let y = 0; y <= ROWS; y++) {
+          ctx.beginPath(); ctx.moveTo(0, y * CELL); ctx.lineTo(W, y * CELL); ctx.stroke();
+        }
+
+        // Food — small filled circle
+        ctx.fillStyle = fg(0.9);
+        ctx.beginPath();
+        ctx.arc(
+          g.food.x * CELL + CELL / 2,
+          g.food.y * CELL + CELL / 2,
+          CELL * 0.28, 0, Math.PI * 2
+        );
+        ctx.fill();
+
+        // Snake
+        const len = g.snake.length;
+        g.snake.forEach((seg, i) => {
+          const headFrac = 1 - i / len;
+          const alpha = 0.25 + headFrac * 0.75;
+          ctx.fillStyle = fg(alpha);
+          ctx.fillRect(seg.x * CELL + 1, seg.y * CELL + 1, CELL - 2, CELL - 2);
+        });
+      }
+
+      function renderDead() {
+        render();
+        const W = canvas.width, H = canvas.height;
+        // Dim overlay
+        ctx.fillStyle = fg(0.04);
+        ctx.fillRect(0, 0, W, H);
+        // "game over" text
+        ctx.save();
+        ctx.font = '700 11px "Geist Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = fg(0.5);
+        ctx.fillText(`game over · ${g.score} pts`, W / 2, H / 2);
+        ctx.restore();
+      }
+
+      // idle splash
+      function renderIdle() {
+        const W = canvas.width, H = canvas.height;
+        ctx.fillStyle = getComputedStyle(document.documentElement)
+          .getPropertyValue('--bg-color').trim() || '#fff';
+        ctx.fillRect(0, 0, W, H);
+        ctx.save();
+        ctx.font = '700 11px "Geist Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = fg(0.3);
+        ctx.fillText('press start', W / 2, H / 2);
+        ctx.restore();
+      }
+      renderIdle();
+
+      // ── Input ──────────────────────────────────────────
+      const KEY_MAP = {
+        ArrowUp:    'UP',    ArrowDown:  'DOWN',
+        ArrowLeft:  'LEFT',  ArrowRight: 'RIGHT',
+        w: 'UP', s: 'DOWN', a: 'LEFT', d: 'RIGHT',
+        W: 'UP', S: 'DOWN', A: 'LEFT', D: 'RIGHT',
+      };
+
+      document.addEventListener('keydown', e => {
+        const dir = KEY_MAP[e.key];
+        if (!dir) return;
+        e.preventDefault();
+        if (phase === 'idle' || phase === 'dead') { startGame(); }
+        if (dir !== OPPOSITE[g.dir]) g.nextDir = dir;
+      });
+
+      // D-pad
+      document.querySelectorAll('#dpad button').forEach(btn => {
+        const fire = () => {
+          const dir = btn.dataset.dir;
+          if (phase === 'idle' || phase === 'dead') startGame();
+          if (dir !== OPPOSITE[g.dir]) g.nextDir = dir;
+          btn.classList.add('pressed');
+          setTimeout(() => btn.classList.remove('pressed'), 120);
+        };
+        btn.addEventListener('click', fire);
+        btn.addEventListener('touchstart', e => { e.preventDefault(); fire(); }, { passive: false });
+      });
+
+      // Start / restart
+      startBtn.addEventListener('click', startGame);
+
+      // Speed buttons
+      document.querySelectorAll('[data-speed]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          speed = parseInt(btn.dataset.speed, 10);
+          document.querySelectorAll('[data-speed]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (phase === 'running') {
+            clearInterval(intervalId);
+            intervalId = setInterval(tick, speed);
+          }
+        });
+      });
+
+      // Re-render on theme change (MutationObserver on classList)
+      new MutationObserver(() => {
+        if (phase !== 'running') renderIdle();
+        else render();
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+    })();
+  </script> <br>
+  <a class="back-link" href="/coolstuff.html">[go back to /cool stuff]</a>
+</body>
+</html>

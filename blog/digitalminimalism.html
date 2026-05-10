@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Digital minimalism isn't about using less tech. It's about being deliberate about the tech you keep.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>What Digital Minimalism Actually Looks Like</title>
+  <script>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+    window.localStorage.setItem('theme', theme);
+  </script>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+    body {
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--bg-color);
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+    }
+    h1 {
+      margin-top: 2rem;
+    }
+    h1:first-child {
+      margin-top: 0;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    a:hover {
+      opacity: .6;
+    }
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav a {
+      margin-right: 1rem;
+      opacity: .4;
+    }
+    nav a.active {
+      opacity: 1;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      opacity: .4;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      opacity: 1;
+    }
+    .back-link {
+      opacity: .6;
+      margin-top: 3rem;
+      display: inline-block;
+    }
+    .back-link:hover {
+      opacity: 1;
+    }
+    .prose {
+      line-height: 1.6;
+    }
+    .prose h2,
+    .prose h3,
+    .prose h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .prose p {
+      margin-bottom: 1rem;
+    }
+    .prose strong {
+      font-weight: 700;
+    }
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      opacity: .6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer a {
+      margin-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <a href="../">[/]</a>
+        <a href="../blog.html" class="active">[/blog]</a>
+        <a href="../photos.html">[/photos]</a>
+        <a href="../resume.html">[/resume]</a>
+        <a href="../notes.html">[/notes]</a>
+        <a href="../coolstuff.html">[/cool stuff]</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display: none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+  <main>
+    <article>
+      <h1>What Digital Minimalism Actually Looks Like</h1>
+      <p style="opacity: 0.6; margin-bottom: 2rem;">May 10, 2026</p>
+      <div class="prose">
+        <p>Digital minimalism gets a bad reputation because it's usually described in extremes. Delete all your apps. Buy a dumb phone. Move to a cabin. Nobody actually does that, and so people dismiss the whole idea. But that framing misses what digital minimalism is really about: being deliberate about which technologies earn a place in your life, and making sure they work for you rather than the other way around.</p>
+
+        <h2 id="it-starts-with-noticing">It starts with noticing</h2>
+        <p>The first step isn't deleting anything. It's noticing. Most of us have never stopped to ask why we pick up our phones. Boredom? Habit? Anxiety? The gesture happens before the thought does. Once you start paying attention to that reflex — not judging it, just watching it — the picture becomes clearer pretty fast.</p>
+        <p>I started keeping a rough mental log of what I actually used my phone for in a given day. The answer was depressing: checking for notifications that didn't matter, opening apps I'd opened five minutes before, and a lot of aimless scrolling that left me feeling vaguely worse than before. None of it was something I'd chosen. It was just what the phone nudged me toward by default.</p>
+
+        <h2 id="the-default-is-not-neutral">The default is not neutral</h2>
+        <p>This is the part most people don't talk about. When you download an app and leave all the settings as-is, you haven't made no choice — you've accepted choices someone else made for you. Notifications on. Autoplay on. Location tracking on. Algorithmic feed, sorted by engagement, not chronology.</p>
+        <p>Every single one of those defaults was designed to maximize your time on the platform, not your satisfaction with it. Digital minimalism, at its most basic, is just refusing to accept those defaults without question. It means asking: does this setting serve me, or does it serve them?</p>
+
+        <h2 id="what-i-actually-changed">What I actually changed</h2>
+        <p>I'm not going to pretend I made some radical transformation overnight. These were small, practical shifts that compounded over time.</p>
+        <p>I turned off almost every notification except phone calls and direct messages from people I know. Not "reduced" — completely off. The pull to check constantly collapsed almost immediately once there was nothing to check for. I moved social apps off my home screen so that opening them required a deliberate choice, not a thumb moving out of habit. I stopped leaving YouTube on autoplay and started using it like a library: go in, find what I want, leave.</p>
+        <p>None of this required a new phone or a paid subscription to a productivity system. It was just configuration.</p>
+
+        <h2 id="the-harder-part-is-filling-the-gap">The harder part is filling the gap</h2>
+        <p>Here's what the books on digital minimalism tend to gloss over: taking away the noise doesn't automatically give you something better. For the first couple of weeks after clearing out apps and turning off notifications, I just felt the absence. The phone felt boring. That discomfort was real.</p>
+        <p>The minimalism part is only half of it. The other half is rebuilding what fills that space with things that are actually worth your time. For me, that turned out to be reading more, cooking without having a video playing in the background, and going on walks without earphones. Boring answers, but they're mine — I chose them, rather than having an algorithm choose for me.</p>
+
+        <h2 id="you-don-t-have-to-quit-everything">You don't have to quit everything</h2>
+        <p>I still use technology constantly. I work on a laptop. I use YouTube. I listen to music. I'm not offline and I have no interest in being offline. The goal was never to use less — it was to use with intention. There's a big difference between spending two hours reading documentation and spending two hours being nudged from one piece of content to the next.</p>
+        <p>The question worth asking isn't "how much am I using?" It's "who is benefiting from the way I'm using it?"</p>
+
+        <p>Digital minimalism isn't a lifestyle aesthetic.<br>
+        <em>It's just deciding that your attention belongs to you.</em></p>
+      </div>
+      <a class="back-link" href="/blog.html">[go back to /blog]</a>
+    </article>
+  </main>
+  <footer>
+    <div>
+      <a href="mailto:kvndu@outlook.com">email</a>
+      <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer">youtube</a>
+      <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer">github</a>
+    </div>
+    <div>@ 2026 Kavindu Tharushan</div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('themeToggle');
+      const lightIcon = document.querySelector('.theme-toggle-light');
+      const darkIcon = document.querySelector('.theme-toggle-dark');
+
+      const updateIcons = () => {
+        const darkMode = document.documentElement.classList.contains('dark');
+        if (lightIcon && darkIcon) {
+          lightIcon.style.display = darkMode ? 'none' : 'inline';
+          darkIcon.style.display = darkMode ? 'inline' : 'none';
+        }
+      };
+
+      updateIcons();
+
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcons();
+      });
+    });
+  </script>
+</body>
+</html>

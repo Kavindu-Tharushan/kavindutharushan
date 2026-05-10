@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Developer Resume of Kavindu Tharushan">
+    <meta name="viewport" content="width=device-width">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <title>Kavindu Tharushan - Resume</title>
+
+    <script>
+        const theme = (() => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+                return localStorage.getItem('theme');
+            }
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        })();
+        if (theme === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+        window.localStorage.setItem('theme', theme);
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #fff;
+            --text-color: #000;
+            --border-color: #afafaf;
+            --code-bg: #f5f5f5
+        }
+
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #e5e5e5;
+            --border-color: #404040;
+            --code-bg: #1a1a1a
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            overflow-y: scroll;
+            background-color: var(--bg-color)
+        }
+
+        body {
+            font-family: 'Geist Mono', monospace;
+            font-size: .75rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: var(--bg-color)
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700
+        }
+
+        h1 { margin-top: 2rem }
+        h1:first-child { margin-top: 0 }
+        h2 { margin-top: 2rem }
+
+        a {
+            color: var(--text-color);
+            text-decoration: none
+        }
+
+        a:hover { opacity: .6 }
+
+        nav {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color)
+        }
+
+        nav a {
+            margin-right: 1rem;
+            opacity: .4
+        }
+
+        nav a.active { opacity: 1 }
+
+        .theme-toggle {
+            cursor: pointer;
+            opacity: .4;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-family: 'Geist Mono', monospace;
+            font-size: .75rem;
+            padding: 0
+        }
+
+        .theme-toggle:hover { opacity: 1 }
+
+        .skill-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.3rem;
+        }
+
+        .tag {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.15rem 0.5rem;
+            border-radius: 2px;
+            font-size: 0.7rem;
+            opacity: 0.85;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <a href="/">[/]</a>
+                <a href="/blog.html">[/blog]</a>
+                <a href="/photos.html">[/photos]</a>
+                <a href="/resume.html" class="active">[/resume]</a>
+                <a href="/notes.html">[/notes]</a>
+                <a href="/coolstuff.html">[/cool stuff]</a>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-toggle-light">[☀]</span>
+                <span class="theme-toggle-dark" style="display: none;">[☾]</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        const s = document.getElementById("themeToggle");
+        const tl = document.querySelector(".theme-toggle-light");
+        const td = document.querySelector(".theme-toggle-dark");
+
+        function updateToggle() {
+            const isDark = document.documentElement.classList.contains("dark");
+            if (tl && td) {
+                tl.style.display = isDark ? "none" : "inline";
+                td.style.display = isDark ? "inline" : "none";
+            }
+        }
+
+        updateToggle();
+        s?.addEventListener("click", () => {
+            if (document.documentElement.classList.contains("dark")) {
+                document.documentElement.classList.remove("dark");
+                localStorage.setItem("theme", "light");
+            } else {
+                document.documentElement.classList.add("dark");
+                localStorage.setItem("theme", "dark");
+            }
+            updateToggle();
+        });
+    </script>
+
+    <main>
+        <h1>Kavindu Tharushan</h1>
+        <p style="opacity: 0.6; margin-bottom: 2rem;">
+            Sri Lanka · <a href="kavindutharushan.com">kavindutharushan.com</a>
+        </p>
+
+        <section style="margin-bottom: 3rem;">
+            <h2>About Me</h2>
+            <p style="margin-top: 2rem;">
+                As an after-A/L student currently pursuing an HND in Computing, I am eager to begin my
+                professional journey. While I am new to the workforce, I bring strong problem-solving skills, a
+                technical mindset, and a genuine enthusiasm for learning. I am a motivated individual with a
+                proactive attitude, ready to contribute effectively to a team and support organizational
+                goals while I build my career in the tech industry.
+            </p>
+        </section>
+
+        <section style="margin-bottom: 3rem;">
+            <h2>Education</h2>
+
+            <div style="margin-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong>CINEC Campus Malabe</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span>Higher National Diploma (HND) in Computing Network Engineering</span>
+                    <span style="opacity: 0.6;">2026 - Present</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong>Bandaranayake College, Gampaha</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span>GCE Advanced Level 2025 in Engineering Technology</span>
+                    <span style="opacity: 0.6;">2024 - 2026</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong>Henegama Central College</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span>GCE Ordinary Level 2022 (2023)</span>
+                    <span style="opacity: 0.6;">2017 - 2024</span>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-bottom: 3rem;">
+            <h2>Projects</h2>
+            <div style="margin-top: 2rem;">
+                <div style="margin-bottom: 1.5rem;">
+                    <strong>Personal Portfolio Website</strong>
+                    <p style="opacity: 0.6; margin-bottom: 0.25rem;">HTML, CSS, Vanilla JavaScript, Cloudflare Pages</p>
+                    <p style="margin-bottom: 0.25rem;">Developed and deployed a responsive personal website to showcase technical projects and skills.</p>
+                    <a href="https://tharushan.pages.dev" target="_blank" rel="noopener noreferrer">tharushan.pages.dev</a>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-bottom: 3rem;">
+            <h2>Skills</h2>
+            <div style="margin-top: 2rem;">
+
+                <div class="skill-group">
+                    <strong>Programming Languages</strong>
+                    <div class="skill-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">PHP</span>
+                        <span class="tag">CSS</span>
+                        <span class="tag">HTML</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">Bash / Shell</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Frontend Development</strong>
+                    <div class="skill-tags">
+                        <span class="tag">HTML5</span>
+                        <span class="tag">CSS3</span>
+                        <span class="tag">Vanilla JavaScript</span>
+                        <span class="tag">Responsive Design</span>
+                        <span class="tag">Flexbox / Grid</span>
+                        <span class="tag">Cloudflare Pages</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Cybersecurity Tools</strong>
+                    <div class="skill-tags">
+                        <span class="tag">Burp Suite</span>
+                        <span class="tag">Nmap</span>
+                        <span class="tag">Metasploit</span>
+                        <span class="tag">Nikto</span>
+                        <span class="tag">OWASP ZAP</span>
+                        <span class="tag">John the Ripper</span>
+                        <span class="tag">Hydra</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Networking Tools</strong>
+                    <div class="skill-tags">
+                        <span class="tag">Wireshark</span>
+                        <span class="tag">Nmap</span>
+                        <span class="tag">Cisco Packet Tracer</span>
+                        <span class="tag">Netcat</span>
+                        <span class="tag">tcpdump</span>
+                        <span class="tag">PuTTY / SSH</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Productivity</strong>
+                    <div class="skill-tags">
+                        <span class="tag">Microsoft Excel (Advanced)</span>
+                        <span class="tag">Word</span>
+                        <span class="tag">PowerPoint</span>
+                        <span class="tag">Power BI</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Operating Systems</strong>
+                    <div class="skill-tags">
+                        <span class="tag">Windows</span>
+                        <span class="tag">Debian Linux</span>
+                        <span class="tag">Kali Linux</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>AI & Automation</strong>
+                    <div class="skill-tags">
+                        <span class="tag">n8n</span>
+                        <span class="tag">Ollama</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Creative</strong>
+                    <div class="skill-tags">
+                        <span class="tag">Adobe Photoshop</span>
+                        <span class="tag">Canva</span>
+                        <span class="tag">GIMP</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Hardware</strong>
+                    <div class="skill-tags">
+                        <span class="tag">PC Assembly & Maintenance</span>
+                    </div>
+                </div>
+
+                <div class="skill-group" style="margin-top: 1rem;">
+                    <strong>Languages</strong>
+                    <div class="skill-tags">
+                        <span class="tag">Sinhala (Native)</span>
+                        <span class="tag">English (Fluent)</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: 0.6; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a>
+            <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+            <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+        </div>
+        <div>@ 2026 Kavindu Tharushan</div>
+    </footer>
+</body>
+
+</html>

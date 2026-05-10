@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="A minimal photo gallery">
+	<meta name="viewport" content="width=device-width">
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+	<meta name="astro-view-transitions-enabled" content="true">
+	<meta name="astro-view-transitions-fallback" content="animate">
+	<script type="module" src="/js/ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js"></script>
+	<script>
+		// Prevent flash during view transitions
+		document.addEventListener('astro:before-swap', (e) => {
+			const savedTheme = localStorage.getItem('theme');
+			if (savedTheme === 'dark') {
+				document.documentElement.classList.add('dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+			}
+		});
+	</script>
+	<title>Kavindu Tharushan - Photos</title>
+	<script>
+		// Dark mode script
+		const theme = (() => {
+			if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+				return localStorage.getItem('theme');
+			}
+			if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+				return 'dark';
+			}
+			return 'light';
+		})();
+
+		if (theme === 'light') {
+			document.documentElement.classList.remove('dark');
+		} else {
+			document.documentElement.classList.add('dark');
+		}
+		window.localStorage.setItem('theme', theme);
+	</script>
+	<style>
+		.astro-route-announcer{position:absolute;left:0;top:0;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;width:1px;height:1px}:root{--bg-color: #fff;--text-color: #000;--border-color: #afafaf;--code-bg: #f5f5f5}.dark{--bg-color: #0a0a0a;--text-color: #e5e5e5;--border-color: #404040;--code-bg: #1a1a1a}*{box-sizing:border-box;margin:0;padding:0}html{overflow-y:scroll;background-color:var(--bg-color)}body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background-color:var(--bg-color)}h1,h2,h3,h4,h5,h6{font-weight:700}h1{margin-top:2rem}h1:first-child{margin-top:0}h2{margin-top:2rem}a{color:var(--text-color);text-decoration:none}a:hover{opacity:.6}nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}nav a{margin-right:1rem;opacity:.4}nav a.active{opacity:1}.theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}.theme-toggle:hover{opacity:1}.gallery[data-astro-cid-vgmx3pcl]{display:flex;flex-direction:column;gap:2rem;margin-top:2rem;max-width:800px;margin-left:auto;margin-right:auto}@media(min-width:769px){.gallery[data-astro-cid-vgmx3pcl]{display:block;column-count:2;column-gap:1.5rem;max-width:1100px}.gallery-item[data-astro-cid-vgmx3pcl]{break-inside:avoid;margin-bottom:1.5rem}}.gallery-item[data-astro-cid-vgmx3pcl]{cursor:pointer;overflow:hidden;background-color:var(--code-bg);display:flex;align-items:center;justify-content:center;width:100%}.gallery-item[data-astro-cid-vgmx3pcl] img[data-astro-cid-vgmx3pcl]{width:100%;height:auto;object-fit:cover;display:block}.gallery-item[data-astro-cid-vgmx3pcl] .gallery-img{width:100%;height:auto;object-fit:contain}.lightbox[data-astro-cid-vgmx3pcl]{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000000f2;z-index:1000;align-items:center;justify-content:center}.lightbox[data-astro-cid-vgmx3pcl].active{display:flex}.lightbox-content[data-astro-cid-vgmx3pcl]{max-width:90%;max-height:90%;display:flex;align-items:center;justify-content:center}.lightbox-content[data-astro-cid-vgmx3pcl] img[data-astro-cid-vgmx3pcl]{max-width:100%;max-height:90vh;object-fit:contain;display:block}.lightbox-close[data-astro-cid-vgmx3pcl],.lightbox-prev[data-astro-cid-vgmx3pcl],.lightbox-next[data-astro-cid-vgmx3pcl]{position:absolute;background:none;border:none;color:#e5e5e5;font-family:Geist Mono,monospace;font-size:2rem;cursor:pointer;opacity:.6;transition:opacity .2s ease;padding:1rem}.lightbox-close[data-astro-cid-vgmx3pcl]:hover,.lightbox-prev[data-astro-cid-vgmx3pcl]:hover,.lightbox-next[data-astro-cid-vgmx3pcl]:hover{opacity:1}.lightbox-close[data-astro-cid-vgmx3pcl]{top:1rem;right:1rem}.lightbox-prev[data-astro-cid-vgmx3pcl]{left:1rem;top:50%;transform:translateY(-50%)}.lightbox-next[data-astro-cid-vgmx3pcl]{right:1rem;top:50%;transform:translateY(-50%)}@media(max-width:768px){.gallery[data-astro-cid-vgmx3pcl]{gap:1.5rem}.gallery-item[data-astro-cid-vgmx3pcl]{cursor:default}.gallery-item[data-astro-cid-vgmx3pcl] .gallery-img,.gallery-item[data-astro-cid-vgmx3pcl]:hover .gallery-img{filter:grayscale(0%)}.lightbox[data-astro-cid-vgmx3pcl]{flex-direction:column;justify-content:center;padding:1rem}.lightbox-content[data-astro-cid-vgmx3pcl]{order:1;margin-bottom:1rem}.lightbox-close[data-astro-cid-vgmx3pcl]{order:0;position:static;margin-bottom:1rem;font-size:1.5rem}.lightbox-prev[data-astro-cid-vgmx3pcl],.lightbox-next[data-astro-cid-vgmx3pcl]{position:static;transform:none;font-size:1.5rem;padding:1rem;order:2}.lightbox-prev[data-astro-cid-vgmx3pcl]{left:auto}.lightbox-next[data-astro-cid-vgmx3pcl]{right:auto}}
+	</style>
+</head>
+<body>
+	<nav>
+		<div style="display: flex; justify-content: space-between; align-items: center;">
+			<div>
+				<a href="/" class>[/]</a>
+				<a href="/blog.html" class>[/blog]</a>
+				<a href="/photos.html" class="active">[/photos]</a>
+				<a href="/resume.html" class>[/resume]</a>
+				<a href="/notes.html">[/notes]</a>
+				<a href="/coolstuff.html" class>[/cool stuff]</a>
+			</div>
+			<button class="theme-toggle" id="themeToggle">
+				<span class="theme-toggle-light">[☀]</span>
+				<span class="theme-toggle-dark" style="display: none;">[☾]</span>
+			</button>
+		</div>
+	</nav> <script type="module">document.addEventListener("astro:page-load",()=>{localStorage.getItem("theme")==="dark"?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark");const s=document.getElementById("themeToggle"),t=document.querySelector(".theme-toggle-light"),n=document.querySelector(".theme-toggle-dark");function o(){const e=document.documentElement.classList.contains("dark");t&&n&&(t.style.display=e?"none":"inline",n.style.display=e?"inline":"none")}o(),s?.addEventListener("click",()=>{document.documentElement.classList.contains("dark")?(document.documentElement.classList.remove("dark"),localStorage.setItem("theme","light")):(document.documentElement.classList.add("dark"),localStorage.setItem("theme","dark")),o()})});</script> <main>  <h1 data-astro-cid-vgmx3pcl>Photos</h1> <p style="opacity: 0.6; margin-bottom: 2rem;" data-astro-cid-vgmx3pcl>
+A collection of beautiful moments I discovered and found <br data-astro-cid-vgmx3pcl>
+across the internet.
+</p>
+<div class="gallery" data-astro-cid-vgmx3pcl>
+	<div class="gallery-item" data-index="0" data-astro-cid-vgmx3pcl>
+		<img src="Images\georgi-kalaydzhiev-WaxPv3S-EXM-unsplash.jpg" alt="yellow" loading="lazy" data-astro-cid-vgmx3pcl="true" decoding="async" fetchpriority="auto" width="800" height="600" class="gallery-img">
+	</div>
+	<div class="gallery-item" data-index="1" data-astro-cid-vgmx3pcl>
+		<img src="Images\katelyn-warner-LwsQr0WOrSM-unsplash.jpg" alt="windows" loading="lazy" data-astro-cid-vgmx3pcl="true" decoding="async" fetchpriority="auto" width="800" height="535" class="gallery-img">
+	</div>
+	<div class="gallery-item" data-index="2" data-astro-cid-vgmx3pcl>
+		<img src="Images\pjh-oEOjXEjFPPo-unsplash.jpg" alt="walking" loading="lazy" data-astro-cid-vgmx3pcl="true" decoding="async" fetchpriority="auto" width="800" height="1067" class="gallery-img">
+	</div>
+	<div class="gallery-item" data-index="3" data-astro-cid-vgmx3pcl>
+		<img src="Images\roman-zJN-QPU6AnA-unsplash.jpg" alt="skyscraper" loading="lazy" data-astro-cid-vgmx3pcl="true" decoding="async" fetchpriority="auto" width="800" height="1067" class="gallery-img">
+	</div>
+	<div class="gallery-item" data-index="4" data-astro-cid-vgmx3pcl>
+		<img src="Images\wrs-tm-pl-QJ6EpR6izoY-unsplash.jpg" alt="skyscraper" loading="lazy" data-astro-cid-vgmx3pcl="true" decoding="async" fetchpriority="auto" width="800" height="1067" class="gallery-img">
+	</div>
+</div>
+<div style="display: none;" data-astro-cid-vgmx3pcl>
+	<img src="Images\georgi-kalaydzhiev-WaxPv3S-EXM-unsplash.jpg" alt="yellow" data-lightbox-index="0" data-astro-cid-vgmx3pcl="true" loading="lazy" decoding="async" fetchpriority="auto" width="2000" height="1500" class="lightbox-high-quality">
+	<img src="Images\katelyn-warner-LwsQr0WOrSM-unsplash.jpg" alt="windows" data-lightbox-index="1" data-astro-cid-vgmx3pcl="true" loading="lazy" decoding="async" fetchpriority="auto" width="2000" height="1337" class="lightbox-high-quality">
+	<img src="Images\pjh-oEOjXEjFPPo-unsplash.jpg" alt="walking" data-lightbox-index="2" data-astro-cid-vgmx3pcl="true" loading="lazy" decoding="async" fetchpriority="auto" width="2000" height="2668" class="lightbox-high-quality">
+	<img src="Images\roman-zJN-QPU6AnA-unsplash.jpg" alt="skyscraper" data-lightbox-index="3" data-astro-cid-vgmx3pcl="true" loading="lazy" decoding="async" fetchpriority="auto" width="2000" height="2666" class="lightbox-high-quality">
+	<img src="Images\wrs-tm-pl-QJ6EpR6izoY-unsplash.jpg" alt="skyscraper" data-lightbox-index="4" data-astro-cid-vgmx3pcl="true" loading="lazy" decoding="async" fetchpriority="auto" width="2000" height="2666" class="lightbox-high-quality">
+</div>
+<div id="lightbox" class="lightbox" data-astro-cid-vgmx3pcl>
+	<button class="lightbox-close" aria-label="Close" data-astro-cid-vgmx3pcl>×</button>
+	<button class="lightbox-prev" aria-label="Previous" data-astro-cid-vgmx3pcl>←</button>
+	<button class="lightbox-next" aria-label="Next" data-astro-cid-vgmx3pcl>→</button>
+	<div class="lightbox-content" data-astro-cid-vgmx3pcl>
+		<a id="lightbox-link" href="" target="_blank"><img id="lightbox-img" src="" alt="" data-astro-cid-vgmx3pcl></a>
+	</div>
+</div>
+<script>
+	(function() {
+		const photos = [
+			{"path":"/src/assets/photos/yellow.jpg","image":{"src":"Images\georgi-kalaydzhiev-WaxPv3S-EXM-unsplash.jpg","width":1440,"height":1080,"format":"jpg"},"filename":"yellow.jpg","alt":"yellow","link":"https://unsplash.com/photos/train-crossing-a-bridge-with-cathedral-in-background-at-sunset-WaxPv3S-EXM"},
+			{"path":"/src/assets/photos/windows.jpg","image":{"src":"Images\katelyn-warner-LwsQr0WOrSM-unsplash.jpg","width":1575,"height":1053,"format":"jpg"},"filename":"windows.jpg","alt":"windows","link":"https://unsplash.com/photos/city-skyline-across-a-large-body-of-water-LwsQr0WOrSM"},
+			{"path":"/src/assets/photos/walking.jpg","image":{"src":"Images\pjh-oEOjXEjFPPo-unsplash.jpg","width":773,"height":1031,"format":"jpg"},"filename":"walking.jpg","alt":"walking","link":"https://unsplash.com/photos/walking-along-a-beach-at-sunset-pjh-oEOjXEjFPPo"},
+			{"path":"/src/assets/photos/skyscraper.jpg","image":{"src":"Images\roman-zJN-QPU6AnA-unsplash.jpg","width":2779,"height":3705,"format":"jpg"},"filename":"skyscraper.jpg","alt":"skyscraper","link":"https://unsplash.com/photos/skyscraper-at-sunset-roman-zJN-QPU6AnA"},
+			{"path":"/src/assets/photos/skyscraper.jpg","image":{"src":"Images\wrs-tm-pl-QJ6EpR6izoY-unsplash.jpg","width":2779,"height":3705,"format":"jpg"},"filename":"skyscraper.jpg","alt":"skyscraper","link":"https://unsplash.com/photos/skyscraper-at-sunset-wrs-tm-pl-QJ6EpR6izoY"},
+		];
+
+		document.addEventListener('astro:page-load', () => {
+			const galleryItems = document.querySelectorAll('.gallery-item');
+			const highQualityImages = document.querySelectorAll('.lightbox-high-quality');
+			const lightbox = document.getElementById('lightbox');
+			const lightboxImg = document.getElementById('lightbox-img');
+			const lightboxLink = document.getElementById('lightbox-link');
+			const closeBtn = document.querySelector('.lightbox-close');
+			const prevBtn = document.querySelector('.lightbox-prev');
+			const nextBtn = document.querySelector('.lightbox-next');
+
+			let currentIndex = 0;
+
+			function openLightbox(index) {
+				currentIndex = index;
+				const highQualityImg = highQualityImages[index];
+				if (lightboxImg && highQualityImg) {
+					// Use the high-quality version in lightbox
+					lightboxImg.src = highQualityImg.src;
+					lightboxImg.alt = highQualityImg.alt;
+					// Use srcset for better quality if available
+					if (highQualityImg.srcset) {
+						lightboxImg.srcset = highQualityImg.srcset;
+					}
+				}
+				if (lightboxLink && photos[index]?.link) {
+					lightboxLink.href = photos[index].link;
+				}
+				lightbox?.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeLightbox() {
+				lightbox?.classList.remove('active');
+				document.body.style.overflow = '';
+			}
+
+			function showNext() {
+				currentIndex = (currentIndex + 1) % galleryItems.length;
+				openLightbox(currentIndex);
+			}
+
+			function showPrev() {
+				currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+				openLightbox(currentIndex);
+			}
+
+			galleryItems.forEach((item, index) => {
+				item.addEventListener('click', () => {
+					// Disable lightbox on mobile
+					if (window.innerWidth <= 768) return;
+					openLightbox(index);
+				});
+			});
+
+			closeBtn?.addEventListener('click', closeLightbox);
+			prevBtn?.addEventListener('click', showPrev);
+			nextBtn?.addEventListener('click', showNext);
+
+			// Close on background click
+			lightbox?.addEventListener('click', (e) => {
+				if (e.target === lightbox) {
+					closeLightbox();
+				}
+			});
+
+			// Keyboard navigation
+			document.addEventListener('keydown', (e) => {
+				if (!lightbox?.classList.contains('active')) return;
+
+				if (e.key === 'Escape') closeLightbox();
+				if (e.key === 'ArrowRight') showNext();
+				if (e.key === 'ArrowLeft') showPrev();
+			});
+		});
+	})();
+</script>
+
+	<script>
+		document.addEventListener('astro:page-load', () => {
+			const galleryItems = document.querySelectorAll('.gallery-item');
+			const highQualityImages = document.querySelectorAll('.lightbox-high-quality');
+			const lightbox = document.getElementById('lightbox');
+			const lightboxImg = document.getElementById('lightbox-img');
+			const closeBtn = document.querySelector('.lightbox-close');
+			const prevBtn = document.querySelector('.lightbox-prev');
+			const nextBtn = document.querySelector('.lightbox-next');
+			
+			let currentIndex = 0;
+
+			function openLightbox(index) {
+				currentIndex = index;
+				const highQualityImg = highQualityImages[index];
+				if (lightboxImg && highQualityImg) {
+					// Use the high-quality version in lightbox
+					lightboxImg.src = highQualityImg.src;
+					lightboxImg.alt = highQualityImg.alt;
+					// Use srcset for better quality if available
+					if (highQualityImg.srcset) {
+						lightboxImg.srcset = highQualityImg.srcset;
+					}
+				}
+				lightbox?.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeLightbox() {
+				lightbox?.classList.remove('active');
+				document.body.style.overflow = '';
+			}
+
+			function showNext() {
+				currentIndex = (currentIndex + 1) % galleryItems.length;
+				openLightbox(currentIndex);
+			}
+
+			function showPrev() {
+				currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+				openLightbox(currentIndex);
+			}
+
+			galleryItems.forEach((item, index) => {
+				item.addEventListener('click', () => {
+					// Disable lightbox on mobile
+					if (window.innerWidth <= 768) return;
+					openLightbox(index);
+				});
+			});
+
+			closeBtn?.addEventListener('click', closeLightbox);
+			prevBtn?.addEventListener('click', showPrev);
+			nextBtn?.addEventListener('click', showNext);
+
+			// Close on background click
+			lightbox?.addEventListener('click', (e) => {
+				if (e.target === lightbox) {
+					closeLightbox();
+				}
+			});
+
+			// Keyboard navigation
+			document.addEventListener('keydown', (e) => {
+				if (!lightbox?.classList.contains('active')) return;
+				
+				if (e.key === 'Escape') closeLightbox();
+				if (e.key === 'ArrowRight') showNext();
+				if (e.key === 'ArrowLeft') showPrev();
+			});
+		});
+	</script></script>  </main> <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: 0.6; display: flex; justify-content: space-between; align-items: center;"> <div> <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a> <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a> <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a> </div> <div>
+@ 2026 Kavindu Tharushan
+</div> </footer> </body></html>

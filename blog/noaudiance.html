@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Most of us have forgotten what it feels like to do something with no one watching. This is about getting that back.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>A Life With No Audience</title>
+  <script>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+    window.localStorage.setItem('theme', theme);
+  </script>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+    body {
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--bg-color);
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+    }
+    h1 {
+      margin-top: 2rem;
+    }
+    h1:first-child {
+      margin-top: 0;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    a:hover {
+      opacity: .6;
+    }
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav a {
+      margin-right: 1rem;
+      opacity: .4;
+    }
+    nav a.active {
+      opacity: 1;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      opacity: .4;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      opacity: 1;
+    }
+    .back-link {
+      opacity: .6;
+      margin-top: 3rem;
+      display: inline-block;
+    }
+    .back-link:hover {
+      opacity: 1;
+    }
+    .prose {
+      line-height: 1.6;
+    }
+    .prose h2,
+    .prose h3,
+    .prose h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .prose p {
+      margin-bottom: 1rem;
+    }
+    .prose strong {
+      font-weight: 700;
+    }
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      opacity: .6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer a {
+      margin-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <a href="../">[/]</a>
+        <a href="../blog.html" class="active">[/blog]</a>
+        <a href="../photos.html">[/photos]</a>
+        <a href="../resume.html">[/resume]</a>
+        <a href="../notes.html">[/notes]</a>
+        <a href="../coolstuff.html">[/cool stuff]</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display: none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+  <main>
+    <article>
+      <h1>A Life With No Audience</h1>
+      <p style="opacity: 0.6; margin-bottom: 2rem;">May 10, 2026</p>
+      <div class="prose">
+        <p>At some point, without really noticing, I started living with a faint awareness of an audience. Not a real one — no one was watching. But the habit of imagining one had crept in. I'd do something small and find myself mentally narrating it, framing it, making it presentable. A meal I cooked. A walk I took. A book I finished. There was always some ghost of a viewer I was performing for, even alone in my room.</p>
+        <p>I think this is one of the stranger things social media did to a generation of people. It didn't just change what we share — it changed how we experience things in the first place.</p>
+
+        <h2 id="the-imaginary-camera">The imaginary camera</h2>
+        <p>I remember the exact moment I noticed it. I was on a walk — genuinely just walking, no destination — and I caught myself composing the scene in my head. The angle. The caption. The version of this walk that would be worth showing someone. I wasn't posting anything. I hadn't been on Instagram in months. But the reflex was still there, running quietly in the background, turning a private moment into content for no one.</p>
+        <p>That's when I understood that quitting platforms isn't enough on its own. The platforms had already installed something in the way I moved through my own life. The audience was gone but the performance continued.</p>
+
+        <h2 id="what-performing-costs-you">What performing costs you</h2>
+        <p>When you live with an imaginary audience, you start editing your experience in real time. You notice the things that would look good and gloss over the things that wouldn't. You reach for the interesting version of what's happening instead of just letting what's happening be enough. It's a small distortion, but it's constant, and over time it adds up to something significant: a life that's been quietly curated away from itself.</p>
+        <p>The moments that don't make good content are often the most real ones. The long stretches of nothing. The mediocre dinner. The walk where you didn't think anything interesting. These are the textures of an actual life, and they get devalued when everything is unconsciously measured against whether it would be worth sharing.</p>
+
+        <h2 id="relearning-privacy">Relearning privacy</h2>
+        <p>What I've been trying to do — slowly, imperfectly — is relearn how to do things with no audience at all. Not for documentation. Not for memory. Not even for the version of myself that might look back on this later. Just to do the thing and let it be done.</p>
+        <p>It's harder than it sounds. The first few times I cooked a meal and didn't photograph it, I felt a small, irrational sense of loss — like it hadn't quite counted. That feeling itself was the problem. An experience that only counts if it's recorded is an experience you're not fully having. You're already somewhere else, managing it from the outside.</p>
+
+        <h2 id="the-unobserved-life">The unobserved life</h2>
+        <p>There's an old idea — older than the internet, older than photography — that character is what you do when no one is watching. I used to think that was about morality: whether you cut corners, whether you're kind when there's nothing to gain from it. And it is about those things. But I think it's also about something quieter. It's about whether you can be present in your own life when there's no external reason to be.</p>
+        <p>The unobserved life isn't a lesser life. It might actually be the fuller one. The conversations that were never posted anywhere. The afternoons that left no record. The version of you that exists only in the moment and then disappears — not into a feed, not into a story, just into having happened.</p>
+
+        <h2 id="no-one-is-coming-to-watch">No one is coming to watch</h2>
+        <p>The audience, it turns out, was never really there. And the sooner you stop performing for it, the sooner you get back the thing it was quietly taking from you: the experience of your own life, unmediated, as it actually is.</p>
+        <p>That's not nothing. That's most of it.</p>
+
+        
+      </div>
+      <a class="back-link" href="/blog.html">[go back to /blog]</a>
+    </article>
+  </main>
+  <footer>
+    <div>
+      <a href="mailto:kvndu@outlook.com">email</a>
+      <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer">youtube</a>
+      <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer">github</a>
+    </div>
+    <div>@ 2026 Kavindu Tharushan</div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('themeToggle');
+      const lightIcon = document.querySelector('.theme-toggle-light');
+      const darkIcon = document.querySelector('.theme-toggle-dark');
+
+      const updateIcons = () => {
+        const darkMode = document.documentElement.classList.contains('dark');
+        if (lightIcon && darkIcon) {
+          lightIcon.style.display = darkMode ? 'none' : 'inline';
+          darkIcon.style.display = darkMode ? 'inline' : 'none';
+        }
+      };
+
+      updateIcons();
+
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcons();
+      });
+    });
+  </script>
+</body>
+</html>

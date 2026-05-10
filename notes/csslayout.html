@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>CSS Layout - Kavindu Tharushan</title>
+    <script>
+        const theme = (() => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) return localStorage.getItem('theme');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+            return 'light';
+        })();
+        if (theme === 'light') document.documentElement.classList.remove('dark');
+        else document.documentElement.classList.add('dark');
+        window.localStorage.setItem('theme', theme);
+    </script>
+    <style>
+        :root{--bg-color:#fff;--text-color:#000;--border-color:#afafaf;--code-bg:#f5f5f5;--subtle:#e8e8e8}
+        .dark{--bg-color:#0a0a0a;--text-color:#e5e5e5;--border-color:#404040;--code-bg:#1a1a1a;--subtle:#222}
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{overflow-y:scroll;background-color:var(--bg-color)}
+        body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;background-color:var(--bg-color)}
+        a{color:var(--text-color);text-decoration:none}
+        a:hover{opacity:.6}
+        nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
+        nav a{margin-right:1rem;opacity:.4}
+        nav a.active{opacity:1}
+        .theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}
+        .theme-toggle:hover{opacity:1}
+        .back{font-size:11px;opacity:.4;display:inline-block;margin-bottom:1.2rem}
+        h1.title{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:.5rem}
+        .meta{font-size:11px;opacity:.35;margin-bottom:2rem}
+        .divider{height:1px;background:var(--border-color);margin:2rem 0;opacity:.4}
+        .prose{font-size:14px;line-height:1.85}
+        .prose p{margin-bottom:1.1rem;opacity:.88}
+        .prose h2{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.4;margin:2.5rem 0 .7rem;border-bottom:1px solid var(--subtle);padding-bottom:.4rem}
+        .prose ul{padding-left:1.2rem;margin-bottom:1rem}
+        .prose li{margin-bottom:.3rem;font-size:14px;opacity:.88}
+        .prose strong{font-weight:700}
+        pre{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto}
+        pre code{font-size:11px;line-height:1.7;opacity:.85}
+        code{font-family:Geist Mono,monospace;font-size:11px;background:var(--code-bg);padding:1px 5px;border-radius:3px;border:1px solid var(--subtle)}
+        table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:12px}
+        th{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--border-color);opacity:.45;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+        td{padding:.5rem .7rem;border-bottom:1px solid var(--subtle);opacity:.85;vertical-align:top}
+        tr:last-child td{border-bottom:none}
+        .ctrl-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
+        .ctrl-btn{font-family:Geist Mono,monospace;font-size:10px;padding:3px 10px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.5;transition:all .15s}
+        .ctrl-btn:hover{opacity:.8}
+        .ctrl-btn.on{opacity:1;border-color:var(--text-color);font-weight:700}
+        .ctrl-label{font-size:10px;opacity:.4;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+        .playground{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0}
+        .pg-header{background:var(--code-bg);padding:.7rem 1rem;border-bottom:1px solid var(--subtle);display:flex;justify-content:space-between;align-items:center;font-size:11px;opacity:.7}
+        .pg-body{padding:1rem}
+        .flex-canvas{min-height:120px;border:1px solid var(--subtle);border-radius:6px;padding:8px;display:flex;gap:6px;transition:all .3s;background:var(--bg-color)}
+        .flex-item{width:52px;height:52px;background:var(--code-bg);border:1px solid var(--subtle);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;opacity:.8;transition:all .3s;flex-shrink:0}
+        .flex-item:nth-child(2){height:72px}
+        .flex-item:nth-child(3){height:40px}
+        .grid-canvas{border:1px solid var(--subtle);border-radius:6px;padding:8px;display:grid;gap:6px;background:var(--bg-color);transition:all .3s}
+        .grid-item{height:44px;background:var(--code-bg);border:1px solid var(--subtle);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;opacity:.8;transition:all .3s}
+        .spec-row{display:flex;align-items:center;gap:.8rem;padding:.5rem 0;border-bottom:1px solid var(--subtle);font-size:12px}
+        .spec-row:last-child{border-bottom:none}
+        .spec-bar-wrap{flex:1;height:6px;background:var(--subtle);border-radius:3px;overflow:hidden}
+        .spec-bar{height:6px;border-radius:3px;background:var(--text-color);transition:width .4s}
+        .spec-name{width:110px;opacity:.7;flex-shrink:0}
+        .spec-val{width:40px;text-align:right;opacity:.45;flex-shrink:0;font-size:11px}
+        .box-model{position:relative;margin:1.5rem auto;width:300px;font-size:10px;text-align:center}
+        .bm-layer{border-radius:4px;padding:12px;cursor:pointer;transition:opacity .2s}
+        .bm-margin{background:rgba(255,165,0,.12);border:1px dashed rgba(255,165,0,.4)}
+        .bm-border{background:rgba(100,149,237,.12);border:1px dashed rgba(100,149,237,.4)}
+        .bm-padding{background:rgba(144,238,144,.12);border:1px dashed rgba(144,238,144,.4)}
+        .bm-content{background:rgba(255,99,132,.12);border:1px dashed rgba(255,99,132,.4);height:40px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px}
+        .bm-desc{margin-top:.8rem;font-size:12px;opacity:.7;min-height:2.5rem;text-align:left;padding:0 .5rem}
+        .code-out{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.7rem 1rem;font-size:11px;font-family:Geist Mono,monospace;opacity:.8;margin-top:.6rem;white-space:pre;overflow-x:auto}
+        footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border-color);opacity:.6;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+                <a href="/">[/]</a>
+                <a href="/blog.html">[/blog]</a>
+                <a href="/photos.html">[/photos]</a>
+                <a href="/resume.html">[/resume]</a>
+                <a href="/notes.html" class="active">[/notes]</a>
+                <a href="/coolstuff.html">[/cool stuff]</a>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-toggle-light">[☀]</span>
+                <span class="theme-toggle-dark" style="display:none">[☾]</span>
+            </button>
+        </div>
+    </nav>
+    <script>
+        const s=document.getElementById('themeToggle'),tl=document.querySelector('.theme-toggle-light'),td=document.querySelector('.theme-toggle-dark');
+        function syncToggle(){const d=document.documentElement.classList.contains('dark');tl.style.display=d?'none':'inline';td.style.display=d?'inline':'none';}
+        syncToggle();
+        s.addEventListener('click',()=>{document.documentElement.classList.contains('dark')?(document.documentElement.classList.remove('dark'),localStorage.setItem('theme','light')):(document.documentElement.classList.add('dark'),localStorage.setItem('theme','dark'));syncToggle();});
+    </script>
+
+    <main>
+        <a href="/notes.html" class="back">← /notes</a>
+        <h1 class="title">CSS Layout</h1>
+        <div class="meta">2026.03.05 &nbsp;·&nbsp; 10 min read</div>
+
+        <div class="prose">
+            <p>CSS layout is the system for placing elements on a page. For most of the web's history, developers used floats and tables — hacks never meant for layout. Flexbox arrived in 2012 and Grid in 2017. Together they cover nearly every layout pattern you will ever need.</p>
+            <p>The distinction is simple: <strong>Flexbox is one-dimensional</strong> — it controls items along a single axis. <strong>Grid is two-dimensional</strong> — it controls rows and columns simultaneously. Choose based on whether your layout thinks in lines or planes.</p>
+
+            <h2>The box model</h2>
+            <p>Before either system, every element is a box. Understanding that box is prerequisite to understanding why layouts break. Hover each layer below to see what it controls.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-header"><span>Box Model</span><span id="bm-active-label" style="opacity:.5">hover a layer</span></div>
+            <div class="pg-body">
+                <div class="box-model">
+                    <div class="bm-layer bm-margin" onmouseenter="hoverBm('margin')" onmouseleave="hoverBm(null)">
+                        <span style="font-size:9px;opacity:.4;text-transform:uppercase;letter-spacing:.06em">margin</span>
+                        <div class="bm-layer bm-border" onmouseenter="hoverBm('border')" onmouseleave="hoverBm(null)">
+                            <span style="font-size:9px;opacity:.4;text-transform:uppercase;letter-spacing:.06em">border</span>
+                            <div class="bm-layer bm-padding" onmouseenter="hoverBm('padding')" onmouseleave="hoverBm(null)">
+                                <span style="font-size:9px;opacity:.4;text-transform:uppercase;letter-spacing:.06em">padding</span>
+                                <div class="bm-layer bm-content" onmouseenter="hoverBm('content')" onmouseleave="hoverBm(null)">content</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bm-desc" id="bm-desc">Hover each layer to learn what it does.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>Flexbox</h2>
+            <p>Flexbox distributes items along a single axis. The parent becomes a flex container; its direct children become flex items. Toggle the properties below and watch the layout update live.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-header"><span>Flexbox Playground</span><span style="opacity:.4;font-size:10px">toggle any property</span></div>
+            <div class="pg-body">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem">
+                    <div>
+                        <div class="ctrl-label">flex-direction</div>
+                        <div class="ctrl-row">
+                            <button class="ctrl-btn on" onclick="setFlex('direction','row',this)">row</button>
+                            <button class="ctrl-btn" onclick="setFlex('direction','column',this)">column</button>
+                            <button class="ctrl-btn" onclick="setFlex('direction','row-reverse',this)">row-reverse</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ctrl-label">flex-wrap</div>
+                        <div class="ctrl-row">
+                            <button class="ctrl-btn on" onclick="setFlex('wrap','nowrap',this)">nowrap</button>
+                            <button class="ctrl-btn" onclick="setFlex('wrap','wrap',this)">wrap</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ctrl-label">justify-content</div>
+                        <div class="ctrl-row">
+                            <button class="ctrl-btn on" onclick="setFlex('justify','flex-start',this)">start</button>
+                            <button class="ctrl-btn" onclick="setFlex('justify','center',this)">center</button>
+                            <button class="ctrl-btn" onclick="setFlex('justify','flex-end',this)">end</button>
+                            <button class="ctrl-btn" onclick="setFlex('justify','space-between',this)">space-between</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ctrl-label">align-items</div>
+                        <div class="ctrl-row">
+                            <button class="ctrl-btn on" onclick="setFlex('align','stretch',this)">stretch</button>
+                            <button class="ctrl-btn" onclick="setFlex('align','flex-start',this)">start</button>
+                            <button class="ctrl-btn" onclick="setFlex('align','center',this)">center</button>
+                            <button class="ctrl-btn" onclick="setFlex('align','flex-end',this)">end</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-canvas" id="flex-canvas">
+                    <div class="flex-item">A</div>
+                    <div class="flex-item">B</div>
+                    <div class="flex-item">C</div>
+                </div>
+                <div class="code-out" id="flex-code">.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+}</div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>Grid</h2>
+            <p>Grid thinks in two dimensions at once. You define columns and rows on the parent; items place themselves or you place them explicitly. The most powerful single line in CSS layout:</p>
+            <pre><code>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</code></pre>
+            <p>This creates as many columns as fit, each at least 200px wide, sharing remaining space equally. No media queries needed.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-header"><span>Grid Playground</span><span style="opacity:.4;font-size:10px">toggle columns and gap</span></div>
+            <div class="pg-body">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem">
+                    <div>
+                        <div class="ctrl-label">grid-template-columns</div>
+                        <div class="ctrl-row">
+                            <button class="ctrl-btn on" onclick="setGrid('cols','1fr',this)">1fr</button>
+                            <button class="ctrl-btn" onclick="setGrid('cols','1fr 1fr',this)">1fr 1fr</button>
+                            <button class="ctrl-btn" onclick="setGrid('cols','1fr 1fr 1fr',this)">1fr 1fr 1fr</button>
+                            <button class="ctrl-btn" onclick="setGrid('cols','2fr 1fr',this)">2fr 1fr</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="ctrl-label">gap</div>
+                        <div class="ctrl-row">
+                            <button class="ctrl-btn" onclick="setGrid('gap','0px',this)">0</button>
+                            <button class="ctrl-btn on" onclick="setGrid('gap','6px',this)">6px</button>
+                            <button class="ctrl-btn" onclick="setGrid('gap','16px',this)">16px</button>
+                            <button class="ctrl-btn" onclick="setGrid('gap','24px',this)">24px</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-canvas" id="grid-canvas">
+                    <div class="grid-item">1</div><div class="grid-item">2</div>
+                    <div class="grid-item">3</div><div class="grid-item">4</div>
+                    <div class="grid-item">5</div><div class="grid-item">6</div>
+                </div>
+                <div class="code-out" id="grid-code">.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}</div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>Flexbox vs Grid — when to use which</h2>
+            <table>
+                <tr><th>Situation</th><th>Use</th><th>Why</th></tr>
+                <tr><td>Navbar with logo + links</td><td>Flexbox</td><td>One row, space-between</td></tr>
+                <tr><td>Card grid that wraps</td><td>Grid</td><td>2D, auto-fit minmax</td></tr>
+                <tr><td>Centering a single element</td><td>Flexbox</td><td>justify + align center</td></tr>
+                <tr><td>Page-level layout</td><td>Grid</td><td>Header / sidebar / main</td></tr>
+                <tr><td>Button row with icon + text</td><td>Flexbox</td><td>Inline axis alignment</td></tr>
+                <tr><td>Dashboard tiles</td><td>Grid</td><td>Named areas, explicit placement</td></tr>
+            </table>
+
+            <h2>CSS specificity</h2>
+            <p>When two rules target the same element, the browser picks the one with higher specificity. The scoring system has three buckets — IDs, classes, and elements — read like a three-digit number.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-header"><span>Specificity Calculator</span><span style="opacity:.4;font-size:10px">click a selector to compare</span></div>
+            <div class="pg-body" id="spec-body">
+                <div class="ctrl-row" style="margin-bottom:1rem">
+                    <button class="ctrl-btn on" onclick="showSpec('element',event)">element</button>
+                    <button class="ctrl-btn" onclick="showSpec('class',event)">class</button>
+                    <button class="ctrl-btn" onclick="showSpec('id',event)">ID</button>
+                    <button class="ctrl-btn" onclick="showSpec('inline',event)">inline style</button>
+                    <button class="ctrl-btn" onclick="showSpec('important',event)">!important</button>
+                </div>
+                <div id="spec-rows"></div>
+                <div id="spec-note" style="font-size:12px;opacity:.6;margin-top:.8rem"></div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <pre><code>/* 0-0-1 — lowest weight */
+p { color: gray; }
+
+/* 0-1-0 — beats element selectors */
+.title { color: black; }
+
+/* 1-0-0 — beats everything except inline + !important */
+#hero { color: red; }
+
+/* nuclear option — avoid */
+.btn { color: blue !important; }</code></pre>
+
+            <h2>Common layout patterns</h2>
+            <pre><code>/* Holy grail layout */
+.page {
+  display: grid;
+  grid-template:
+    "header  header  header"  auto
+    "sidebar main    aside"   1fr
+    "footer  footer  footer"  auto
+    / 200px  1fr     200px;
+}
+
+/* Centred container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Sticky footer */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main { flex: 1; }</code></pre>
+        </div>
+    </main>
+
+    <div class="divider"></div>
+    <footer>
+        <div>
+            <a href="mailto:kvndu@outlook.com" style="margin-right:1rem">email</a>
+            <a href="https://www.linkedin.com/in/kvndu/" target="_blank" rel="noopener noreferrer" style="margin-right:1rem">linkedin</a>
+            <a href="https://www.instagram.com/kvndu/" target="_blank" rel="noopener noreferrer">instagram</a>
+        </div>
+        <div>@ 2026 Kavindu Tharushan</div>
+    </footer>
+
+    <script>
+        function hoverBm(layer) {
+            const msgs = {
+                margin:'The space outside the border. Margins collapse vertically between siblings — two stacked elements with margin:16px each produce 16px of gap, not 32px.',
+                border:'The visible stroke around the element. box-sizing: border-box makes the border count inside the declared width, not outside it.',
+                padding:'Space between the border and the content. Unlike margin, padding is inside the element — it inherits the background color.',
+                content:'Where text and children live. With box-sizing: border-box, width includes padding + border — almost always what you want.'
+            };
+            document.getElementById('bm-desc').textContent = layer ? msgs[layer] : 'Hover each layer to learn what it does.';
+            document.getElementById('bm-active-label').textContent = layer || 'hover a layer';
+        }
+
+        const flexState = {direction:'row',wrap:'nowrap',justify:'flex-start',align:'stretch'};
+        function setFlex(prop, val, btn) {
+            flexState[prop] = val;
+            btn.closest('.ctrl-row').querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('on'));
+            btn.classList.add('on');
+            const c = document.getElementById('flex-canvas');
+            c.style.flexDirection = flexState.direction;
+            c.style.flexWrap = flexState.wrap;
+            c.style.justifyContent = flexState.justify;
+            c.style.alignItems = flexState.align;
+            c.style.minHeight = flexState.direction === 'column' ? '200px' : '120px';
+            document.getElementById('flex-code').textContent = `.container {\n  display: flex;\n  flex-direction: ${flexState.direction};\n  flex-wrap: ${flexState.wrap};\n  justify-content: ${flexState.justify};\n  align-items: ${flexState.align};\n}`;
+        }
+
+        const gridState = {cols:'1fr',gap:'6px'};
+        function setGrid(prop, val, btn) {
+            gridState[prop] = val;
+            btn.closest('.ctrl-row').querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('on'));
+            btn.classList.add('on');
+            const c = document.getElementById('grid-canvas');
+            c.style.gridTemplateColumns = gridState.cols;
+            c.style.gap = gridState.gap;
+            document.getElementById('grid-code').textContent = `.container {\n  display: grid;\n  grid-template-columns: ${gridState.cols};\n  gap: ${gridState.gap};\n}`;
+        }
+
+        const specData = {
+            element:  {score:[0,0,1],label:'p, div, h1',note:'Elements have the lowest weight. Always overrideable by a class or ID.',pct:[0,0,5]},
+            class:    {score:[0,1,0],label:'.title, :hover, [attr]',note:'Classes, pseudo-classes, and attribute selectors all score (0,1,0). Most day-to-day styling lives here.',pct:[0,60,0]},
+            id:       {score:[1,0,0],label:'#hero, #nav',note:'IDs are extremely specific. One ID beats any number of classes. Avoid for styling — hard to override.',pct:[80,0,0]},
+            inline:   {score:['∞',0,0],label:'style="color:red"',note:'Inline styles beat all external rules. Reserve for JS-applied dynamic styles only.',pct:[95,0,0]},
+            important:{score:['∞','∞','∞'],label:'color: red !important',note:'!important overrides everything. Breaks the cascade — use only as a last resort.',pct:[100,100,100]},
+        };
+        function showSpec(key, e) {
+            document.querySelectorAll('#spec-body .ctrl-btn').forEach(b => b.classList.remove('on'));
+            e.target.classList.add('on');
+            const d = specData[key];
+            const labels = ['IDs','Classes','Elements'];
+            document.getElementById('spec-rows').innerHTML = labels.map((l,i) =>
+                `<div class="spec-row"><span class="spec-name">${l}</span><div class="spec-bar-wrap"><div class="spec-bar" style="width:${d.pct[i]}%"></div></div><span class="spec-val">${d.score[i]}</span></div>`
+            ).join('') + `<div style="font-size:11px;opacity:.5;margin-top:.5rem">${d.label}</div>`;
+            document.getElementById('spec-note').textContent = d.note;
+        }
+        showSpec('element', {target: document.querySelector('#spec-body .ctrl-btn')});
+    </script>
+</body>
+</html>

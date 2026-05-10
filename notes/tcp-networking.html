@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>TCP / Networking - Kavindu Tharushan</title>
+    <script>
+        const theme = (() => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) return localStorage.getItem('theme');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+            return 'light';
+        })();
+        if (theme === 'light') document.documentElement.classList.remove('dark');
+        else document.documentElement.classList.add('dark');
+        window.localStorage.setItem('theme', theme);
+    </script>
+    <style>
+        :root{--bg-color:#fff;--text-color:#000;--border-color:#afafaf;--code-bg:#f5f5f5;--subtle:#e8e8e8}
+        .dark{--bg-color:#0a0a0a;--text-color:#e5e5e5;--border-color:#404040;--code-bg:#1a1a1a;--subtle:#222}
+        *{box-sizing:border-box;margin:0;padding:0}
+        html{overflow-y:scroll;background-color:var(--bg-color)}
+        body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;background-color:var(--bg-color)}
+        a{color:var(--text-color);text-decoration:none}
+        a:hover{opacity:.6}
+        nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
+        nav a{margin-right:1rem;opacity:.4}
+        nav a.active{opacity:1}
+        .theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}
+        .theme-toggle:hover{opacity:1}
+        .back{font-size:11px;opacity:.4;display:inline-block;margin-bottom:1.2rem}
+        h1.title{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:.5rem}
+        .meta{font-size:11px;opacity:.35;margin-bottom:2rem}
+        .divider{height:1px;background:var(--border-color);margin:2rem 0;opacity:.4}
+        .prose{font-size:14px;line-height:1.85}
+        .prose p{margin-bottom:1.1rem;opacity:.88}
+        .prose h2{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.4;margin:2.5rem 0 .7rem;border-bottom:1px solid var(--subtle);padding-bottom:.4rem}
+        .prose ul{padding-left:1.2rem;margin-bottom:1rem}
+        .prose li{margin-bottom:.4rem;font-size:14px;opacity:.88}
+        .prose strong{font-weight:700}
+        pre{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto}
+        pre code{font-size:11px;line-height:1.7;opacity:.85}
+        code{font-family:Geist Mono,monospace;font-size:11px;background:var(--code-bg);padding:1px 5px;border-radius:3px;border:1px solid var(--subtle)}
+        .playground{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0}
+        .pg-head{background:var(--code-bg);padding:.65rem 1rem;border-bottom:1px solid var(--subtle);display:flex;justify-content:space-between;align-items:center;font-size:11px;opacity:.75}
+        .pg-body{padding:1rem}
+        .btn{font-family:Geist Mono,monospace;font-size:10px;padding:3px 11px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.55;transition:all .15s}
+        .btn:hover{opacity:.9}.btn.on{opacity:1;border-color:var(--text-color);font-weight:700}
+        .btn-primary{background:var(--code-bg);opacity:.8}
+        .ctrl-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem}
+        #handshake-canvas{width:100%;height:220px;display:block}
+        .hs-controls{display:flex;gap:.6rem;align-items:center;margin-bottom:.8rem;flex-wrap:wrap}
+        .hs-log{background:var(--code-bg);border:1px solid var(--subtle);border-radius:5px;padding:.6rem .8rem;font-size:11px;min-height:2.4rem;opacity:.8;line-height:1.6}
+        .packet-wrap{display:flex;gap:0;margin:1rem 0;border:1px solid var(--subtle);border-radius:6px;overflow:hidden}
+        .pkt-field{flex:1;padding:.5rem .3rem;text-align:center;cursor:pointer;transition:all .15s;border-right:1px solid var(--subtle);font-size:10px;font-weight:700;line-height:1.3}
+        .pkt-field:last-child{border-right:none}
+        .pkt-field:hover{background:var(--code-bg)}
+        .pkt-field.sel{background:var(--text-color);color:var(--bg-color)}
+        .pkt-field .bytes{font-size:9px;opacity:.5;font-weight:400;display:block;margin-top:2px}
+        .pkt-detail{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.75rem 1rem;font-size:12px;line-height:1.7;min-height:3rem;margin-top:.5rem}
+        .pkt-detail strong{display:block;margin-bottom:.25rem;font-size:13px}
+        .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.6rem}
+        .cmp-col{border:1px solid var(--subtle);border-radius:6px;overflow:hidden}
+        .cmp-head{background:var(--code-bg);padding:.4rem .8rem;font-size:10px;font-weight:700;opacity:.65;border-bottom:1px solid var(--subtle);text-transform:uppercase;letter-spacing:.06em;display:flex;justify-content:space-between}
+        .cmp-body{padding:.6rem .8rem}
+        .cmp-row{display:flex;justify-content:space-between;padding:.25rem 0;border-bottom:1px solid var(--subtle);font-size:11px}
+        .cmp-row:last-child{border-bottom:none}
+        .cmp-label{opacity:.5}.cmp-val{font-weight:700;font-size:11px}
+        .tcp-val{color:#3b82f6}.udp-val{color:#f59e0b}
+        .port-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.7rem}
+        @media(max-width:500px){.port-grid{grid-template-columns:repeat(3,1fr)}}
+        .port-btn{font-family:Geist Mono,monospace;font-size:10px;padding:.3rem .4rem;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.55;text-align:left;transition:all .15s;line-height:1.3}
+        .port-btn:hover{opacity:1;background:var(--code-bg)}
+        .port-btn.sel{border-color:var(--text-color);opacity:1;background:var(--code-bg)}
+        .port-num{font-weight:700;display:block;font-size:12px}
+        .port-name{opacity:.5;font-size:9px}
+        .port-detail{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.75rem 1rem;font-size:12px;line-height:1.7;min-height:2.8rem}
+        .port-detail strong{display:block;margin-bottom:.2rem}
+        #loss-canvas{width:100%;height:160px;display:block}
+        .loss-controls{display:flex;gap:.5rem;align-items:center;margin-bottom:.7rem;flex-wrap:wrap}
+        .loss-slider{-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:var(--subtle);outline:none;width:120px;cursor:pointer}
+        .loss-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--text-color);cursor:pointer}
+        .loss-stats{display:flex;gap:1.2rem;margin-top:.6rem;font-size:11px;flex-wrap:wrap}
+        .stat-item{opacity:.6}.stat-val{font-weight:700;opacity:1}
+        .osi-row{display:flex;align-items:center;gap:.7rem;padding:.45rem .7rem;border-bottom:1px solid var(--subtle);cursor:pointer;transition:background .15s;font-size:12px}
+        .osi-row:last-child{border-bottom:none}
+        .osi-row:hover{background:var(--code-bg)}
+        .osi-row.sel{background:var(--code-bg);border-left:2px solid var(--text-color)}
+        .osi-num{width:18px;font-weight:700;opacity:.4;flex-shrink:0;font-size:11px}
+        .osi-name{font-weight:700;width:110px;flex-shrink:0}
+        .osi-proto{opacity:.45;font-size:11px;flex:1}
+        .osi-detail{padding:.8rem 1rem;background:var(--code-bg);border-top:1px solid var(--subtle);font-size:12px;line-height:1.6;display:none}
+        .osi-detail strong{display:block;margin-bottom:.25rem;font-size:13px}
+        .osi-detail.show{display:block}
+        footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border-color);opacity:.6;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+    </style>
+</head>
+<body>
+    <nav>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+                <a href="/">[/]</a>
+                <a href="/blog.html">[/blog]</a>
+                <a href="/photos.html">[/photos]</a>
+                <a href="/resume.html">[/resume]</a>
+                <a href="/notes.html" class="active">[/notes]</a>
+                <a href="/coolstuff.html">[/cool stuff]</a>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-toggle-light">[☀]</span>
+                <span class="theme-toggle-dark" style="display:none">[☾]</span>
+            </button>
+        </div>
+    </nav>
+    <script>
+        const s=document.getElementById('themeToggle'),tl=document.querySelector('.theme-toggle-light'),td=document.querySelector('.theme-toggle-dark');
+        function syncToggle(){const d=document.documentElement.classList.contains('dark');tl.style.display=d?'none':'inline';td.style.display=d?'inline':'none';}
+        syncToggle();
+        s.addEventListener('click',()=>{document.documentElement.classList.contains('dark')?(document.documentElement.classList.remove('dark'),localStorage.setItem('theme','light')):(document.documentElement.classList.add('dark'),localStorage.setItem('theme','dark'));syncToggle();});
+    </script>
+
+    <main>
+        <a href="/notes.html" class="back">← /notes</a>
+        <h1 class="title">TCP / Networking</h1>
+        <div class="meta">2026.01.24 &nbsp;·&nbsp; 10 min read</div>
+
+        <div class="prose">
+            <p>Every time you open a webpage, stream a video, or send a message, data travels across networks as a series of small chunks called packets. TCP — the Transmission Control Protocol — is the system that makes sure those packets arrive in the right order, with nothing missing, even when the network between you and the server is unreliable.</p>
+            <p>TCP trades speed for <strong>reliability</strong>. If that trade-off is wrong for your use case — live video, gaming, DNS lookups — you use UDP instead and handle the unreliability yourself. Most of the web runs on TCP. Most real-time apps run on UDP.</p>
+            <h2>The OSI model</h2>
+            <p>The OSI model splits networking into 7 layers. Each layer has a specific job and only talks to the layers directly above and below it. TCP lives at layer 4. HTTP lives at layer 7. Click any layer to see what it does.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-head"><span>OSI Model</span><span style="opacity:.45;font-size:10px">click a layer</span></div>
+            <div class="pg-body" style="padding:0">
+                <div id="osi-rows"></div>
+                <div class="osi-detail" id="osi-detail"></div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>The three-way handshake</h2>
+            <p>Before any data is sent over TCP, the client and server must establish a connection. This takes exactly three messages — SYN, SYN-ACK, ACK. It guarantees both sides are reachable and agree on sequence numbers before a single byte of real data moves.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-head"><span>Three-Way Handshake</span><span id="hs-step-label" style="opacity:.45;font-size:10px">press play</span></div>
+            <div class="pg-body">
+                <div class="hs-controls">
+                    <button class="btn btn-primary" id="hs-play-btn" onclick="hsPlay()">▶ play</button>
+                    <button class="btn" onclick="hsReset()">reset</button>
+                </div>
+                <canvas id="handshake-canvas"></canvas>
+                <div class="hs-log" id="hs-log">Click play to watch the handshake step by step.</div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>The TCP segment</h2>
+            <p>Every piece of data sent over TCP is wrapped in a segment — a header plus payload. Click each field to see what it does.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-head"><span>TCP Segment Anatomy</span><span style="opacity:.45;font-size:10px">click any field</span></div>
+            <div class="pg-body">
+                <div class="packet-wrap" id="pkt-wrap"></div>
+                <div class="pkt-detail" id="pkt-detail"><span style="opacity:.45">Select a field above.</span></div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>TCP vs UDP</h2>
+            <p>TCP and UDP share the same layer but make completely opposite bets. TCP assumes the network is unreliable and fixes it. UDP assumes you do not care.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-head"><span>TCP vs UDP</span></div>
+            <div class="pg-body">
+                <div class="cmp-grid">
+                    <div class="cmp-col">
+                        <div class="cmp-head"><span>TCP</span><span style="color:#3b82f6">reliable</span></div>
+                        <div class="cmp-body" id="tcp-body"></div>
+                    </div>
+                    <div class="cmp-col">
+                        <div class="cmp-head"><span>UDP</span><span style="color:#f59e0b">fast</span></div>
+                        <div class="cmp-body" id="udp-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>Ports</h2>
+            <p>A port is a 16-bit number that identifies a specific process on a machine. The IP address gets you to the right computer. The port gets you to the right door on that computer.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-head"><span>Well-Known Ports</span><span style="opacity:.45;font-size:10px">click to explore</span></div>
+            <div class="pg-body">
+                <div class="port-grid" id="port-grid"></div>
+                <div class="port-detail" id="port-detail"><span style="opacity:.45">Select a port above.</span></div>
+            </div>
+        </div>
+
+        <div class="prose">
+            <h2>Packet loss & retransmission</h2>
+            <p>The internet does not guarantee delivery. TCP detects packet loss with timeouts and duplicate acknowledgements, then retransmits. Watch what happens to throughput as loss increases.</p>
+        </div>
+
+        <div class="playground">
+            <div class="pg-head"><span>Packet Loss Simulator</span><span style="opacity:.45;font-size:10px">drag the slider</span></div>
+            <div class="pg-body">
+                <div class="loss-controls">
+                    <span style="font-size:11px;opacity:.6">packet loss:</span>
+                    <input class="loss-slider" type="range" min="0" max="60" value="0" id="loss-slider" oninput="updateLoss(this.value)">
+                    <span style="font-size:11px;font-weight:700" id="loss-pct">0%</span>
+                    <button class="btn btn-primary" onclick="runLossSim()">simulate</button>
+                </div>
+                <canvas id="loss-canvas"></canvas>
+                <div class="loss-stats" id="loss-stats"></div>
+            </div>
+        </div>
+
+        <div class="prose">
+<pre><code># Tools for poking at the network
+ping google.com               # round-trip time to a host
+traceroute google.com         # every hop between you and the host
+curl -v https://example.com   # full HTTP request/response with headers
+netstat -an                   # all open ports and connections
+nslookup example.com          # DNS lookup
+ss -tulpn                     # modern netstat: sockets, ports, PIDs</code></pre>
+
+            <h2>Why TCP is slow to start</h2>
+            <p>TCP uses <strong>slow start</strong> — a congestion control algorithm that begins by sending a small window of data and doubles it every round trip until it hits a limit or detects packet loss. This is why the first few seconds of a large download feel slower than the rest.</p>
+<pre><code>let cwnd = 1          // start: 1 segment
+let ssthresh = 64     // slow start threshold
+
+// Each ACK received:
+if (cwnd < ssthresh) {
+  cwnd *= 2           // slow start: exponential
+} else {
+  cwnd += 1           // congestion avoidance: linear
+}
+
+// On packet loss:
+ssthresh = cwnd / 2   // back off
+cwnd = 1              // restart slow start</code></pre>
+        </div>
+    </main>
+
+    <div class="divider"></div>
+    <footer>
+        <div>
+            <a href="mailto:kvndu@outlook.com" style="margin-right:1rem">email</a>
+            <a href="https://www.linkedin.com/in/kvndu/" target="_blank" rel="noopener noreferrer" style="margin-right:1rem">linkedin</a>
+            <a href="https://www.instagram.com/kvndu/" target="_blank" rel="noopener noreferrer">instagram</a>
+        </div>
+        <div>@ 2026 Kavindu Tharushan</div>
+    </footer>
+
+    <script>
+        const isDark=()=>document.documentElement.classList.contains('dark');
+        const FG=()=>isDark()?'#e5e5e5':'#111';
+        const MUTED=()=>isDark()?'#444':'#ccc';
+        const CODEBG=()=>isDark()?'#1a1a1a':'#f5f5f5';
+
+        // OSI
+        const osiLayers=[{n:7,name:'Application',proto:'HTTP, DNS, SMTP, FTP',detail:'Where user-facing protocols live. HTTP transfers web pages, DNS resolves domain names, SMTP sends email. This is the layer your code usually interacts with directly.'},{n:6,name:'Presentation',proto:'TLS/SSL, JPEG, UTF-8',detail:'Translates data between formats — encryption (TLS), compression, and encoding. HTTPS encryption happens here before data is handed to the transport layer.'},{n:5,name:'Session',proto:'NetBIOS, RPC',detail:'Manages sessions — establishing, maintaining, and terminating conversations between applications. Largely handled by the OS in modern networking.'},{n:4,name:'Transport',proto:'TCP, UDP',detail:'Responsible for end-to-end communication. TCP adds reliability: ordering, acknowledgements, retransmission. UDP skips all that for speed. Port numbers live here.'},{n:3,name:'Network',proto:'IP, ICMP, routing',detail:'Handles logical addressing (IP addresses) and routing — deciding which path packets take across networks. Routers operate at this layer.'},{n:2,name:'Data Link',proto:'Ethernet, Wi-Fi (802.11)',detail:'Responsible for node-to-node transfer on a single network segment. MAC addresses live here. Your Wi-Fi card and Ethernet adapter operate at this layer.'},{n:1,name:'Physical',proto:'Cables, radio, fibre',detail:'Raw bits over a physical medium — electrical signals on copper, light pulses in fibre, radio waves for Wi-Fi. Everything eventually becomes this.'}];
+        const osiWrap=document.getElementById('osi-rows');
+        osiLayers.forEach(l=>{const row=document.createElement('div');row.className='osi-row';row.innerHTML=`<span class="osi-num">${l.n}</span><span class="osi-name">${l.name}</span><span class="osi-proto">${l.proto}</span>`;row.onclick=()=>{document.querySelectorAll('.osi-row').forEach(r=>r.classList.remove('sel'));row.classList.add('sel');const d=document.getElementById('osi-detail');d.innerHTML=`<strong>Layer ${l.n}: ${l.name}</strong>${l.detail}`;d.classList.add('show');};osiWrap.appendChild(row);});
+
+        // Handshake
+        const HC=document.getElementById('handshake-canvas');
+        const hctx=HC.getContext('2d');
+        let hsState={step:0,animating:false};
+        const hsSteps=[{msg:'SYN',from:'client',seq:'seq=0',ack:'',color:'#3b82f6',log:'Client sends SYN — "I want to connect. My starting sequence number is 0."'},{msg:'SYN-ACK',from:'server',seq:'seq=0',ack:'ack=1',color:'#10b981',log:'Server replies SYN-ACK — "Got it. My sequence number is 0. I expected byte 1 from you next."'},{msg:'ACK',from:'client',seq:'seq=1',ack:'ack=1',color:'#3b82f6',log:'Client sends ACK — "Received. Connection established. Data can now flow in both directions."'},{msg:'DATA',from:'client',seq:'seq=1',ack:'',color:'#6366f1',log:'Connection established ✓ — First data segment sent. The handshake took 1.5 round trips before this could happen.'}];
+        function hsDraw(progress){const W=HC.offsetWidth,H=220;HC.width=W;HC.height=H;hctx.clearRect(0,0,W,H);const lx=60,rx=W-60,cx=W/2,fgC=FG(),mutedC=MUTED(),codebgC=CODEBG();hctx.strokeStyle=mutedC;hctx.lineWidth=1;hctx.setLineDash([4,4]);[lx,rx].forEach(x=>{hctx.beginPath();hctx.moveTo(x,30);hctx.lineTo(x,H-20);hctx.stroke();});hctx.setLineDash([]);hctx.font='bold 11px Courier New';hctx.fillStyle=fgC;hctx.textAlign='center';hctx.fillText('CLIENT',lx,20);hctx.fillText('SERVER',rx,20);const stepH=44;for(let i=0;i<hsState.step;i++){const s=hsSteps[i],y=50+i*stepH,fromX=s.from==='client'?lx:rx,toX=s.from==='client'?rx:lx,dir=toX>fromX?1:-1;hctx.strokeStyle=s.color;hctx.lineWidth=1.5;hctx.setLineDash([]);hctx.beginPath();hctx.moveTo(fromX,y);hctx.lineTo(toX,y);hctx.stroke();hctx.beginPath();hctx.moveTo(toX,y);hctx.lineTo(toX-dir*8,y-5);hctx.lineTo(toX-dir*8,y+5);hctx.closePath();hctx.fillStyle=s.color;hctx.fill();hctx.font='bold 10px Courier New';hctx.fillStyle=s.color;hctx.textAlign='center';hctx.fillText(s.msg,cx,y-5);hctx.font='9px Courier New';hctx.fillStyle=mutedC;hctx.fillText(s.seq+(s.ack?' '+s.ack:''),cx,y+13);}if(hsState.step<hsSteps.length&&progress!==undefined&&progress>0){const s=hsSteps[hsState.step],y=50+hsState.step*stepH,fromX=s.from==='client'?lx:rx,toX=s.from==='client'?rx:lx,curX=fromX+(toX-fromX)*progress;hctx.strokeStyle=s.color+'99';hctx.lineWidth=1.5;hctx.beginPath();hctx.moveTo(fromX,y);hctx.lineTo(curX,y);hctx.stroke();hctx.beginPath();hctx.arc(curX,y,4,0,Math.PI*2);hctx.fillStyle=s.color;hctx.fill();hctx.font='bold 10px Courier New';hctx.fillStyle=s.color+'aa';hctx.textAlign='center';hctx.fillText(s.msg,cx,y-5);}}
+        function hsAnimateStep(cb){let start=null;const dur=700;function frame(ts){if(!start)start=ts;const p=Math.min((ts-start)/dur,1);hsDraw(p);if(p<1)requestAnimationFrame(frame);else cb();}requestAnimationFrame(frame);}
+        function hsPlay(){if(hsState.animating)return;if(hsState.step>=hsSteps.length){hsReset();return;}hsState.animating=true;document.getElementById('hs-play-btn').textContent='⏸ running';function runStep(){if(hsState.step>=hsSteps.length){hsState.animating=false;document.getElementById('hs-play-btn').textContent='▶ play';return;}const s=hsSteps[hsState.step];document.getElementById('hs-step-label').textContent='step '+(hsState.step+1)+' of '+hsSteps.length;hsAnimateStep(()=>{hsState.step++;hsDraw();document.getElementById('hs-log').textContent=s.log;setTimeout(runStep,500);});}runStep();}
+        function hsReset(){hsState={step:0,animating:false};document.getElementById('hs-play-btn').textContent='▶ play';document.getElementById('hs-step-label').textContent='press play';document.getElementById('hs-log').textContent='Click play to watch the handshake step by step.';hsDraw();}
+        window.addEventListener('resize',hsDraw);setTimeout(hsDraw,50);
+
+        // Packet fields
+        const pktFields=[{name:'Src Port',bytes:'2B',title:'Source Port',body:'The port on the sending machine this segment originates from. Ephemeral ports (49152–65535) are assigned by the OS for outgoing connections.'},{name:'Dst Port',bytes:'2B',title:'Destination Port',body:'The port on the receiving machine. Well-known ports: 80 for HTTP, 443 for HTTPS, 22 for SSH. This is how the OS routes incoming data to the right process.'},{name:'Seq Num',bytes:'4B',title:'Sequence Number',body:'A 32-bit number labelling the first byte of data in this segment. Allows the receiver to reassemble out-of-order packets and detect missing ones.'},{name:'Ack Num',bytes:'4B',title:'Acknowledgement Number',body:'The next byte the receiver expects. If it sends ACK=1001, it is saying "I received everything up to byte 1000. Send me 1001 next."'},{name:'Flags',bytes:'1B',title:'Control Flags',body:'Six 1-bit flags: SYN (start), ACK (acknowledge), FIN (close), RST (reset), PSH (flush buffer), URG (urgent). Multiple can be set simultaneously.'},{name:'Window',bytes:'2B',title:'Window Size',body:"How many bytes the receiver will accept before an ACK is required. TCP's flow control mechanism — prevents a fast sender from overwhelming a slow receiver."},{name:'Checksum',bytes:'2B',title:'Checksum',body:'A 16-bit error-detection value. The receiver recomputes it — if they do not match, the segment is silently discarded and TCP retransmits.'},{name:'Data',bytes:'varies',title:'Payload',body:'The actual application data: an HTTP request, part of a file, a TLS record. TCP is transparent to what is inside — it just guarantees delivery.'}];
+        const pw=document.getElementById('pkt-wrap');
+        pktFields.forEach(f=>{const el=document.createElement('div');el.className='pkt-field';el.innerHTML=`${f.name}<span class="bytes">${f.bytes}</span>`;el.onclick=()=>{document.querySelectorAll('.pkt-field').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('pkt-detail').innerHTML=`<strong>${f.title}</strong>${f.body}`;};pw.appendChild(el);});
+
+        // TCP vs UDP
+        const cmpRows=[{label:'Connection',tcp:'3-way handshake',udp:'none'},{label:'Delivery',tcp:'guaranteed',udp:'best-effort'},{label:'Ordering',tcp:'in-order',udp:'no guarantee'},{label:'Error check',tcp:'retransmits',udp:'drops silently'},{label:'Speed',tcp:'slower',udp:'faster'},{label:'Header size',tcp:'20–60 bytes',udp:'8 bytes'},{label:'Use cases',tcp:'HTTP, SSH, email',udp:'DNS, video, games'}];
+        document.getElementById('tcp-body').innerHTML=cmpRows.map(r=>`<div class="cmp-row"><span class="cmp-label">${r.label}</span><span class="cmp-val tcp-val">${r.tcp}</span></div>`).join('');
+        document.getElementById('udp-body').innerHTML=cmpRows.map(r=>`<div class="cmp-row"><span class="cmp-label">${r.label}</span><span class="cmp-val udp-val">${r.udp}</span></div>`).join('');
+
+        // Ports
+        const ports=[{port:20,name:'FTP data',proto:'TCP',detail:'File Transfer Protocol data channel. Port 21 is the control channel; actual file data flows through 20. Rarely used unencrypted today.'},{port:22,name:'SSH',proto:'TCP',detail:'Secure Shell — encrypted remote terminal access. Also used for SFTP file transfer and port forwarding tunnels.'},{port:25,name:'SMTP',proto:'TCP',detail:'Simple Mail Transfer Protocol — sending email between servers. Port 587 is used for client-to-server submission. Port 465 for SMTPS.'},{port:53,name:'DNS',proto:'UDP/TCP',detail:'Domain Name System — translates domain names to IP addresses. Uses UDP for quick queries under 512 bytes, TCP for larger responses.'},{port:80,name:'HTTP',proto:'TCP',detail:'Hypertext Transfer Protocol — unencrypted web traffic. Mostly replaced by HTTPS on port 443. Still used for redirect-to-443.'},{port:443,name:'HTTPS',proto:'TCP',detail:'HTTP over TLS. The vast majority of web traffic today. TLS handshake happens first; HTTP runs inside the encrypted tunnel.'},{port:3306,name:'MySQL',proto:'TCP',detail:'Default MySQL port. Never expose to the public internet — bind to localhost or a private network.'},{port:5432,name:'PostgreSQL',proto:'TCP',detail:'Default PostgreSQL port. Same rules as MySQL — keep it off the public internet. Connect via SSH tunnel or private VPC.'},{port:6379,name:'Redis',proto:'TCP',detail:'Redis in-memory store. No authentication by default in older versions — a key reason Redis instances ended up exposed on the internet.'},{port:8080,name:'HTTP alt',proto:'TCP',detail:'Common alternative HTTP port for dev servers. Used when you cannot bind to port 80 without root privileges.'},{port:27017,name:'MongoDB',proto:'TCP',detail:'Default MongoDB port. Left open on thousands of servers — the source of numerous high-profile data breaches in 2017.'},{port:22222,name:'Custom SSH',proto:'TCP',detail:'Moving SSH from 22 to a non-standard port reduces automated bot scanning. Security through obscurity — not a real defence, but cuts noise.'}];
+        const pgEl=document.getElementById('port-grid');
+        ports.forEach(p=>{const el=document.createElement('div');el.className='port-btn';el.innerHTML=`<span class="port-num">${p.port}</span><span class="port-name">${p.name}</span>`;el.onclick=()=>{document.querySelectorAll('.port-btn').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('port-detail').innerHTML=`<strong>:${p.port} — ${p.name} (${p.proto})</strong>${p.detail}`;};pgEl.appendChild(el);});
+
+        // Packet loss
+        const LC=document.getElementById('loss-canvas');
+        const lctx=LC.getContext('2d');
+        let lossVal=0;
+        function updateLoss(v){lossVal=parseInt(v);document.getElementById('loss-pct').textContent=v+'%';}
+        function runLossSim(){const W=LC.offsetWidth,H=160;LC.width=W;LC.height=H;lctx.clearRect(0,0,W,H);const fgC=FG(),mutedC=MUTED(),codebgC=CODEBG();const totalPkts=24,cols=totalPkts,pkW=Math.floor((W-20)/cols);const clientY=30,serverY=H-30;lctx.strokeStyle=mutedC;lctx.lineWidth=1;lctx.setLineDash([3,3]);lctx.beginPath();lctx.moveTo(10,clientY);lctx.lineTo(W-10,clientY);lctx.stroke();lctx.beginPath();lctx.moveTo(10,serverY);lctx.lineTo(W-10,serverY);lctx.stroke();lctx.setLineDash([]);lctx.font='9px Courier New';lctx.fillStyle=mutedC;lctx.textAlign='left';lctx.fillText('sender',12,clientY-8);lctx.fillText('receiver',12,serverY+14);let delivered=0,dropped=0;const packets=[];for(let i=0;i<totalPkts;i++){const lost=Math.random()*100<lossVal;packets.push({lost});if(lost)dropped++;else delivered++;}packets.forEach((p,i)=>{const x=15+i*pkW+pkW/2;if(p.lost){const midY=(clientY+serverY)/2;lctx.strokeStyle='#e06c7566';lctx.lineWidth=1;lctx.setLineDash([3,3]);lctx.beginPath();lctx.moveTo(x,clientY);lctx.lineTo(x,midY);lctx.stroke();lctx.setLineDash([]);lctx.strokeStyle='#e06c75';lctx.lineWidth=1.5;lctx.beginPath();lctx.moveTo(x-4,midY-4);lctx.lineTo(x+4,midY+4);lctx.stroke();lctx.beginPath();lctx.moveTo(x+4,midY-4);lctx.lineTo(x-4,midY+4);lctx.stroke();}else{lctx.strokeStyle=fgC+'55';lctx.lineWidth=1;lctx.setLineDash([]);lctx.beginPath();lctx.moveTo(x,clientY);lctx.lineTo(x,serverY);lctx.stroke();lctx.beginPath();lctx.arc(x,serverY,2.5,0,Math.PI*2);lctx.fillStyle='#10b981';lctx.fill();}lctx.beginPath();lctx.arc(x,clientY,2.5,0,Math.PI*2);lctx.fillStyle=p.lost?'#e06c75':'#3b82f6';lctx.fill();});const throughput=Math.round((delivered/totalPkts)*100);document.getElementById('loss-stats').innerHTML=`<div class="stat-item">sent: <span class="stat-val">${totalPkts}</span></div><div class="stat-item">delivered: <span class="stat-val" style="color:#10b981">${delivered}</span></div><div class="stat-item">dropped: <span class="stat-val" style="color:#e06c75">${dropped}</span></div><div class="stat-item">retransmitted: <span class="stat-val">${dropped}</span></div><div class="stat-item">throughput: <span class="stat-val">${throughput}%</span></div>`;}
+        window.addEventListener('resize',()=>{if(document.getElementById('loss-stats').innerHTML)runLossSim();});
+        setTimeout(()=>{LC.width=LC.offsetWidth;LC.height=160;runLossSim();},60);
+    </script>
+</body>
+</html>

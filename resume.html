@@ -109,24 +109,59 @@
 
         .theme-toggle:hover { opacity: 1 }
 
-        .skill-group {
-            margin-bottom: 0.75rem;
+        .entry {
+            margin-top: 2rem;
         }
 
-        .skill-tags {
+        .entry-header {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: 0.3rem;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.25rem;
         }
 
-        .tag {
-            background: var(--code-bg);
-            border: 1px solid var(--border-color);
-            padding: 0.15rem 0.5rem;
-            border-radius: 2px;
-            font-size: 0.7rem;
-            opacity: 0.85;
+        .entry-sub {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.75rem;
+            opacity: 0.6;
+        }
+
+        .entry-tech {
+            opacity: 0.6;
+            margin-bottom: 0.25rem;
+        }
+
+        .entry-desc {
+            margin-bottom: 0.25rem;
+        }
+
+        ul.bullet-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 0.5rem;
+        }
+
+        ul.bullet-list li {
+            padding-left: 1.2rem;
+            position: relative;
+            margin-bottom: 0.25rem;
+        }
+
+        ul.bullet-list li::before {
+            content: '-';
+            position: absolute;
+            left: 0;
+            opacity: 0.5;
+        }
+
+        .skills-line {
+            margin-top: 1rem;
+        }
+
+        .skills-line + .skills-line {
+            margin-top: 0.5rem;
         }
     </style>
 </head>
@@ -135,12 +170,12 @@
     <nav>
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <a href="/">[/]</a>
-                <a href="/blog.html">[/blog]</a>
-                <a href="/photos.html">[/photos]</a>
-                <a href="/resume.html" class="active">[/resume]</a>
-                <a href="/notes.html">[/notes]</a>
-                <a href="/coolstuff.html">[/cool stuff]</a>
+                <a href="index.html">[/]</a>
+                <a href="blog.html">[/blog]</a>
+                <a href="photos.html">[/photos]</a>
+                <a href="resume.html" class="active">[/resume]</a>
+                <a href="notes.html">[/notes]</a>
+                <a href="coolstuff.html">[/cool stuff]</a>
             </div>
             <button class="theme-toggle" id="themeToggle">
                 <span class="theme-toggle-light">[☀]</span>
@@ -178,170 +213,75 @@
     <main>
         <h1>Kavindu Tharushan</h1>
         <p style="opacity: 0.6; margin-bottom: 2rem;">
-            Sri Lanka · <a href="kavindutharushan.com">kavindutharushan.com</a>
+            Sri Lanka · <a href="https://kavindutharushan.com">kavindutharushan.com</a> · <a href="mailto:kvndu@outlook.com">kvndu@outlook.com</a>
         </p>
 
+        <!-- WORK EXPERIENCE -->
         <section style="margin-bottom: 3rem;">
-            <h2>About Me</h2>
-            <p style="margin-top: 2rem;">
-                As an after-A/L student currently pursuing an HND in Computing, I am eager to begin my
-                professional journey. While I am new to the workforce, I bring strong problem-solving skills, a
-                technical mindset, and a genuine enthusiasm for learning. I am a motivated individual with a
-                proactive attitude, ready to contribute effectively to a team and support organizational
-                goals while I build my career in the tech industry.
-            </p>
+            <h2>Work Experience</h2>
+
+            <div class="entry">
+                <div class="entry-header">
+                    <strong>Self-employed</strong>
+                </div>
+                <div class="entry-sub">
+                    <span>Freelance Frontend Web Developer &amp; Graphic Designer</span>
+                    <span>2024 - Present</span>
+                </div>
+                <ul class="bullet-list">
+                    <li>Designed and developed custom websites for clients, handling everything from layout and styling to deployment.</li>
+                    <li>Created visual assets, logos, and marketing materials using Adobe Photoshop, GIMP, and Canva.</li>
+                    <li>Managed client communication, project scoping, and delivery independently.</li>
+                </ul>
+            </div>
         </section>
 
+        <!-- EDUCATION -->
         <section style="margin-bottom: 3rem;">
             <h2>Education</h2>
 
-            <div style="margin-top: 2rem;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <div class="entry">
+                <div class="entry-header">
                     <strong>CINEC Campus Malabe</strong>
+                    <span style="opacity: 0.6;">Malabe, Sri Lanka</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <div class="entry-sub">
                     <span>Higher National Diploma (HND) in Computing Network Engineering</span>
-                    <span style="opacity: 0.6;">2026 - Present</span>
+                    <span>2026 - Present</span>
                 </div>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <strong>Bandaranayake College, Gampaha</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                    <span>GCE Advanced Level 2025 in Engineering Technology</span>
-                    <span style="opacity: 0.6;">2024 - 2026</span>
-                </div>
-            </div>
-
-            <div style="margin-top: 2rem;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                    <strong>Henegama Central College</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                    <span>GCE Ordinary Level 2022 (2023)</span>
-                    <span style="opacity: 0.6;">2017 - 2024</span>
-                </div>
+                <ul class="bullet-list">
+                    <li>Studying core subjects including networking fundamentals.</li>
+                </ul>
             </div>
         </section>
 
+        <!-- PROJECTS -->
         <section style="margin-bottom: 3rem;">
-            <h2>Projects</h2>
-            <div style="margin-top: 2rem;">
-                <div style="margin-bottom: 1.5rem;">
+            <h2>Work</h2>
+
+            <div class="entry">
+                <div class="entry-header">
                     <strong>Personal Portfolio Website</strong>
-                    <p style="opacity: 0.6; margin-bottom: 0.25rem;">HTML, CSS, Vanilla JavaScript, Cloudflare Pages</p>
-                    <p style="margin-bottom: 0.25rem;">Developed and deployed a responsive personal website to showcase technical projects and skills.</p>
-                    <a href="https://tharushan.pages.dev" target="_blank" rel="noopener noreferrer">tharushan.pages.dev</a>
                 </div>
+                <p class="entry-tech">HTML, CSS, JavaScript, Cloudflare Pages</p>
+                <p class="entry-desc">Designed and deployed a personal website to showcase projects, notes, and a blog. Implemented a custom dark/light theme toggle with localStorage persistence and focused on a minimal, readable aesthetic.</p>
+                <a href="https://tharushan.pages.dev" target="_blank" rel="noopener noreferrer">tharushan.pages.dev</a>
             </div>
         </section>
 
+        <!-- SKILLS -->
         <section style="margin-bottom: 3rem;">
             <h2>Skills</h2>
             <div style="margin-top: 2rem;">
-
-                <div class="skill-group">
-                    <strong>Programming Languages</strong>
-                    <div class="skill-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">PHP</span>
-                        <span class="tag">CSS</span>
-                        <span class="tag">HTML</span>
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">Bash / Shell</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Frontend Development</strong>
-                    <div class="skill-tags">
-                        <span class="tag">HTML5</span>
-                        <span class="tag">CSS3</span>
-                        <span class="tag">Vanilla JavaScript</span>
-                        <span class="tag">Responsive Design</span>
-                        <span class="tag">Flexbox / Grid</span>
-                        <span class="tag">Cloudflare Pages</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Cybersecurity Tools</strong>
-                    <div class="skill-tags">
-                        <span class="tag">Burp Suite</span>
-                        <span class="tag">Nmap</span>
-                        <span class="tag">Metasploit</span>
-                        <span class="tag">Nikto</span>
-                        <span class="tag">OWASP ZAP</span>
-                        <span class="tag">John the Ripper</span>
-                        <span class="tag">Hydra</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Networking Tools</strong>
-                    <div class="skill-tags">
-                        <span class="tag">Wireshark</span>
-                        <span class="tag">Nmap</span>
-                        <span class="tag">Cisco Packet Tracer</span>
-                        <span class="tag">Netcat</span>
-                        <span class="tag">tcpdump</span>
-                        <span class="tag">PuTTY / SSH</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Productivity</strong>
-                    <div class="skill-tags">
-                        <span class="tag">Microsoft Excel (Advanced)</span>
-                        <span class="tag">Word</span>
-                        <span class="tag">PowerPoint</span>
-                        <span class="tag">Power BI</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Operating Systems</strong>
-                    <div class="skill-tags">
-                        <span class="tag">Windows</span>
-                        <span class="tag">Debian Linux</span>
-                        <span class="tag">Kali Linux</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>AI & Automation</strong>
-                    <div class="skill-tags">
-                        <span class="tag">n8n</span>
-                        <span class="tag">Ollama</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Creative</strong>
-                    <div class="skill-tags">
-                        <span class="tag">Adobe Photoshop</span>
-                        <span class="tag">Canva</span>
-                        <span class="tag">GIMP</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Hardware</strong>
-                    <div class="skill-tags">
-                        <span class="tag">PC Assembly & Maintenance</span>
-                    </div>
-                </div>
-
-                <div class="skill-group" style="margin-top: 1rem;">
-                    <strong>Languages</strong>
-                    <div class="skill-tags">
-                        <span class="tag">Sinhala (Native)</span>
-                        <span class="tag">English (Fluent)</span>
-                    </div>
-                </div>
-
+                <p class="skills-line"><strong>Languages:</strong> Python, JavaScript, PHP, HTML, CSS, Bash / Shell</p>
+                <p class="skills-line"><strong>Frontend:</strong> HTML5, CSS3, Vanilla JavaScript, Responsive Design, Flexbox / Grid</p>
+                <p class="skills-line"><strong>Cybersecurity:</strong> Burp Suite, Nmap, Metasploit, Nikto, OWASP ZAP, </p>
+                <p class="skills-line"><strong>Reverse Engineering:</strong> IDA Pro, Ghidra, JADX, ImHex, Detect-It-Easy (DIE)</p>
+                <p class="skills-line"><strong>Networking:</strong> Wireshark, Cisco Packet Tracer, GNS3</p>
+                <p class="skills-line"><strong>Systems:</strong> Windows, Debian Linux, Fedora</p>
+                <p class="skills-line"><strong>AI Automation:</strong> n8n, Ollama, OpenClaw</p>
+                <p class="skills-line"><strong>Other Tools:</strong> Git, Docker, Cloudflare Pages, Adobe Photoshop, GIMP, Canva</p>
+                <p class="skills-line"><strong>Languages:</strong> Sinhala (Native), English (Fluent)</p>
             </div>
         </section>
     </main>

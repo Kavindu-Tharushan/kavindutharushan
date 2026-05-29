@@ -231,8 +231,8 @@
   <nav>
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div>
-        <a href="/">[/]</a>
-        <a href="/blog.html">[/blog]</a>
+        <a href="/index.html">[/]</a>
+        <a href="/blog.html" class="active">[/blog]</a>
         <a href="/photos.html">[/photos]</a>
         <a href="/resume.html">[/resume]</a>
         <a href="/notes.html">[/notes]</a>
@@ -246,7 +246,7 @@
   </nav>
 
   <main>
-    <!-- ── Title ── -->
+    
     <div class="page-header">
       <h1>Flappy Bird</h1>
       <p>
@@ -257,9 +257,7 @@
       </p>
     </div>
 
-    <!-- ══════════════════════════════════════
-         SECTION 1 — Physics
-    ══════════════════════════════════════ -->
+    
     <div class="section">
       <h2>Physics: Gravity and Velocity</h2>
       <p>
@@ -278,9 +276,7 @@ y  += vy</code></pre>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         SECTION 2 — Pipes
-    ══════════════════════════════════════ -->
+    
     <div class="section">
       <h2>Pipes: Scrolling Obstacles</h2>
       <p>
@@ -301,9 +297,7 @@ if (pipe.x + PIPE_WIDTH < 0) pipes.shift()  // cull</code></pre>
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         SECTION 3 — Collision
-    ══════════════════════════════════════ -->
+    
     <div class="section">
       <h2>Collision Detection</h2>
       <p>The game ends in two cases, both checked every frame before drawing.</p>
@@ -318,9 +312,7 @@ const inGap = bird.y - BIRD_R > pipe.gapTop &&
 if (inX && !inGap) die()</code></pre>
     </div>
 
-    <!-- ══════════════════════════════════════
-         SECTION 4 — Scoring
-    ══════════════════════════════════════ -->
+    
     <div class="section">
       <h2>Scoring</h2>
       <p>
@@ -333,9 +325,7 @@ if (inX && !inGap) die()</code></pre>
 }</code></pre>
     </div>
 
-    <!-- ══════════════════════════════════════
-         THE GAME
-    ══════════════════════════════════════ -->
+    
     <hr>
 
     <div class="section">
@@ -365,9 +355,7 @@ if (inX && !inGap) die()</code></pre>
       </figure>
     </section>
 
-    <!-- ══════════════════════════════════════
-         SECTION 5 — Concepts at a glance
-    ══════════════════════════════════════ -->
+    
     <div class="section">
       <h2>Concepts at a Glance</h2>
       <table>
@@ -387,11 +375,9 @@ if (inX && !inGap) die()</code></pre>
     </div>
   </main>
 
-  <!-- ══════════════════════════════════════════
-       SCRIPTS
-  ══════════════════════════════════════════ -->
+ 
   <script>
-    // ── Theme toggle ──────────────────────────────────────
+    
     (function () {
       const saved = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -423,7 +409,7 @@ if (inX && !inGap) die()</code></pre>
     }
     initThemeToggle();
 
-    // ── Flappy Bird game ──────────────────────────────────
+    
     (function () {
       const canvas   = document.getElementById('game-canvas');
       const ctx      = canvas.getContext('2d');
@@ -435,7 +421,7 @@ if (inX && !inGap) die()</code></pre>
       const W = canvas.width;
       const H = canvas.height;
 
-      // ── Difficulty presets ─────────────────────────────
+      
       const PRESETS = {
         easy:   { gravity: 0.28, flapVel: -6.8, pipeSpeed: 2.0, gapHeight: 130 },
         normal: { gravity: 0.35, flapVel: -6.5, pipeSpeed: 2.4, gapHeight: 110 },
@@ -448,10 +434,10 @@ if (inX && !inGap) die()</code></pre>
       const BIRD_X    = 120;
       const BIRD_R    = 8;
       const PIPE_W    = 30;
-      const PIPE_EVERY = 90;   // frames
+      const PIPE_EVERY = 90;   
 
       let rafId   = null;
-      let phase   = 'idle';   // idle | running | dead
+      let phase   = 'idle';   
       let frame   = 0;
 
       const g = {
@@ -460,7 +446,7 @@ if (inX && !inGap) die()</code></pre>
         score: 0,
       };
 
-      // ── Helpers ────────────────────────────────────────
+      
       function fg(alpha) {
         const dark = document.documentElement.classList.contains('dark');
         return dark
@@ -489,13 +475,13 @@ if (inX && !inGap) die()</code></pre>
         spawnPipe();
       }
 
-      // ── Flap ───────────────────────────────────────────
+      
       function flap() {
         if (phase === 'idle' || phase === 'dead') { startGame(); return; }
         g.bird.vy = cfg.flapVel;
       }
 
-      // ── Game loop ──────────────────────────────────────
+      
       function loop() {
         update();
         render();
@@ -505,34 +491,33 @@ if (inX && !inGap) die()</code></pre>
       function update() {
         frame++;
 
-        // Physics
+        
         g.bird.vy += cfg.gravity;
         g.bird.y  += g.bird.vy;
 
-        // Floor / ceiling
-        if (g.bird.y - BIRD_R < 0 || g.bird.y + BIRD_R > H) {
+                if (g.bird.y - BIRD_R < 0 || g.bird.y + BIRD_R > H) {
           endGame(); return;
         }
 
-        // Spawn pipes
+       
         if (frame % PIPE_EVERY === 0) spawnPipe();
 
-        // Update pipes
+        
         for (let i = g.pipes.length - 1; i >= 0; i--) {
           const p = g.pipes[i];
           p.x -= cfg.pipeSpeed;
 
-          // Cull off-screen
+          
           if (p.x + PIPE_W < 0) { g.pipes.splice(i, 1); continue; }
 
-          // Scoring
+          
           if (!p.scored && BIRD_X > p.x + PIPE_W) {
             p.scored = true;
             g.score++;
             scoreEl.textContent = g.score;
           }
 
-          // Collision
+          
           const inX   = BIRD_X + BIRD_R > p.x && BIRD_X - BIRD_R < p.x + PIPE_W;
           const inGap = g.bird.y - BIRD_R > p.gapTop &&
                         g.bird.y + BIRD_R < p.gapTop + cfg.gapHeight;
@@ -540,20 +525,20 @@ if (inX && !inGap) die()</code></pre>
         }
       }
 
-      // ── Rendering ──────────────────────────────────────
+      
       function render() {
-        // Background
+        
         ctx.fillStyle = bgColor();
         ctx.fillRect(0, 0, W, H);
 
-        // Subtle horizontal guide lines
+        
         ctx.strokeStyle = fg(0.05);
         ctx.lineWidth   = 0.5;
         for (let y = 0; y <= H; y += 20) {
           ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
         }
 
-        // Pipes
+        
         ctx.fillStyle = fg(0.85);
         for (const p of g.pipes) {
           // Top pipe

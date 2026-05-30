@@ -19,99 +19,187 @@
         window.localStorage.setItem('theme', theme);
     </script>
     <style>
-        :root{--bg-color:#fff;--text-color:#000;--border-color:#afafaf;--code-bg:#f5f5f5;--subtle:#e8e8e8}
-        .dark{--bg-color:#0a0a0a;--text-color:#e5e5e5;--border-color:#404040;--code-bg:#1a1a1a;--subtle:#222}
-        *{box-sizing:border-box;margin:0;padding:0}
-        html{overflow-y:scroll;background-color:var(--bg-color)}
-        body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;background-color:var(--bg-color)}
-        a{color:var(--text-color);text-decoration:none}
-        a:hover{opacity:.6}
-        nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
-        nav a{margin-right:1rem;opacity:.4}
-        nav a.active{opacity:1}
-        .theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}
-        .theme-toggle:hover{opacity:1}
-        .back{font-size:11px;opacity:.4;display:inline-block;margin-bottom:1.2rem}
-        h1.title{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:.5rem}
-        .meta{font-size:11px;opacity:.35;margin-bottom:2rem}
-        .divider{height:1px;background:var(--border-color);margin:2rem 0;opacity:.4}
-        .prose{font-size:14px;line-height:1.85}
-        .prose p{margin-bottom:1.1rem;opacity:.88}
-        .prose h2{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.4;margin:2.5rem 0 .7rem;border-bottom:1px solid var(--subtle);padding-bottom:.4rem}
-        .prose ul{padding-left:1.2rem;margin-bottom:1rem}
-        .prose li{margin-bottom:.4rem;font-size:14px;opacity:.88}
-        .prose strong{font-weight:700}
-        pre{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto}
-        pre code{font-size:11px;line-height:1.7;opacity:.85}
-        code{font-family:Geist Mono,monospace;font-size:11px;background:var(--code-bg);padding:1px 5px;border-radius:3px;border:1px solid var(--subtle)}
-        .playground{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0}
-        .pg-head{background:var(--code-bg);padding:.65rem 1rem;border-bottom:1px solid var(--subtle);display:flex;justify-content:space-between;align-items:center;font-size:11px;opacity:.75}
-        .pg-body{padding:1rem}
-        .btn{font-family:Geist Mono,monospace;font-size:10px;padding:3px 11px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.55;transition:all .15s}
-        .btn:hover{opacity:.9}.btn.on{opacity:1;border-color:var(--text-color);font-weight:700}
-        .btn-primary{background:var(--code-bg);opacity:.8}
-        .ctrl-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem}
-        #handshake-canvas{width:100%;height:220px;display:block}
-        .hs-controls{display:flex;gap:.6rem;align-items:center;margin-bottom:.8rem;flex-wrap:wrap}
-        .hs-log{background:var(--code-bg);border:1px solid var(--subtle);border-radius:5px;padding:.6rem .8rem;font-size:11px;min-height:2.4rem;opacity:.8;line-height:1.6}
-        .packet-wrap{display:flex;gap:0;margin:1rem 0;border:1px solid var(--subtle);border-radius:6px;overflow:hidden}
-        .pkt-field{flex:1;padding:.5rem .3rem;text-align:center;cursor:pointer;transition:all .15s;border-right:1px solid var(--subtle);font-size:10px;font-weight:700;line-height:1.3}
-        .pkt-field:last-child{border-right:none}
-        .pkt-field:hover{background:var(--code-bg)}
-        .pkt-field.sel{background:var(--text-color);color:var(--bg-color)}
-        .pkt-field .bytes{font-size:9px;opacity:.5;font-weight:400;display:block;margin-top:2px}
-        .pkt-detail{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.75rem 1rem;font-size:12px;line-height:1.7;min-height:3rem;margin-top:.5rem}
-        .pkt-detail strong{display:block;margin-bottom:.25rem;font-size:13px}
-        .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.6rem}
-        .cmp-col{border:1px solid var(--subtle);border-radius:6px;overflow:hidden}
-        .cmp-head{background:var(--code-bg);padding:.4rem .8rem;font-size:10px;font-weight:700;opacity:.65;border-bottom:1px solid var(--subtle);text-transform:uppercase;letter-spacing:.06em;display:flex;justify-content:space-between}
-        .cmp-body{padding:.6rem .8rem}
-        .cmp-row{display:flex;justify-content:space-between;padding:.25rem 0;border-bottom:1px solid var(--subtle);font-size:11px}
-        .cmp-row:last-child{border-bottom:none}
-        .cmp-label{opacity:.5}.cmp-val{font-weight:700;font-size:11px}
-        .tcp-val{color:#3b82f6}.udp-val{color:#f59e0b}
-        .port-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.7rem}
-        @media(max-width:500px){.port-grid{grid-template-columns:repeat(3,1fr)}}
-        .port-btn{font-family:Geist Mono,monospace;font-size:10px;padding:.3rem .4rem;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.55;text-align:left;transition:all .15s;line-height:1.3}
-        .port-btn:hover{opacity:1;background:var(--code-bg)}
-        .port-btn.sel{border-color:var(--text-color);opacity:1;background:var(--code-bg)}
-        .port-num{font-weight:700;display:block;font-size:12px}
-        .port-name{opacity:.5;font-size:9px}
-        .port-detail{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.75rem 1rem;font-size:12px;line-height:1.7;min-height:2.8rem}
-        .port-detail strong{display:block;margin-bottom:.2rem}
-        #loss-canvas{width:100%;height:160px;display:block}
-        .loss-controls{display:flex;gap:.5rem;align-items:center;margin-bottom:.7rem;flex-wrap:wrap}
-        .loss-slider{-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:var(--subtle);outline:none;width:120px;cursor:pointer}
-        .loss-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--text-color);cursor:pointer}
-        .loss-stats{display:flex;gap:1.2rem;margin-top:.6rem;font-size:11px;flex-wrap:wrap}
-        .stat-item{opacity:.6}.stat-val{font-weight:700;opacity:1}
-        .osi-row{display:flex;align-items:center;gap:.7rem;padding:.45rem .7rem;border-bottom:1px solid var(--subtle);cursor:pointer;transition:background .15s;font-size:12px}
-        .osi-row:last-child{border-bottom:none}
-        .osi-row:hover{background:var(--code-bg)}
-        .osi-row.sel{background:var(--code-bg);border-left:2px solid var(--text-color)}
-        .osi-num{width:18px;font-weight:700;opacity:.4;flex-shrink:0;font-size:11px}
-        .osi-name{font-weight:700;width:110px;flex-shrink:0}
-        .osi-proto{opacity:.45;font-size:11px;flex:1}
-        .osi-detail{padding:.8rem 1rem;background:var(--code-bg);border-top:1px solid var(--subtle);font-size:12px;line-height:1.6;display:none}
-        .osi-detail strong{display:block;margin-bottom:.25rem;font-size:13px}
-        .osi-detail.show{display:block}
-        footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border-color);opacity:.6;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+        :root {
+            --bg-color: #fff;
+            --text-color: #000;
+            --border-color: #afafaf;
+            --code-bg: #f5f5f5;
+            --subtle: #e8e8e8;
+        }
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #e5e5e5;
+            --border-color: #404040;
+            --code-bg: #1a1a1a;
+            --subtle: #222;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-y: scroll; background-color: var(--bg-color); }
+        body {
+            font-family: 'Geist Mono', monospace;
+            font-size: .75rem; /* 12px base */
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-color);
+        }
+        a { color: var(--text-color); text-decoration: none; }
+        a:hover { opacity: .6; }
+        nav {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a { margin-right: 1rem; opacity: .4; }
+        nav a.active { opacity: 1; }
+        
+        .theme-toggle {
+            cursor: pointer; opacity: .4; background: none; border: none;
+            color: var(--text-color); font-family: 'Geist Mono', monospace;
+            font-size: .75rem; padding: 0;
+        }
+        .theme-toggle:hover { opacity: 1; }
+        
+        /* Typography Content Layout */
+        h1, h2, h3 { font-weight: 700; }
+        .back { font-size: 11px; opacity: .4; display: inline-block; margin-bottom: 1.2rem; }
+        h1.title { font-size: 1.5rem; font-weight: 700; line-height: 1.25; margin-bottom: .5rem; }
+        .meta { font-size: 11px; opacity: .35; margin-bottom: 2rem; }
+        .divider { height: 1px; background: var(--border-color); margin: 2rem 0; opacity: .4; }
+        
+        .page-header p {
+            opacity: 0.8;
+            margin-top: 0.75rem;
+            margin-bottom: 2rem;
+            max-width: 70ch;
+        }
+        .prose { margin-bottom: 2rem; }
+        .prose p { margin-top: 0.5rem; opacity: 0.8; }
+        .prose h2 {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            opacity: .4;
+            margin: 2.5rem 0 .7rem;
+            border-bottom: 1px solid var(--subtle);
+            padding-bottom: .4rem;
+        }
+        .prose ul { padding-left: 1.2rem; margin-bottom: 1rem; margin-top: 0.5rem; }
+        .prose li { margin-bottom: .4rem; opacity: .8; }
+        .prose strong { font-weight: 700; }
+        
+        /* Syntax Rendering Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--subtle);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            line-height: 1.7;
+        }
+        pre code { font-size: 11px; opacity: .85; }
+        code {
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.7rem; /* ~11px */
+            background: var(--code-bg);
+            padding: 1px 5px;
+            border-radius: 3px;
+            border: 1px solid var(--subtle);
+        }
+        
+        /* Interactive Playgrounds */
+        .playground { border: 1px solid var(--subtle); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+        .pg-head { background: var(--code-bg); padding: .7rem 1rem; border-bottom: 1px solid var(--subtle); display: flex; justify-content: space-between; align-items: center; font-size: 11px; opacity: .7; }
+        .pg-body { padding: 1rem; }
+        
+        /* UI Controls */
+        .btn { font-family: 'Geist Mono', monospace; font-size: 10px; padding: 3px 11px; border: 1px solid var(--subtle); border-radius: 4px; cursor: pointer; background: var(--bg-color); color: var(--text-color); opacity: .55; transition: all .15s; }
+        .btn:hover { opacity: .9; }
+        .btn.on { opacity: 1; border-color: var(--text-color); font-weight: 700; }
+        .btn-primary { background: var(--code-bg); opacity: .8; }
+        .ctrl-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .7rem; }
+        
+        /* Handshake Tool */
+        #handshake-canvas { width: 100%; height: 220px; display: block; }
+        .hs-controls { display: flex; gap: .6rem; align-items: center; margin-bottom: .8rem; flex-wrap: wrap; }
+        .hs-log { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 5px; padding: .6rem .8rem; font-size: 11px; min-height: 2.4rem; opacity: .8; line-height: 1.6; }
+        
+        /* TCP Packet UI */
+        .packet-wrap { display: flex; gap: 0; margin: 1rem 0; border: 1px solid var(--subtle); border-radius: 6px; overflow: hidden; }
+        .pkt-field { flex: 1; padding: .5rem .3rem; text-align: center; cursor: pointer; transition: all .15s; border-right: 1px solid var(--subtle); font-size: 10px; font-weight: 700; line-height: 1.3; }
+        .pkt-field:last-child { border-right: none; }
+        .pkt-field:hover { background: var(--code-bg); }
+        .pkt-field.sel { background: var(--text-color); color: var(--bg-color); }
+        .pkt-field .bytes { font-size: 9px; opacity: .5; font-weight: 400; display: block; margin-top: 2px; }
+        .pkt-detail { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .75rem 1rem; font-size: 11px; line-height: 1.7; min-height: 3rem; margin-top: .5rem; }
+        .pkt-detail strong { display: block; margin-bottom: .25rem; font-size: 12px; }
+        
+        /* Comparison Module (TCP/UDP) */
+        .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .6rem; }
+        .cmp-col { border: 1px solid var(--subtle); border-radius: 6px; overflow: hidden; }
+        .cmp-head { background: var(--code-bg); padding: .4rem .8rem; font-size: 10px; font-weight: 700; opacity: .65; border-bottom: 1px solid var(--subtle); text-transform: uppercase; letter-spacing: .06em; display: flex; justify-content: space-between; }
+        .cmp-body { padding: .6rem .8rem; }
+        .cmp-row { display: flex; justify-content: space-between; padding: .25rem 0; border-bottom: 1px solid var(--subtle); font-size: 11px; }
+        .cmp-row:last-child { border-bottom: none; }
+        .cmp-label { opacity: .5; }
+        .cmp-val { font-weight: 700; font-size: 11px; }
+        .tcp-val { color: #3b82f6; }
+        .udp-val { color: #f59e0b; }
+        
+        /* Ports Module */
+        .port-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; margin-bottom: .7rem; }
+        @media(max-width:500px) { .port-grid { grid-template-columns: repeat(3, 1fr); } }
+        .port-btn { font-family: 'Geist Mono', monospace; font-size: 10px; padding: .3rem .4rem; border: 1px solid var(--subtle); border-radius: 4px; cursor: pointer; background: var(--bg-color); color: var(--text-color); opacity: .55; text-align: left; transition: all .15s; line-height: 1.3; }
+        .port-btn:hover { opacity: 1; background: var(--code-bg); }
+        .port-btn.sel { border-color: var(--text-color); opacity: 1; background: var(--code-bg); }
+        .port-num { font-weight: 700; display: block; font-size: 11px; }
+        .port-name { opacity: .5; font-size: 9px; }
+        .port-detail { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .75rem 1rem; font-size: 11px; line-height: 1.7; min-height: 2.8rem; }
+        .port-detail strong { display: block; margin-bottom: .2rem; font-size: 12px; }
+        
+        /* Packet Loss Simulator */
+        #loss-canvas { width: 100%; height: 160px; display: block; }
+        .loss-controls { display: flex; gap: .5rem; align-items: center; margin-bottom: .7rem; flex-wrap: wrap; }
+        .loss-slider { -webkit-appearance: none; appearance: none; height: 3px; border-radius: 2px; background: var(--subtle); outline: none; width: 120px; cursor: pointer; }
+        .loss-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--text-color); cursor: pointer; }
+        .loss-stats { display: flex; gap: 1.2rem; margin-top: .6rem; font-size: 11px; flex-wrap: wrap; }
+        .stat-item { opacity: .6; }
+        .stat-val { font-weight: 700; opacity: 1; }
+        
+        /* OSI Model */
+        .osi-row { display: flex; align-items: center; gap: .7rem; padding: .45rem .7rem; border-bottom: 1px solid var(--subtle); cursor: pointer; transition: background .15s; font-size: 11px; }
+        .osi-row:last-child { border-bottom: none; }
+        .osi-row:hover { background: var(--code-bg); }
+        .osi-row.sel { background: var(--code-bg); border-left: 2px solid var(--text-color); }
+        .osi-num { width: 18px; font-weight: 700; opacity: .4; flex-shrink: 0; font-size: 11px; }
+        .osi-name { font-weight: 700; width: 110px; flex-shrink: 0; }
+        .osi-proto { opacity: .45; font-size: 11px; flex: 1; }
+        .osi-detail { padding: .8rem 1rem; background: var(--code-bg); border-top: 1px solid var(--subtle); font-size: 11px; line-height: 1.6; display: none; }
+        .osi-detail strong { display: block; margin-bottom: .25rem; font-size: 12px; }
+        .osi-detail.show { display: block; }
+        
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: .6; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
     </style>
 </head>
 <body>
     <nav>
         <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
-                <a href="/index.html">[/]</a>
-        <a href="/blog.html">[/blog]</a>
-        <a href="/photos.html">[/photos]</a>
-        <a href="/resume.html">[/resume]</a>
-        <a href="/notes.html" class="active">[/notes]</a>
-        <a href="/coolstuff.html">[/cool stuff]</a>
+                <a href="/index.html">[?]</a>
+                <a href="/blog.html">[b!og]</a>
+                <a href="/photos.html">[pho!os]</a>
+                <a href="/resume.html">[re?ume]</a>
+                <a href="/notes.html" class="active">[no!es]</a>
+                <a href="/coolstuff.html">[¿]</a>
             </div>
             <button class="theme-toggle" id="themeToggle">
-                <span class="theme-toggle-light">[☀]</span>
-                <span class="theme-toggle-dark" style="display:none">[☾]</span>
+                <span class="theme-toggle-light">[◐]</span>
+                <span class="theme-toggle-dark" style="display:none">[◐]</span>
             </button>
         </div>
     </nav>
@@ -123,19 +211,21 @@
     </script>
 
     <main>
-        <a href="../notes.html">← /notes</a>
-        <h1 class="title">TCP / Networking</h1>
-        <div class="meta">2026.04.10 &nbsp;·&nbsp; 10 min read</div>
-
-        <div class="prose">
+        <div class="page-header">
+            <a href="../notes.html" class="back">← /notes</a>
+            <h1 class="title">TCP / Networking</h1>
+            <div class="meta">2026.04.10 &nbsp;·&nbsp; 10 min read</div>
             <p>Every time you open a webpage, stream a video, or send a message, data travels across networks as a series of small chunks called packets. TCP — the Transmission Control Protocol — is the system that makes sure those packets arrive in the right order, with nothing missing, even when the network between you and the server is unreliable.</p>
             <p>TCP trades speed for <strong>reliability</strong>. If that trade-off is wrong for your use case — live video, gaming, DNS lookups — you use UDP instead and handle the unreliability yourself. Most of the web runs on TCP. Most real-time apps run on UDP.</p>
+        </div>
+
+        <div class="prose">
             <h2>The OSI model</h2>
             <p>The OSI model splits networking into 7 layers. Each layer has a specific job and only talks to the layers directly above and below it. TCP lives at layer 4. HTTP lives at layer 7. Click any layer to see what it does.</p>
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>OSI Model</span><span style="opacity:.45;font-size:10px">click a layer</span></div>
+            <div class="pg-head"><span>OSI Model</span><span style="opacity:.45;font-size:10px;text-transform:uppercase;letter-spacing:.06em">click a layer</span></div>
             <div class="pg-body" style="padding:0">
                 <div id="osi-rows"></div>
                 <div class="osi-detail" id="osi-detail"></div>
@@ -148,7 +238,7 @@
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>Three-Way Handshake</span><span id="hs-step-label" style="opacity:.45;font-size:10px">press play</span></div>
+            <div class="pg-head"><span>Three-Way Handshake</span><span id="hs-step-label" style="opacity:.45;font-size:10px;text-transform:uppercase;letter-spacing:.06em">press play</span></div>
             <div class="pg-body">
                 <div class="hs-controls">
                     <button class="btn btn-primary" id="hs-play-btn" onclick="hsPlay()">▶ play</button>
@@ -165,7 +255,7 @@
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>TCP Segment Anatomy</span><span style="opacity:.45;font-size:10px">click any field</span></div>
+            <div class="pg-head"><span>TCP Segment Anatomy</span><span style="opacity:.45;font-size:10px;text-transform:uppercase;letter-spacing:.06em">click any field</span></div>
             <div class="pg-body">
                 <div class="packet-wrap" id="pkt-wrap"></div>
                 <div class="pkt-detail" id="pkt-detail"><span style="opacity:.45">Select a field above.</span></div>
@@ -199,7 +289,7 @@
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>Well-Known Ports</span><span style="opacity:.45;font-size:10px">click to explore</span></div>
+            <div class="pg-head"><span>Well-Known Ports</span><span style="opacity:.45;font-size:10px;text-transform:uppercase;letter-spacing:.06em">click to explore</span></div>
             <div class="pg-body">
                 <div class="port-grid" id="port-grid"></div>
                 <div class="port-detail" id="port-detail"><span style="opacity:.45">Select a port above.</span></div>
@@ -212,7 +302,7 @@
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>Packet Loss Simulator</span><span style="opacity:.45;font-size:10px">drag the slider</span></div>
+            <div class="pg-head"><span>Packet Loss Simulator</span><span style="opacity:.45;font-size:10px;text-transform:uppercase;letter-spacing:.06em">drag the slider</span></div>
             <div class="pg-body">
                 <div class="loss-controls">
                     <span style="font-size:11px;opacity:.6">packet loss:</span>
@@ -255,9 +345,10 @@ cwnd = 1              // restart slow start</code></pre>
     <div class="divider"></div>
     <footer>
         <div>
-            <a href="mailto:kvndu@outlook.com" style="margin-right:1rem">email</a>
-            <a href="https://www.linkedin.com/in/kvndu/" target="_blank" rel="noopener noreferrer" style="margin-right:1rem">linkedin</a>
-            <a href="https://www.instagram.com/kvndu/" target="_blank" rel="noopener noreferrer">instagram</a>
+            <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a>
+            <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+            <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+            <a href="pgp\Kavindu Tharushan_0x6D3F8DC9ED4A7F7D_public.asc" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">pgp</a>
         </div>
         <div>@ 2026 Kavindu Tharushan</div>
     </footer>
@@ -271,7 +362,7 @@ cwnd = 1              // restart slow start</code></pre>
         // OSI
         const osiLayers=[{n:7,name:'Application',proto:'HTTP, DNS, SMTP, FTP',detail:'Where user-facing protocols live. HTTP transfers web pages, DNS resolves domain names, SMTP sends email. This is the layer your code usually interacts with directly.'},{n:6,name:'Presentation',proto:'TLS/SSL, JPEG, UTF-8',detail:'Translates data between formats — encryption (TLS), compression, and encoding. HTTPS encryption happens here before data is handed to the transport layer.'},{n:5,name:'Session',proto:'NetBIOS, RPC',detail:'Manages sessions — establishing, maintaining, and terminating conversations between applications. Largely handled by the OS in modern networking.'},{n:4,name:'Transport',proto:'TCP, UDP',detail:'Responsible for end-to-end communication. TCP adds reliability: ordering, acknowledgements, retransmission. UDP skips all that for speed. Port numbers live here.'},{n:3,name:'Network',proto:'IP, ICMP, routing',detail:'Handles logical addressing (IP addresses) and routing — deciding which path packets take across networks. Routers operate at this layer.'},{n:2,name:'Data Link',proto:'Ethernet, Wi-Fi (802.11)',detail:'Responsible for node-to-node transfer on a single network segment. MAC addresses live here. Your Wi-Fi card and Ethernet adapter operate at this layer.'},{n:1,name:'Physical',proto:'Cables, radio, fibre',detail:'Raw bits over a physical medium — electrical signals on copper, light pulses in fibre, radio waves for Wi-Fi. Everything eventually becomes this.'}];
         const osiWrap=document.getElementById('osi-rows');
-        osiLayers.forEach(l=>{const row=document.createElement('div');row.className='osi-row';row.innerHTML=`<span class="osi-num">${l.n}</span><span class="osi-name">${l.name}</span><span class="osi-proto">${l.proto}</span>`;row.onclick=()=>{document.querySelectorAll('.osi-row').forEach(r=>r.classList.remove('sel'));row.classList.add('sel');const d=document.getElementById('osi-detail');d.innerHTML=`<strong>Layer ${l.n}: ${l.name}</strong>${l.detail}`;d.classList.add('show');};osiWrap.appendChild(row);});
+        osiLayers.forEach(l=>{const row=document.createElement('div');row.className='osi-row';row.innerHTML=`<span class="osi-num">${l.n}</span><span class="osi-name">${l.name}</span><span class="osi-proto">${l.proto}</span>`;row.onclick=()=>{document.querySelectorAll('.osi-row').forEach(r=>r.classList.remove('sel'));row.classList.add('sel');const d=document.getElementById('osi-detail');d.innerHTML=`<strong>Layer ${l.n}: ${l.name}</strong><span style="opacity:.8;display:block">${l.detail}</span>`;d.classList.add('show');};osiWrap.appendChild(row);});
 
         // Handshake
         const HC=document.getElementById('handshake-canvas');
@@ -287,7 +378,7 @@ cwnd = 1              // restart slow start</code></pre>
         // Packet fields
         const pktFields=[{name:'Src Port',bytes:'2B',title:'Source Port',body:'The port on the sending machine this segment originates from. Ephemeral ports (49152–65535) are assigned by the OS for outgoing connections.'},{name:'Dst Port',bytes:'2B',title:'Destination Port',body:'The port on the receiving machine. Well-known ports: 80 for HTTP, 443 for HTTPS, 22 for SSH. This is how the OS routes incoming data to the right process.'},{name:'Seq Num',bytes:'4B',title:'Sequence Number',body:'A 32-bit number labelling the first byte of data in this segment. Allows the receiver to reassemble out-of-order packets and detect missing ones.'},{name:'Ack Num',bytes:'4B',title:'Acknowledgement Number',body:'The next byte the receiver expects. If it sends ACK=1001, it is saying "I received everything up to byte 1000. Send me 1001 next."'},{name:'Flags',bytes:'1B',title:'Control Flags',body:'Six 1-bit flags: SYN (start), ACK (acknowledge), FIN (close), RST (reset), PSH (flush buffer), URG (urgent). Multiple can be set simultaneously.'},{name:'Window',bytes:'2B',title:'Window Size',body:"How many bytes the receiver will accept before an ACK is required. TCP's flow control mechanism — prevents a fast sender from overwhelming a slow receiver."},{name:'Checksum',bytes:'2B',title:'Checksum',body:'A 16-bit error-detection value. The receiver recomputes it — if they do not match, the segment is silently discarded and TCP retransmits.'},{name:'Data',bytes:'varies',title:'Payload',body:'The actual application data: an HTTP request, part of a file, a TLS record. TCP is transparent to what is inside — it just guarantees delivery.'}];
         const pw=document.getElementById('pkt-wrap');
-        pktFields.forEach(f=>{const el=document.createElement('div');el.className='pkt-field';el.innerHTML=`${f.name}<span class="bytes">${f.bytes}</span>`;el.onclick=()=>{document.querySelectorAll('.pkt-field').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('pkt-detail').innerHTML=`<strong>${f.title}</strong>${f.body}`;};pw.appendChild(el);});
+        pktFields.forEach(f=>{const el=document.createElement('div');el.className='pkt-field';el.innerHTML=`${f.name}<span class="bytes">${f.bytes}</span>`;el.onclick=()=>{document.querySelectorAll('.pkt-field').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('pkt-detail').innerHTML=`<strong>${f.title}</strong><span style="opacity:.8">${f.body}</span>`;};pw.appendChild(el);});
 
         // TCP vs UDP
         const cmpRows=[{label:'Connection',tcp:'3-way handshake',udp:'none'},{label:'Delivery',tcp:'guaranteed',udp:'best-effort'},{label:'Ordering',tcp:'in-order',udp:'no guarantee'},{label:'Error check',tcp:'retransmits',udp:'drops silently'},{label:'Speed',tcp:'slower',udp:'faster'},{label:'Header size',tcp:'20–60 bytes',udp:'8 bytes'},{label:'Use cases',tcp:'HTTP, SSH, email',udp:'DNS, video, games'}];
@@ -297,7 +388,7 @@ cwnd = 1              // restart slow start</code></pre>
         // Ports
         const ports=[{port:20,name:'FTP data',proto:'TCP',detail:'File Transfer Protocol data channel. Port 21 is the control channel; actual file data flows through 20. Rarely used unencrypted today.'},{port:22,name:'SSH',proto:'TCP',detail:'Secure Shell — encrypted remote terminal access. Also used for SFTP file transfer and port forwarding tunnels.'},{port:25,name:'SMTP',proto:'TCP',detail:'Simple Mail Transfer Protocol — sending email between servers. Port 587 is used for client-to-server submission. Port 465 for SMTPS.'},{port:53,name:'DNS',proto:'UDP/TCP',detail:'Domain Name System — translates domain names to IP addresses. Uses UDP for quick queries under 512 bytes, TCP for larger responses.'},{port:80,name:'HTTP',proto:'TCP',detail:'Hypertext Transfer Protocol — unencrypted web traffic. Mostly replaced by HTTPS on port 443. Still used for redirect-to-443.'},{port:443,name:'HTTPS',proto:'TCP',detail:'HTTP over TLS. The vast majority of web traffic today. TLS handshake happens first; HTTP runs inside the encrypted tunnel.'},{port:3306,name:'MySQL',proto:'TCP',detail:'Default MySQL port. Never expose to the public internet — bind to localhost or a private network.'},{port:5432,name:'PostgreSQL',proto:'TCP',detail:'Default PostgreSQL port. Same rules as MySQL — keep it off the public internet. Connect via SSH tunnel or private VPC.'},{port:6379,name:'Redis',proto:'TCP',detail:'Redis in-memory store. No authentication by default in older versions — a key reason Redis instances ended up exposed on the internet.'},{port:8080,name:'HTTP alt',proto:'TCP',detail:'Common alternative HTTP port for dev servers. Used when you cannot bind to port 80 without root privileges.'},{port:27017,name:'MongoDB',proto:'TCP',detail:'Default MongoDB port. Left open on thousands of servers — the source of numerous high-profile data breaches in 2017.'},{port:22222,name:'Custom SSH',proto:'TCP',detail:'Moving SSH from 22 to a non-standard port reduces automated bot scanning. Security through obscurity — not a real defence, but cuts noise.'}];
         const pgEl=document.getElementById('port-grid');
-        ports.forEach(p=>{const el=document.createElement('div');el.className='port-btn';el.innerHTML=`<span class="port-num">${p.port}</span><span class="port-name">${p.name}</span>`;el.onclick=()=>{document.querySelectorAll('.port-btn').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('port-detail').innerHTML=`<strong>:${p.port} — ${p.name} (${p.proto})</strong>${p.detail}`;};pgEl.appendChild(el);});
+        ports.forEach(p=>{const el=document.createElement('div');el.className='port-btn';el.innerHTML=`<span class="port-num">${p.port}</span><span class="port-name">${p.name}</span>`;el.onclick=()=>{document.querySelectorAll('.port-btn').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('port-detail').innerHTML=`<strong>:${p.port} — ${p.name} (${p.proto})</strong><span style="opacity:.8">${p.detail}</span>`;};pgEl.appendChild(el);});
 
         // Packet loss
         const LC=document.getElementById('loss-canvas');

@@ -19,80 +19,152 @@
         window.localStorage.setItem('theme', theme);
     </script>
     <style>
-        :root{--bg-color:#fff;--text-color:#000;--border-color:#afafaf;--code-bg:#f5f5f5;--subtle:#e8e8e8}
-        .dark{--bg-color:#0a0a0a;--text-color:#e5e5e5;--border-color:#404040;--code-bg:#1a1a1a;--subtle:#222}
-        *{box-sizing:border-box;margin:0;padding:0}
-        html{overflow-y:scroll;background-color:var(--bg-color)}
-        body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;background-color:var(--bg-color)}
-        a{color:var(--text-color);text-decoration:none}
-        a:hover{opacity:.6}
-        nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
-        nav a{margin-right:1rem;opacity:.4}
-        nav a.active{opacity:1}
-        .theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}
-        .theme-toggle:hover{opacity:1}
-        .back{font-size:11px;opacity:.4;display:inline-block;margin-bottom:1.2rem}
-        h1.title{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:.5rem}
-        .meta{font-size:11px;opacity:.35;margin-bottom:2rem}
-        .divider{height:1px;background:var(--border-color);margin:2rem 0;opacity:.4}
-        .prose{font-size:14px;line-height:1.85}
-        .prose p{margin-bottom:1.1rem;opacity:.88}
-        .prose h2{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.4;margin:2.5rem 0 .7rem;border-bottom:1px solid var(--subtle);padding-bottom:.4rem}
-        .prose ul{padding-left:1.2rem;margin-bottom:1rem}
-        .prose li{margin-bottom:.3rem;font-size:14px;opacity:.88}
-        .prose strong{font-weight:700}
-        pre{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto}
-        pre code{font-size:11px;line-height:1.7;opacity:.85}
-        code{font-family:Geist Mono,monospace;font-size:11px;background:var(--code-bg);padding:1px 5px;border-radius:3px;border:1px solid var(--subtle)}
-        table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:12px}
-        th{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--border-color);opacity:.45;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
-        td{padding:.5rem .7rem;border-bottom:1px solid var(--subtle);opacity:.85;vertical-align:top}
-        tr:last-child td{border-bottom:none}
-        .ctrl-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
-        .ctrl-btn{font-family:Geist Mono,monospace;font-size:10px;padding:3px 10px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.5;transition:all .15s}
-        .ctrl-btn:hover{opacity:.8}
-        .ctrl-btn.on{opacity:1;border-color:var(--text-color);font-weight:700}
-        .ctrl-label{font-size:10px;opacity:.4;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
-        .playground{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0}
-        .pg-header{background:var(--code-bg);padding:.7rem 1rem;border-bottom:1px solid var(--subtle);display:flex;justify-content:space-between;align-items:center;font-size:11px;opacity:.7}
-        .pg-body{padding:1rem}
-        .flex-canvas{min-height:120px;border:1px solid var(--subtle);border-radius:6px;padding:8px;display:flex;gap:6px;transition:all .3s;background:var(--bg-color)}
-        .flex-item{width:52px;height:52px;background:var(--code-bg);border:1px solid var(--subtle);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;opacity:.8;transition:all .3s;flex-shrink:0}
-        .flex-item:nth-child(2){height:72px}
-        .flex-item:nth-child(3){height:40px}
-        .grid-canvas{border:1px solid var(--subtle);border-radius:6px;padding:8px;display:grid;gap:6px;background:var(--bg-color);transition:all .3s}
-        .grid-item{height:44px;background:var(--code-bg);border:1px solid var(--subtle);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;opacity:.8;transition:all .3s}
-        .spec-row{display:flex;align-items:center;gap:.8rem;padding:.5rem 0;border-bottom:1px solid var(--subtle);font-size:12px}
-        .spec-row:last-child{border-bottom:none}
-        .spec-bar-wrap{flex:1;height:6px;background:var(--subtle);border-radius:3px;overflow:hidden}
-        .spec-bar{height:6px;border-radius:3px;background:var(--text-color);transition:width .4s}
-        .spec-name{width:110px;opacity:.7;flex-shrink:0}
-        .spec-val{width:40px;text-align:right;opacity:.45;flex-shrink:0;font-size:11px}
-        .box-model{position:relative;margin:1.5rem auto;width:300px;font-size:10px;text-align:center}
-        .bm-layer{border-radius:4px;padding:12px;cursor:pointer;transition:opacity .2s}
-        .bm-margin{background:rgba(255,165,0,.12);border:1px dashed rgba(255,165,0,.4)}
-        .bm-border{background:rgba(100,149,237,.12);border:1px dashed rgba(100,149,237,.4)}
-        .bm-padding{background:rgba(144,238,144,.12);border:1px dashed rgba(144,238,144,.4)}
-        .bm-content{background:rgba(255,99,132,.12);border:1px dashed rgba(255,99,132,.4);height:40px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px}
-        .bm-desc{margin-top:.8rem;font-size:12px;opacity:.7;min-height:2.5rem;text-align:left;padding:0 .5rem}
-        .code-out{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.7rem 1rem;font-size:11px;font-family:Geist Mono,monospace;opacity:.8;margin-top:.6rem;white-space:pre;overflow-x:auto}
-        footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border-color);opacity:.6;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+        :root {
+            --bg-color: #fff;
+            --text-color: #000;
+            --border-color: #afafaf;
+            --code-bg: #f5f5f5;
+            --subtle: #e8e8e8;
+        }
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #e5e5e5;
+            --border-color: #404040;
+            --code-bg: #1a1a1a;
+            --subtle: #222;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-y: scroll; background-color: var(--bg-color); }
+        body {
+            font-family: 'Geist Mono', monospace;
+            font-size: .75rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-color);
+        }
+        h1, h2, h3 { font-weight: 700; }
+        h1 { margin-top: 0; }
+        h2 { margin-top: 2rem; }
+        a { color: var(--text-color); text-decoration: none; }
+        a:hover { opacity: .6; }
+        nav {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a { margin-right: 1rem; opacity: .4; }
+        nav a.active { opacity: 1; }
+        .theme-toggle {
+            cursor: pointer; opacity: .4; background: none; border: none;
+            color: var(--text-color); font-family: 'Geist Mono', monospace;
+            font-size: .75rem; padding: 0;
+        }
+        .theme-toggle:hover { opacity: 1; }
+        
+        /* Layout Structure Styling */
+        .page-header p {
+            opacity: 0.8;
+            margin-top: 0.75rem;
+            margin-bottom: 2rem;
+            max-width: 70ch;
+        }
+        .section { margin-bottom: 2rem; }
+        .section p { margin-top: 0.5rem; opacity: 0.8; }
+        .back { font-size: 11px; opacity: .4; display: inline-block; margin-bottom: 1.2rem; }
+        h1.title { font-size: 1.5rem; font-weight: 700; line-height: 1.25; margin-bottom: .5rem; }
+        .meta { font-size: 11px; opacity: .35; margin-bottom: 2rem; }
+        
+        /* Code Elements */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            line-height: 1.7;
+        }
+        pre code { font-size: 11px; opacity: .85; }
+        code { font-family: 'Geist Mono', monospace; font-size: 0.7rem; }
+        
+        /* Interactive Data Components */
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; margin-bottom: 1rem; }
+        th, td {
+            text-align: left;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.7rem;
+            vertical-align: top;
+        }
+        th { font-weight: 700; text-transform: uppercase; letter-spacing: .06em; opacity: .85; }
+        td { opacity: .85; }
+        
+        /* Playground Styling Rules */
+        .ctrl-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .8rem; }
+        .ctrl-btn {
+            font-family: 'Geist Mono', monospace;
+            font-size: 10px;
+            padding: 3px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            background: var(--bg-color);
+            color: var(--text-color);
+            opacity: .5;
+            transition: all .15s;
+        }
+        .ctrl-btn:hover { opacity: .8; }
+        .ctrl-btn.on { opacity: 1; border-color: var(--text-color); font-weight: 700; background: var(--text-color); color: var(--bg-color); }
+        .ctrl-label { font-size: 10px; opacity: .4; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .3rem; }
+        .playground { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+        .pg-header { background: var(--code-bg); padding: .7rem 1rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-size: 11px; opacity: .7; }
+        .pg-body { padding: 1rem; }
+        
+        /* Dynamic Elements */
+        .flex-canvas { min-height: 120px; border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; display: flex; gap: 6px; transition: all .3s; background: var(--bg-color); }
+        .flex-item { width: 52px; height: 52px; background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; opacity: .8; transition: all .3s; flex-shrink: 0; }
+        .flex-item:nth-child(2) { height: 72px; }
+        .flex-item:nth-child(3) { height: 40px; }
+        .grid-canvas { border: 1px solid var(--border-color); border-radius: 6px; padding: 8px; display: grid; gap: 6px; background: var(--bg-color); transition: all .3s; }
+        .grid-item { height: 44px; background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; opacity: .8; transition: all .3s; }
+        .spec-row { display: flex; align-items: center; gap: .8rem; padding: .5rem 0; border-bottom: 1px solid var(--border-color); font-size: 12px; }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-bar-wrap { flex: 1; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; opacity: 0.3; }
+        .spec-bar { height: 6px; border-radius: 3px; background: var(--text-color); transition: width .4s; }
+        .spec-name { width: 110px; opacity: .7; flex-shrink: 0; }
+        .spec-val { width: 40px; text-align: right; opacity: .45; flex-shrink: 0; font-size: 11px; }
+        
+        /* Box Model Visualizer */
+        .box-model { position: relative; margin: 1.5rem auto; width: 300px; font-size: 10px; text-align: center; }
+        .bm-layer { border-radius: 4px; padding: 12px; cursor: pointer; transition: opacity .2s; }
+        .bm-margin { background: rgba(255,165,0,.12); border: 1px dashed rgba(255,165,0,.4); }
+        .bm-border { background: rgba(100,149,237,.12); border: 1px dashed rgba(100,149,237,.4); }
+        .bm-padding { background: rgba(144,238,144,.12); border: 1px dashed rgba(144,238,144,.4); }
+        .bm-content { background: rgba(255,99,132,.12); border: 1px dashed rgba(255,99,132,.4); height: 40px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }
+        .bm-desc { margin-top: .8rem; font-size: 12px; opacity: .7; min-height: 2.5rem; text-align: left; padding: 0 .5rem; }
+        .code-out { background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: .7rem 1rem; font-size: 11px; font-family: 'Geist Mono', monospace; opacity: .8; margin-top: .6rem; white-space: pre; overflow-x: auto; }
+        
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: .6; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+        hr { border: none; border-top: 1px solid var(--border-color); margin: 2rem 0; }
     </style>
 </head>
 <body>
     <nav>
         <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
-                <a href="/index.html">[/]</a>
-        <a href="/blog.html">[/blog]</a>
-        <a href="/photos.html">[/photos]</a>
-        <a href="/resume.html">[/resume]</a>
-        <a href="/notes.html" class="active">[/notes]</a>
-        <a href="/coolstuff.html">[/cool stuff]</a>
+                <a href="/index.html">[?]</a>
+                <a href="/blog.html">[b!og]</a>
+                <a href="/photos.html">[pho!os]</a>
+                <a href="/resume.html">[re?ume]</a>
+                <a href="/notes.html" class="active">[no!es]</a>
+                <a href="/coolstuff.html">[¿]</a>
             </div>
             <button class="theme-toggle" id="themeToggle">
-                <span class="theme-toggle-light">[☀]</span>
-                <span class="theme-toggle-dark" style="display:none">[☾]</span>
+                <span class="theme-toggle-light">[◐]</span>
+                <span class="theme-toggle-dark" style="display:none">[◐]</span>
             </button>
         </div>
     </nav>
@@ -104,14 +176,15 @@
     </script>
 
     <main>
-        <a href="../notes.html">← /notes</a>
-        <h1 class="title">CSS Layout</h1>
-        <div class="meta">2026.04.30 &nbsp;·&nbsp; 10 min read</div>
-
-        <div class="prose">
+        <div class="page-header">
+            <a href="../notes.html" class="back">← /notes</a>
+            <h1 class="title">CSS Layout</h1>
+            <div class="meta">2026.04.30 &nbsp;·&nbsp; 10 min read</div>
             <p>CSS layout is the system for placing elements on a page. For most of the web's history, developers used floats and tables — hacks never meant for layout. Flexbox arrived in 2012 and Grid in 2017. Together they cover nearly every layout pattern you will ever need.</p>
             <p>The distinction is simple: <strong>Flexbox is one-dimensional</strong> — it controls items along a single axis. <strong>Grid is two-dimensional</strong> — it controls rows and columns simultaneously. Choose based on whether your layout thinks in lines or planes.</p>
+        </div>
 
+        <div class="section">
             <h2>The box model</h2>
             <p>Before either system, every element is a box. Understanding that box is prerequisite to understanding why layouts break. Hover each layer below to see what it controls.</p>
         </div>
@@ -135,7 +208,7 @@
             </div>
         </div>
 
-        <div class="prose">
+        <div class="section">
             <h2>Flexbox</h2>
             <p>Flexbox distributes items along a single axis. The parent becomes a flex container; its direct children become flex items. Toggle the properties below and watch the layout update live.</p>
         </div>
@@ -193,7 +266,7 @@
             </div>
         </div>
 
-        <div class="prose">
+        <div class="section">
             <h2>Grid</h2>
             <p>Grid thinks in two dimensions at once. You define columns and rows on the parent; items place themselves or you place them explicitly. The most powerful single line in CSS layout:</p>
             <pre><code>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</code></pre>
@@ -236,16 +309,20 @@
             </div>
         </div>
 
-        <div class="prose">
+        <div class="section">
             <h2>Flexbox vs Grid — when to use which</h2>
             <table>
-                <tr><th>Situation</th><th>Use</th><th>Why</th></tr>
-                <tr><td>Navbar with logo + links</td><td>Flexbox</td><td>One row, space-between</td></tr>
-                <tr><td>Card grid that wraps</td><td>Grid</td><td>2D, auto-fit minmax</td></tr>
-                <tr><td>Centering a single element</td><td>Flexbox</td><td>justify + align center</td></tr>
-                <tr><td>Page-level layout</td><td>Grid</td><td>Header / sidebar / main</td></tr>
-                <tr><td>Button row with icon + text</td><td>Flexbox</td><td>Inline axis alignment</td></tr>
-                <tr><td>Dashboard tiles</td><td>Grid</td><td>Named areas, explicit placement</td></tr>
+                <thead>
+                    <tr><th>Situation</th><th>Use</th><th>Why</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Navbar with logo + links</td><td>Flexbox</td><td>One row, space-between</td></tr>
+                    <tr><td>Card grid that wraps</td><td>Grid</td><td>2D, auto-fit minmax</td></tr>
+                    <tr><td>Centering a single element</td><td>Flexbox</td><td>justify + align center</td></tr>
+                    <tr><td>Page-level layout</td><td>Grid</td><td>Header / sidebar / main</td></tr>
+                    <tr><td>Button row with icon + text</td><td>Flexbox</td><td>Inline axis alignment</td></tr>
+                    <tr><td>Dashboard tiles</td><td>Grid</td><td>Named areas, explicit placement</td></tr>
+                </tbody>
             </table>
 
             <h2>CSS specificity</h2>
@@ -267,7 +344,7 @@
             </div>
         </div>
 
-        <div class="prose">
+        <div class="section">
             <pre><code>/* 0-0-1 — lowest weight */
 p { color: gray; }
 
@@ -308,13 +385,14 @@ main { flex: 1; }</code></pre>
         </div>
     </main>
 
-    <div class="divider"></div>
+    <hr>
     <footer>
         <div>
-            <a href="mailto:kvndu@outlook.com" style="margin-right:1rem">email</a>
-            <a href="https://www.linkedin.com/in/kvndu/" target="_blank" rel="noopener noreferrer" style="margin-right:1rem">linkedin</a>
-            <a href="https://www.instagram.com/kvndu/" target="_blank" rel="noopener noreferrer">instagram</a>
-        </div>
+      <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a>
+      <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+      <a href="https://www.github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+      <a href="pgp\Kavindu Tharushan_0x6D3F8DC9ED4A7F7D_public.asc" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">pgp</a>
+    </div>
         <div>@ 2026 Kavindu Tharushan</div>
     </footer>
 

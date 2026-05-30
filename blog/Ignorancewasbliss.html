@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="I stopped reading the news. The world kept going. I was fine.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <title>Ignorance Was Bliss, Actually</title>
+  <script>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+    window.localStorage.setItem('theme', theme);
+  </script>
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --border-color: #afafaf;
+      --code-bg: #f5f5f5;
+    }
+    .dark {
+      --bg-color: #0a0a0a;
+      --text-color: #e5e5e5;
+      --border-color: #404040;
+      --code-bg: #1a1a1a;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+    body {
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--bg-color);
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+    }
+    h1 {
+      margin-top: 2rem;
+    }
+    h1:first-child {
+      margin-top: 0;
+    }
+    h2 {
+      margin-top: 2rem;
+    }
+    a {
+      color: var(--text-color);
+      text-decoration: none;
+    }
+    a:hover {
+      opacity: .6;
+    }
+    nav {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav a {
+      margin-right: 1rem;
+      opacity: .4;
+    }
+    nav a.active {
+      opacity: 1;
+    }
+    .theme-toggle {
+      cursor: pointer;
+      opacity: .4;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-family: Geist Mono, monospace;
+      font-size: .75rem;
+      padding: 0;
+    }
+    .theme-toggle:hover {
+      opacity: 1;
+    }
+    .back-link {
+      opacity: .6;
+      margin-top: 3rem;
+      display: inline-block;
+    }
+    .back-link:hover {
+      opacity: 1;
+    }
+    .prose {
+      line-height: 1.6;
+    }
+    .prose h2,
+    .prose h3,
+    .prose h4 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .prose p {
+      margin-bottom: 1rem;
+    }
+    .prose ul,
+    .prose ol {
+      margin-bottom: 1rem;
+      padding-left: 2rem;
+    }
+    .prose strong {
+      font-weight: 700;
+    }
+    .prose code {
+      background: var(--code-bg);
+      padding: .2rem .4rem;
+    }
+    .prose pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .prose pre code {
+      background: none;
+      padding: 0;
+    }
+    .prose img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--border-color);
+    }
+    .img-box {
+      margin: 2rem 0;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    .img-box img {
+      display: block;
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border: none;
+    }
+    .img-box figcaption {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.7rem;
+      opacity: 0.5;
+      border-top: 1px solid var(--border-color);
+    }
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+      opacity: .6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer a {
+      margin-right: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <a href="/index.html">[?]</a>
+        <a href="/blog.html" class="active">[b!og]</a>
+        <a href="/photos.html">[pho!os]</a>
+        <a href="/resume.html">[re?ume]</a>
+        <a href="/notes.html">[no!es]</a>
+        <a href="/coolstuff.html">[¿]</a>
+   
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <span class="theme-toggle-light">[☀]</span>
+        <span class="theme-toggle-dark" style="display: none;">[☾]</span>
+      </button>
+    </div>
+  </nav>
+  <main>
+    <article>
+  <h1>Ignorance Was Bliss, Actually</h1>
+  <p style="opacity: 0.6; margin-bottom: 2rem;">May 30, 2026</p>
+  <div class="prose">
+    <p>I stopped reading the news about eight months ago. Not as a statement. Not as a detox challenge with a planned end date. I just quietly stopped, and then noticed I felt better, and then kept not doing it. The world continued. I was fine.</p>
+
+    <figure class="img-box">
+      <img src="blogimages/p03txyk4.jpg" alt="Headlines">
+      <figcaption>Image Source : bbc.com</figcaption>
+    </figure>
+
+    <h2 id="what-the-news-actually-is">What the news actually is</h2>
+    <p>The news is not a neutral feed of important events. It is a product, and like most products it is optimised to keep you consuming it. The selection of what counts as news — what gets covered, how often, with what tone — is shaped entirely by what keeps people reading. And what keeps people reading is, almost always, fear and outrage.</p>
+    <p>This is not a conspiracy. It is just economics. Calm, measured updates about slow-moving problems do not get clicks. A crisis does. So every day becomes a crisis, even when it isn't, because that is the format that works.</p>
+
+    <h2 id="the-illusion-of-being-informed">The illusion of being informed</h2>
+    <p>Reading the news every day feels responsible. Like you are a person who knows what is happening. But most of what the news delivers is not information you can act on. It is ambient dread. You absorb it, feel vaguely worse, and carry it around until tomorrow's ambient dread replaces it.</p>
+
+    <figure class="img-box">
+      <img src="blogimages/2500.jpg" alt="Phone showing news app notifications">
+      <figcaption>Image Source : theguardian.com</figcaption>
+    </figure>
+
+    <p>The things I actually needed to know — things that affected my life, my work, my city — I still found out about. Through conversations, through context, through the occasional headline I could not avoid. Being less plugged in did not make me uninformed. It made me more selective about what I gave my attention to.</p>
+
+    <h2 id="the-noise-to-signal-problem">The noise to signal problem</h2>
+    <p>There is more news now than at any point in history. More sources, more platforms, more takes, more updates. And the quality of the average piece of information has not gone up with the quantity. If anything it has gone down, because the pressure to publish fast outpaces the time needed to be right.</p>
+    <p>Following the news closely means wading through an enormous amount of noise to find a small amount of signal. Most people do not do that filtering consciously. They just absorb everything and call it staying informed.</p>
+
+    <h2 id="what-replaced-it">What replaced it</h2>
+    <p>Nothing dramatic. I read more books. I had longer conversations. I noticed I had more opinions that were actually mine rather than reactions to whatever had been deemed important that morning. The mental space that the news had occupied turned out to be useful for other things.</p>
+
+    <figure class="img-box">
+      <img src="blogimages/Philosophy-books.jpg" alt="Books">
+      <figcaption>Image Source : biblio.com</figcaption>
+    </figure>
+
+    <h2 id="when-the-news-actually-mattered">When the news actually mattered</h2>
+    <p>I want to be fair here. There are moments when the news is genuinely essential. COVID was one of them. In early 2020, knowing what was happening — which areas were affected, what symptoms to watch for, when lockdowns were starting — was not optional background noise. It was information that directly changed how people lived and whether they stayed safe.</p>
+    <p>In those moments, a functioning news cycle is a public good. It coordinates behaviour, communicates risk, and keeps people connected to something larger than their immediate surroundings. The problem is not that the news exists. It is that it runs at pandemic urgency all the time, even when nothing is a pandemic.</p>
+
+    <figure class="img-box">
+      <img src="blogimages/Covid-19-Pandemic-Top-8-Reasons-To-Go-Solar-During-The-Covid-19-Pandemic.jpg" alt="Pandemic">
+      <figcaption>Image Source : thesolarfuture.co.za</figcaption>
+    </figure>
+
+    <h2 id="the-fake-news-problem">The fake news problem</h2>
+    <p>COVID also showed the other side of it. Alongside the genuine reporting came an avalanche of misinformation — cures that did not work, statistics that were made up, conspiracy theories that spread faster than the virus itself. People forwarding things without reading them. Screenshots replacing sources. Confidence inversely proportional to accuracy.</p>
+    <p>The infrastructure that was supposed to keep people informed became, simultaneously, the infrastructure for keeping people misinformed. And the two streams looked nearly identical on a phone screen. Same format. Same urgency. No easy way to tell them apart.</p>
+
+    <figure class="img-box">
+      <img src="blogimages/Threads-X-Instagram-Facebook-WhatsApp-apps-on-smartphone-screen.webp" alt="Socail Media">
+      <figcaption>Image Source : britannica.com</figcaption>
+    </figure>
+
+    <p>This is the real issue with constant news consumption. It is not just that most of it is low value — it is that a meaningful portion of it is actively wrong, and the volume makes it nearly impossible to filter carefully. The more you consume, the more you absorb without checking. And the platforms have no incentive to slow that down.</p>
+
+    <h2 id="selective-not-absent">Selective, not absent</h2>
+    <p>What I actually want is not zero news. It is better news. Slower, more considered, less driven by what performs well in the first hour. The kind of reporting that takes time to be right rather than racing to be first. That exists, but you have to go looking for it — it does not come to you in a feed optimised for engagement.</p>
+    <p>The move is not to go fully dark. It is to be deliberate. To follow a small number of sources you actually trust, check them occasionally rather than constantly, and treat everything else with the scepticism it has earned.</p>
+
+    
+
+    <p>Ignorance was bliss, actually.<br>
+    <em>Or at least: knowing less was costing me less.</em></p>
+  </div>
+  <a class="back-link" href="../blog.html">[go back to /blog]</a>
+    </article>
+  </main>
+  <footer>
+    <div>
+      <a href="mailto:kvndu@outlook.com">email</a>
+      <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+      <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+      <a href="pgp\Kavindu Tharushan_0x6D3F8DC9ED4A7F7D_public.asc" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">pgp</a>
+    </div>
+    <div>@ 2026 Kavindu Tharushan</div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('themeToggle');
+      const lightIcon = document.querySelector('.theme-toggle-light');
+      const darkIcon = document.querySelector('.theme-toggle-dark');
+
+      const updateIcons = () => {
+        const darkMode = document.documentElement.classList.contains('dark');
+        if (lightIcon && darkIcon) {
+          lightIcon.style.display = darkMode ? 'none' : 'inline';
+          darkIcon.style.display = darkMode ? 'inline' : 'none';
+        }
+      };
+
+      updateIcons();
+
+      toggle?.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateIcons();
+      });
+    });
+  </script>
+</body>
+</html>

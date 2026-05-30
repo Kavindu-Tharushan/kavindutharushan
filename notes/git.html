@@ -19,78 +19,161 @@
         window.localStorage.setItem('theme', theme);
     </script>
     <style>
-        :root{--bg-color:#fff;--text-color:#000;--border-color:#afafaf;--code-bg:#f5f5f5;--subtle:#e8e8e8}
-        .dark{--bg-color:#0a0a0a;--text-color:#e5e5e5;--border-color:#404040;--code-bg:#1a1a1a;--subtle:#222}
-        *{box-sizing:border-box;margin:0;padding:0}
-        html{overflow-y:scroll;background-color:var(--bg-color)}
-        body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;background-color:var(--bg-color)}
-        a{color:var(--text-color);text-decoration:none}
-        a:hover{opacity:.6}
-        nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
-        nav a{margin-right:1rem;opacity:.4}
-        nav a.active{opacity:1}
-        .theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}
-        .theme-toggle:hover{opacity:1}
-        .back{font-size:11px;opacity:.4;display:inline-block;margin-bottom:1.2rem}
-        h1.title{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:.5rem}
-        .meta{font-size:11px;opacity:.35;margin-bottom:2rem}
-        .divider{height:1px;background:var(--border-color);margin:2rem 0;opacity:.4}
-        .prose{font-size:14px;line-height:1.85}
-        .prose p{margin-bottom:1.1rem;opacity:.88}
-        .prose h2{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.4;margin:2.5rem 0 .7rem;border-bottom:1px solid var(--subtle);padding-bottom:.4rem}
-        .prose ul{padding-left:1.2rem;margin-bottom:1rem}
-        .prose li{margin-bottom:.4rem;font-size:14px;opacity:.88}
-        .prose strong{font-weight:700}
-        pre{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto}
-        pre code{font-size:11px;line-height:1.7;opacity:.85}
-        code{font-family:Geist Mono,monospace;font-size:11px;background:var(--code-bg);padding:1px 5px;border-radius:3px;border:1px solid var(--subtle)}
-        .playground{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0}
-        .pg-head{background:var(--code-bg);padding:.65rem 1rem;border-bottom:1px solid var(--subtle);display:flex;justify-content:space-between;align-items:center;font-size:11px;opacity:.75}
-        .pg-body{padding:1rem}
-        .btn{font-family:Geist Mono,monospace;font-size:10px;padding:3px 10px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.5;transition:all .15s}
-        .btn:hover{opacity:.85}.btn.on{opacity:1;border-color:var(--text-color);font-weight:700}
-        .btn-action{opacity:.75;background:var(--code-bg)}
-        .ctrl-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem}
-        #branch-canvas{width:100%;height:200px;display:block}
-        .branch-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem;align-items:center}
-        .branch-info{font-size:11px;opacity:.5;margin-top:.5rem;min-height:1.4rem}
-        .cmd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-bottom:.8rem}
-        @media(max-width:500px){.cmd-grid{grid-template-columns:repeat(2,1fr)}}
-        .cmd-card{padding:.5rem .7rem;border:1px solid var(--subtle);border-radius:5px;cursor:pointer;transition:all .15s;font-size:11px;font-weight:700;opacity:.6}
-        .cmd-card:hover{opacity:1;background:var(--code-bg)}
-        .cmd-card.sel{opacity:1;border-color:var(--text-color);background:var(--code-bg)}
-        .cmd-detail{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.8rem 1rem;font-size:12px;line-height:1.7;min-height:3.5rem}
-        .cmd-detail strong{font-size:13px;display:block;margin-bottom:.3rem}
-        .mvr-wrap{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-        @media(max-width:480px){.mvr-wrap{grid-template-columns:1fr}}
-        .mvr-pane{border:1px solid var(--subtle);border-radius:6px;overflow:hidden}
-        .mvr-head{background:var(--code-bg);padding:.4rem .8rem;font-size:10px;font-weight:700;opacity:.6;border-bottom:1px solid var(--subtle);text-transform:uppercase;letter-spacing:.06em}
-        .mvr-canvas{display:block;width:100%;height:150px}
-        .mvr-desc{padding:.6rem .8rem;font-size:11px;opacity:.65;line-height:1.5}
-        .undo-row{display:grid;grid-template-columns:auto 1fr auto;gap:.6rem;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--subtle);font-size:12px}
-        .undo-row:last-child{border-bottom:none}
-        .undo-cmd{font-weight:700;opacity:.6;white-space:nowrap}
-        .undo-desc{opacity:.7}
-        .undo-danger{font-size:10px;padding:1px 6px;border-radius:3px;border:1px solid var(--subtle);opacity:.6;white-space:nowrap}
-        .danger{color:#e06c75;border-color:#e06c7540}
-        .safe{color:#98c379;border-color:#98c37940}
-        footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border-color);opacity:.6;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+        :root {
+            --bg-color: #fff;
+            --text-color: #000;
+            --border-color: #afafaf;
+            --code-bg: #f5f5f5;
+            --subtle: #e8e8e8;
+        }
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #e5e5e5;
+            --border-color: #404040;
+            --code-bg: #1a1a1a;
+            --subtle: #222;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-y: scroll; background-color: var(--bg-color); }
+        body {
+            font-family: 'Geist Mono', monospace;
+            font-size: .75rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-color);
+        }
+        h1, h2, h3 { font-weight: 700; }
+        h1 { margin-top: 0; }
+        h2 { margin-top: 2rem; }
+        a { color: var(--text-color); text-decoration: none; }
+        a:hover { opacity: .6; }
+        nav {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a { margin-right: 1rem; opacity: .4; }
+        nav a.active { opacity: 1; }
+        .theme-toggle {
+            cursor: pointer; opacity: .4; background: none; border: none;
+            color: var(--text-color); font-family: 'Geist Mono', monospace;
+            font-size: .75rem; padding: 0;
+        }
+        .theme-toggle:hover { opacity: 1; }
+        
+        /* Typography Content Layout */
+        .page-header p {
+            opacity: 0.8;
+            margin-top: 0.75rem;
+            margin-bottom: 2rem;
+            max-width: 70ch;
+        }
+        .prose { margin-bottom: 2rem; }
+        .prose p { margin-top: 0.5rem; opacity: 0.8; }
+        .prose ul { padding-left: 1.2rem; margin-bottom: 1rem; margin-top: 0.5rem; }
+        .prose li { margin-bottom: .4rem; opacity: .8; }
+        .prose strong { font-weight: 700; }
+        
+        .back { font-size: 11px; opacity: .4; display: inline-block; margin-bottom: 1.2rem; }
+        h1.title { font-size: 1.5rem; font-weight: 700; line-height: 1.25; margin-bottom: .5rem; }
+        .meta { font-size: 11px; opacity: .35; margin-bottom: 2rem; }
+        .divider { height: 1px; background: var(--border-color); margin: 2rem 0; opacity: .4; }
+        
+        /* Syntax Rendering Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--subtle);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            line-height: 1.7;
+        }
+        pre code { font-size: 11px; opacity: .85; }
+        code {
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.7rem;
+            background: var(--code-bg);
+            padding: 1px 5px;
+            border-radius: 3px;
+            border: 1px solid var(--subtle);
+        }
+        
+        /* Interactive Playgrounds */
+        .playground { border: 1px solid var(--subtle); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+        .pg-head { background: var(--code-bg); padding: .7rem 1rem; border-bottom: 1px solid var(--subtle); display: flex; justify-content: space-between; align-items: center; font-size: 11px; opacity: .7; }
+        .pg-body { padding: 1rem; }
+        
+        /* UI Control Triggers */
+        .btn {
+            font-family: 'Geist Mono', monospace;
+            font-size: 10px;
+            padding: 3px 10px;
+            border: 1px solid var(--subtle);
+            border-radius: 4px;
+            cursor: pointer;
+            background: var(--bg-color);
+            color: var(--text-color);
+            opacity: .5;
+            transition: all .15s;
+        }
+        .btn:hover { opacity: .85; }
+        .btn.on { opacity: 1; border-color: var(--text-color); font-weight: 700; }
+        .btn-action { opacity: .75; background: var(--code-bg); }
+        .ctrl-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .7rem; }
+        
+        /* Live Render Canvas Ecosystems */
+        #branch-canvas { width: 100%; height: 200px; display: block; }
+        .branch-controls { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; align-items: center; }
+        .branch-info { font-size: 11px; opacity: .5; margin-top: .5rem; min-height: 1.4rem; }
+        
+        /* Explorer Matrix Structure */
+        .cmd-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; margin-bottom: .8rem; }
+        @media (max-width: 500px) { .cmd-grid { grid-template-columns: repeat(2, 1fr); } }
+        .cmd-card { padding: .5rem .7rem; border: 1px solid var(--subtle); border-radius: 5px; cursor: pointer; transition: all .15s; font-size: 11px; font-weight: 700; opacity: .6; }
+        .cmd-card:hover { opacity: 1; background: var(--code-bg); }
+        .cmd-card.sel { opacity: 1; border-color: var(--text-color); background: var(--code-bg); }
+        .cmd-detail { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .8rem 1rem; font-size: 12px; line-height: 1.7; min-height: 3.5rem; }
+        .cmd-detail strong { font-size: 12px; display: block; margin-bottom: .3rem; text-transform: uppercase; letter-spacing: .06em; opacity: .85; }
+        
+        /* Integration Mode Comparative Modules */
+        .mvr-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+        @media (max-width: 480px) { .mvr-wrap { grid-template-columns: 1fr; } }
+        .mvr-pane { border: 1px solid var(--subtle); border-radius: 6px; overflow: hidden; }
+        .mvr-head { background: var(--code-bg); padding: .4rem .8rem; font-size: 10px; font-weight: 700; opacity: .6; border-bottom: 1px solid var(--subtle); text-transform: uppercase; letter-spacing: .06em; }
+        .mvr-canvas { display: block; width: 100%; height: 150px; }
+        .mvr-desc { padding: .6rem .8rem; font-size: 11px; opacity: .65; line-height: 1.5; }
+        
+        /* Operations Matrix Lookups */
+        .undo-row { display: grid; grid-template-columns: auto 1fr auto; gap: .6rem; align-items: center; padding: .5rem 0; border-bottom: 1px solid var(--subtle); font-size: 12px; }
+        .undo-row:last-child { border-bottom: none; }
+        .undo-cmd { font-weight: 700; opacity: .6; white-space: nowrap; }
+        .undo-desc { opacity: .7; }
+        .undo-danger { font-size: 10px; padding: 1px 6px; border-radius: 3px; border: 1px solid var(--subtle); opacity: .6; white-space: nowrap; text-transform: uppercase; letter-spacing: .06em; }
+        .danger { color: #e06c75; border-color: #e06c7540; }
+        .safe { color: #98c379; border-color: #98c37940; }
+        
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: .6; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
     </style>
 </head>
 <body>
     <nav>
         <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
-                <a href="/index.html">[/]</a>
-        <a href="/blog.html">[/blog]</a>
-        <a href="/photos.html">[/photos]</a>
-        <a href="/website/resume.html">[/resume]</a>
-        <a href="/notes.html" class="active">[/notes]</a>
-        <a href="/coolstuff.html">[/cool stuff]</a>
+                <a href="/index.html">[?]</a>
+                <a href="/blog.html">[b!og]</a>
+                <a href="/photos.html">[pho!os]</a>
+                <a href="/website/resume.html">[re?ume]</a>
+                <a href="/notes.html" class="active">[no!es]</a>
+                <a href="/coolstuff.html">[¿]</a>
             </div>
             <button class="theme-toggle" id="themeToggle">
-                <span class="theme-toggle-light">[☀]</span>
-                <span class="theme-toggle-dark" style="display:none">[☾]</span>
+                <span class="theme-toggle-light">[◐]</span>
+                <span class="theme-toggle-dark" style="display:none">[◐]</span>
             </button>
         </div>
     </nav>
@@ -102,19 +185,21 @@
     </script>
 
     <main>
-        <a href="../notes.html">← /notes</a>
-        <h1 class="title">Git</h1>
-        <div class="meta">2026.05.08 &nbsp;·&nbsp; 9 min read</div>
-
-        <div class="prose">
+        <div class="page-header">
+            <a href="../notes.html" class="back">← /notes</a>
+            <h1 class="title">Git</h1>
+            <div class="meta">2026.05.08 &nbsp;·&nbsp; 9 min read</div>
             <p>Git is a distributed version control system. Every developer has a full copy of the repository — history, branches, everything — not just the files. That single design decision is why git works offline, why branching is cheap, and why losing the server does not mean losing the project.</p>
             <p>Git does not store diffs. It stores <strong>snapshots</strong>. Each commit is a complete picture of every tracked file at a moment in time. Diffs are computed on demand by comparing snapshots. This is counterintuitive but it is why git is fast.</p>
+        </div>
+
+        <div class="prose">
             <h2>The three areas</h2>
             <p>Understanding git means understanding where your changes live at any moment. There are three places — and most confusion comes from not knowing which one you are in.</p>
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>The Three Areas</span><span style="opacity:.5;font-size:10px">click each area</span></div>
+            <div class="pg-head"><span>The Three Areas</span><span style="opacity:.5;font-size:10px;text-transform:uppercase;letter-spacing:.06em">click each area</span></div>
             <div class="pg-body">
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.8rem">
                     <div class="cmd-card sel" id="area-wd" onclick="selectArea('wd')">Working Directory</div>
@@ -134,7 +219,7 @@
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>Branch Visualiser</span><span id="branch-status" style="opacity:.5;font-size:10px">HEAD → main</span></div>
+            <div class="pg-head"><span>Branch Visualiser</span><span id="branch-status" style="opacity:.5;font-size:10px;text-transform:uppercase;letter-spacing:.06em">HEAD → main</span></div>
             <div class="pg-body">
                 <div class="branch-controls">
                     <button class="btn btn-action" onclick="simCommit()">+ commit</button>
@@ -190,7 +275,7 @@
         </div>
 
         <div class="playground">
-            <div class="pg-head"><span>Undo Reference</span><span style="opacity:.45;font-size:10px">danger = rewrites history</span></div>
+            <div class="pg-head"><span>Undo Reference</span><span style="opacity:.45;font-size:10px;text-transform:uppercase;letter-spacing:.06em">danger = rewrites history</span></div>
             <div class="pg-body"><div id="undo-rows"></div></div>
         </div>
 
@@ -221,9 +306,10 @@ git push --force              # nuclear, no checks</code></pre>
     <div class="divider"></div>
     <footer>
         <div>
-            <a href="mailto:kvndu@outlook.com" style="margin-right:1rem">email</a>
-            <a href="https://www.linkedin.com/in/kvndu/" target="_blank" rel="noopener noreferrer" style="margin-right:1rem">linkedin</a>
-            <a href="https://www.instagram.com/kvndu/" target="_blank" rel="noopener noreferrer">instagram</a>
+            <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a>
+            <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+            <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+            <a href="pgp\Kavindu Tharushan_0x6D3F8DC9ED4A7F7D_public.asc" target="_blank" rel="noopener noreferrer">pgp</a>
         </div>
         <div>@ 2026 Kavindu Tharushan</div>
     </footer>
@@ -231,7 +317,7 @@ git push --force              # nuclear, no checks</code></pre>
     <script>
         // Three areas
         const areas={wd:{title:'Working Directory',body:'Your local file system. Changes here are untracked until you stage them. git status shows what is modified, added, or deleted. Nothing here affects other developers.'},idx:{title:'Staging Index',body:'A preview of your next commit. git add moves changes here. You can stage some files and not others — this is how you split one batch of edits into multiple focused commits.'},repo:{title:'Repository (.git)',body:'The full history of all commits, branches, and tags. Lives in the hidden .git folder. git commit moves what is staged into here as a permanent snapshot.'}};
-        function selectArea(k){['wd','idx','repo'].forEach(id=>document.getElementById('area-'+id).classList.remove('sel'));document.getElementById('area-'+k).classList.add('sel');const a=areas[k];document.getElementById('area-detail').innerHTML=`<strong>${a.title}</strong>${a.body}`;}
+        function selectArea(k){['wd','idx','repo'].forEach(id=>document.getElementById('area-'+id).classList.remove('sel'));document.getElementById('area-'+k).classList.add('sel');const a=areas[k];document.getElementById('area-detail').innerHTML=`<strong>${a.title}</strong><span style="opacity:.8;display:block">${a.body}</span>`;}
         selectArea('wd');
 
         // Branch visualiser
@@ -275,7 +361,7 @@ git push --force              # nuclear, no checks</code></pre>
         // Commands
         const cmds=[{name:'git init',title:'Initialise a repo',body:'Creates a .git directory in the current folder. This is the entire git database — every commit, every branch, every tag.'},{name:'git clone',title:'Copy a remote repo',body:'Downloads the full repository — all history, all branches — into a new folder. Sets up "origin" as the remote alias automatically.'},{name:'git status',title:'What changed',body:'Shows three lists: staged changes, unstaged changes in tracked files, and untracked files. Run this constantly — it is free and instant.'},{name:'git add',title:'Stage changes',body:'git add &lt;file&gt; stages one file. git add . stages everything. git add -p stages interactively hunk by hunk.'},{name:'git commit',title:'Snapshot staged changes',body:'git commit -m "message" creates a commit. git commit --amend rewrites the most recent commit — only safe before pushing.'},{name:'git push',title:'Upload to remote',body:'Sends commits from your local branch to the remote. git push -u origin feature pushes a new branch and sets upstream tracking.'},{name:'git pull',title:'Download + integrate',body:'git pull is git fetch + git merge in one step. Use git pull --rebase to rebase instead of merge.'},{name:'git branch',title:'Manage branches',body:'git branch lists branches. git branch feature creates one. git branch -d feature deletes it. Branches are cheap — just pointers.'},{name:'git switch',title:'Change branches',body:'git switch feature moves HEAD to feature. git switch -c new-branch creates and switches in one step.'},{name:'git merge',title:'Join branch histories',body:'Integrates one branch into another with a merge commit. Non-destructive — never rewrites history.'},{name:'git rebase',title:'Replay commits linearly',body:'Re-applies commits on top of another base. Produces clean linear history. Never rebase a shared branch.'},{name:'git log',title:'Browse history',body:'git log --oneline --graph --all is the most useful form. Shows the full tree of all branches in ASCII art.'},{name:'git stash',title:'Hide WIP temporarily',body:'Saves your working directory to a stack, leaving a clean HEAD. git stash pop restores the top entry.'},{name:'git revert',title:'Safe undo (new commit)',body:'Creates a new commit that undoes a previous one. Safe on shared branches — does not rewrite history.'},{name:'git reset',title:'Move HEAD (destructive)',body:'--soft keeps changes staged. --mixed unstages them. --hard discards them entirely. Never use --hard carelessly.'}];
         const grid=document.getElementById('cmd-grid');
-        cmds.forEach(c=>{const el=document.createElement('div');el.className='cmd-card';el.textContent=c.name;el.onclick=()=>{document.querySelectorAll('.cmd-card').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('cmd-detail').innerHTML=`<strong>${c.name}</strong><span style="opacity:.5;display:block;font-size:11px;margin-bottom:.4rem">${c.title}</span>${c.body}`;};grid.appendChild(el);});
+        cmds.forEach(c=>{const el=document.createElement('div');el.className='cmd-card';el.textContent=c.name;el.onclick=()=>{document.querySelectorAll('.cmd-card').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');document.getElementById('cmd-detail').innerHTML=`<strong>${c.name}</strong><span style="opacity:.5;display:block;font-size:11px;margin-bottom:.4rem">${c.title}</span><span style="opacity:.8">${c.body}</span>`;};grid.appendChild(el);});
 
         // Merge vs Rebase
         function drawMvr(){

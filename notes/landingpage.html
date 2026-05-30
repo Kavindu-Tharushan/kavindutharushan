@@ -19,92 +19,185 @@
         window.localStorage.setItem('theme', theme);
     </script>
     <style>
-        :root{--bg-color:#fff;--text-color:#000;--border-color:#afafaf;--code-bg:#f5f5f5;--subtle:#e8e8e8}
-        .dark{--bg-color:#0a0a0a;--text-color:#e5e5e5;--border-color:#404040;--code-bg:#1a1a1a;--subtle:#222}
-        *{box-sizing:border-box;margin:0;padding:0}
-        html{overflow-y:scroll;background-color:var(--bg-color)}
-        body{font-family:Geist Mono,monospace;font-size:.75rem;line-height:1.6;color:var(--text-color);max-width:800px;margin:0 auto;padding:2rem 1rem;-webkit-font-smoothing:antialiased;background-color:var(--bg-color)}
-        a{color:var(--text-color);text-decoration:none}
-        a:hover{opacity:.6}
-        nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
-        nav a{margin-right:1rem;opacity:.4}
-        nav a.active{opacity:1}
-        .theme-toggle{cursor:pointer;opacity:.4;background:none;border:none;color:var(--text-color);font-family:Geist Mono,monospace;font-size:.75rem;padding:0}
-        .theme-toggle:hover{opacity:1}
-        .back{font-size:11px;opacity:.4;display:inline-block;margin-bottom:1.2rem}
-        h1.title{font-size:1.5rem;font-weight:700;line-height:1.25;margin-bottom:.5rem}
-        .meta{font-size:11px;opacity:.35;margin-bottom:2rem}
-        .divider{height:1px;background:var(--border-color);margin:2rem 0;opacity:.4}
-        .prose{font-size:14px;line-height:1.85}
-        .prose p{margin-bottom:1.1rem;opacity:.88}
-        .prose h2{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.4;margin:2.5rem 0 .7rem;border-bottom:1px solid var(--subtle);padding-bottom:.4rem}
-        .prose ul{padding-left:1.2rem;margin-bottom:1rem}
-        .prose li{margin-bottom:.3rem;font-size:14px;opacity:.88}
-        .prose strong{font-weight:700}
-        pre{background:var(--code-bg);border:1px solid var(--subtle);border-radius:6px;padding:.9rem 1rem;margin:1rem 0;overflow-x:auto}
-        pre code{font-size:11px;line-height:1.7;opacity:.85}
-        code{font-family:Geist Mono,monospace;font-size:11px;background:var(--code-bg);padding:1px 5px;border-radius:3px;border:1px solid var(--subtle)}
-        table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:12px}
-        th{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--border-color);opacity:.45;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
-        td{padding:.5rem .7rem;border-bottom:1px solid var(--subtle);opacity:.85;vertical-align:top}
-        tr:last-child td{border-bottom:none}
-        /* wireframe */
-        .wireframe{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0;font-size:11px}
-        .wf-section{padding:.6rem 1rem;border-bottom:1px solid var(--subtle);cursor:pointer;transition:background .15s;display:flex;justify-content:space-between;align-items:center}
-        .wf-section:last-child{border-bottom:none}
-        .wf-section:hover{background:var(--code-bg)}
-        .wf-section.selected{background:var(--code-bg);border-left:2px solid var(--text-color)}
-        .wf-label{font-weight:700}
-        .wf-hint{font-size:10px;opacity:.35}
-        .wf-detail{padding:.9rem 1rem;background:var(--code-bg);border-top:1px solid var(--subtle);font-size:12px;line-height:1.6;opacity:.85;display:none}
-        .wf-detail.show{display:block}
-        /* fold sim */
-        .fold-sim{border:1px solid var(--subtle);border-radius:8px;overflow:hidden;margin:1.5rem 0}
-        .fold-controls{display:flex;gap:.5rem;padding:.8rem 1rem;border-bottom:1px solid var(--subtle);background:var(--code-bg);flex-wrap:wrap}
-        .fold-btn{font-family:Geist Mono,monospace;font-size:11px;padding:3px 10px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.5}
-        .fold-btn.active{opacity:1;border-color:var(--text-color)}
-        .fold-body{padding:1rem}
-        .fold-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-        .fold-section-label{font-size:10px;opacity:.35;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
-        .fold-items{list-style:none;padding:0}
-        .fold-items li{font-size:12px;padding:3px 0;opacity:.7}
-        /* effects */
-        .effects-nav{display:flex;gap:.4rem;flex-wrap:wrap;margin:.8rem 0}
-        .effect-btn{font-family:Geist Mono,monospace;font-size:10px;padding:3px 10px;border:1px solid var(--subtle);border-radius:4px;cursor:pointer;background:var(--bg-color);color:var(--text-color);opacity:.5}
-        .effect-btn.active{opacity:1;border-color:var(--text-color)}
-        .effect-preview{height:100px;border:1px solid var(--subtle);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--code-bg)}
-        .effect-desc{font-size:12px;opacity:.65;margin-top:.6rem;line-height:1.6}
-        /* animations */
-        @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-        .grad-text{font-size:1.6rem;font-weight:700;background:linear-gradient(90deg,#a855f7,#3b82f6,#06b6d4,#a855f7);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradShift 3s ease infinite}
-        @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
-        .shimmer-btn{position:relative;padding:.55rem 1.4rem;border-radius:6px;border:none;cursor:pointer;font-family:Geist Mono,monospace;font-size:13px;font-weight:700;background:linear-gradient(90deg,#111 40%,#555 50%,#111 60%);background-size:200%;color:#fff;animation:shimmer 2s linear infinite}
-        @property --angle{syntax:'<angle>';initial-value:0deg;inherits:false}
-        @keyframes beamRotate{0%{--angle:0deg}100%{--angle:360deg}}
-        .border-beam-wrap{padding:1px;border-radius:8px;background:conic-gradient(from var(--angle),transparent 70%,#a855f7,#3b82f6,transparent);animation:beamRotate 2s linear infinite}
-        .border-beam-inner{background:var(--code-bg);border-radius:7px;padding:.4rem 1.2rem;font-size:13px;font-weight:700}
-        .ticker-num{font-size:2.2rem;font-weight:700;font-variant-numeric:tabular-nums}
-        @keyframes marqueeAnim{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-        .marquee-track{overflow:hidden;width:100%}
-        .marquee-inner{display:flex;gap:2rem;animation:marqueeAnim 7s linear infinite;white-space:nowrap}
-        .marquee-item{font-size:12px;opacity:.5;flex-shrink:0}
-        footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border-color);opacity:.6;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+        :root {
+            --bg-color: #fff;
+            --text-color: #000;
+            --border-color: #afafaf;
+            --code-bg: #f5f5f5;
+            --subtle: #e8e8e8;
+        }
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #e5e5e5;
+            --border-color: #404040;
+            --code-bg: #1a1a1a;
+            --subtle: #222;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-y: scroll; background-color: var(--bg-color); }
+        body {
+            font-family: 'Geist Mono', monospace;
+            font-size: .75rem; /* 12px base */
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-color);
+        }
+        h1, h2, h3 { font-weight: 700; }
+        a { color: var(--text-color); text-decoration: none; }
+        a:hover { opacity: .6; }
+        nav {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a { margin-right: 1rem; opacity: .4; }
+        nav a.active { opacity: 1; }
+        
+        .theme-toggle {
+            cursor: pointer; opacity: .4; background: none; border: none;
+            color: var(--text-color); font-family: 'Geist Mono', monospace;
+            font-size: .75rem; padding: 0;
+        }
+        .theme-toggle:hover { opacity: 1; }
+        
+        /* Typography Content Layout */
+        .page-header p {
+            opacity: 0.8;
+            margin-top: 0.75rem;
+            margin-bottom: 2rem;
+            max-width: 70ch;
+        }
+        .prose { margin-bottom: 2rem; }
+        .prose p { margin-top: 0.5rem; opacity: 0.8; }
+        .prose h2 {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            opacity: .4;
+            margin: 2.5rem 0 .7rem;
+            border-bottom: 1px solid var(--subtle);
+            padding-bottom: .4rem;
+        }
+        .prose ul { padding-left: 1.2rem; margin-bottom: 1rem; margin-top: 0.5rem; }
+        .prose li { margin-bottom: .4rem; opacity: .8; }
+        .prose strong { font-weight: 700; }
+        
+        .back { font-size: 11px; opacity: .4; display: inline-block; margin-bottom: 1.2rem; }
+        h1.title { font-size: 1.5rem; font-weight: 700; line-height: 1.25; margin-bottom: .5rem; }
+        .meta { font-size: 11px; opacity: .35; margin-bottom: 2rem; }
+        .divider { height: 1px; background: var(--border-color); margin: 2rem 0; opacity: .4; }
+        
+        /* Syntax Rendering Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--subtle);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            line-height: 1.7;
+        }
+        pre code { font-size: 11px; opacity: .85; }
+        code {
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.7rem; /* ~11px */
+            background: var(--code-bg);
+            padding: 1px 5px;
+            border-radius: 3px;
+            border: 1px solid var(--subtle);
+        }
+        
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th {
+            text-align: left;
+            padding: 0.5rem 0.7rem;
+            border-bottom: 1px solid var(--border-color);
+            opacity: .45;
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+        td {
+            padding: 0.5rem 0.7rem;
+            border-bottom: 1px solid var(--subtle);
+            opacity: .85;
+            vertical-align: top;
+            font-size: 11px;
+        }
+        tr:last-child td { border-bottom: none; }
+        
+        /* Wireframe Component */
+        .wireframe { border: 1px solid var(--subtle); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; font-size: 11px; }
+        .wf-section { padding: .6rem 1rem; border-bottom: 1px solid var(--subtle); cursor: pointer; transition: background .15s; display: flex; justify-content: space-between; align-items: center; }
+        .wf-section:last-child { border-bottom: none; }
+        .wf-section:hover { background: var(--code-bg); }
+        .wf-section.selected { background: var(--code-bg); border-left: 2px solid var(--text-color); }
+        .wf-label { font-weight: 700; }
+        .wf-hint { font-size: 10px; opacity: .35; }
+        .wf-detail { padding: .9rem 1rem; background: var(--code-bg); border-top: 1px solid var(--subtle); font-size: 11px; line-height: 1.6; opacity: .85; display: none; }
+        .wf-detail.show { display: block; }
+        
+        /* Fold Simulator */
+        .fold-sim { border: 1px solid var(--subtle); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+        .fold-controls { display: flex; gap: .5rem; padding: .8rem 1rem; border-bottom: 1px solid var(--subtle); background: var(--code-bg); flex-wrap: wrap; }
+        .fold-btn { font-family: 'Geist Mono', monospace; font-size: 10px; padding: 3px 10px; border: 1px solid var(--subtle); border-radius: 4px; cursor: pointer; background: var(--bg-color); color: var(--text-color); opacity: .5; }
+        .fold-btn.active { opacity: 1; border-color: var(--text-color); font-weight: 700; }
+        .fold-body { padding: 1rem; }
+        .fold-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .fold-section-label { font-size: 10px; opacity: .35; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .4rem; }
+        .fold-items { list-style: none; padding: 0; }
+        .fold-items li { font-size: 11px; padding: 3px 0; opacity: .7; }
+        
+        /* Effects Navigation */
+        .effects-nav { display: flex; gap: .4rem; flex-wrap: wrap; margin: .8rem 0; }
+        .effect-btn { font-family: 'Geist Mono', monospace; font-size: 10px; padding: 3px 10px; border: 1px solid var(--subtle); border-radius: 4px; cursor: pointer; background: var(--bg-color); color: var(--text-color); opacity: .5; }
+        .effect-btn.active { opacity: 1; border-color: var(--text-color); font-weight: 700; }
+        .effect-preview { height: 100px; border: 1px solid var(--subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--code-bg); }
+        .effect-desc { font-size: 11px; opacity: .65; margin-top: .6rem; line-height: 1.6; }
+        
+        /* Magic UI Animations */
+        @keyframes gradShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .grad-text { font-size: 1.6rem; font-weight: 700; background: linear-gradient(90deg, #a855f7, #3b82f6, #06b6d4, #a855f7); background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradShift 3s ease infinite; }
+        
+        @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+        .shimmer-btn { position: relative; padding: .55rem 1.4rem; border-radius: 6px; border: none; cursor: pointer; font-family: 'Geist Mono', monospace; font-size: 12px; font-weight: 700; background: linear-gradient(90deg, #111 40%, #555 50%, #111 60%); background-size: 200%; color: #fff; animation: shimmer 2s linear infinite; }
+        
+        @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+        @keyframes beamRotate { 0% { --angle: 0deg; } 100% { --angle: 360deg; } }
+        .border-beam-wrap { padding: 1px; border-radius: 8px; background: conic-gradient(from var(--angle), transparent 70%, #a855f7, #3b82f6, transparent); animation: beamRotate 2s linear infinite; }
+        .border-beam-inner { background: var(--code-bg); border-radius: 7px; padding: .4rem 1.2rem; font-size: 12px; font-weight: 700; }
+        
+        .ticker-num { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+        
+        @keyframes marqueeAnim { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-track { overflow: hidden; width: 100%; }
+        .marquee-inner { display: flex; gap: 2rem; animation: marqueeAnim 7s linear infinite; white-space: nowrap; }
+        .marquee-item { font-size: 11px; opacity: .5; flex-shrink: 0; }
+        
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: .6; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
     </style>
 </head>
 <body>
     <nav>
         <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
-                <<a href="/index.html">[/]</a>
-        <a href="/blog.html">[/blog]</a>
-        <a href="/photos.html">[/photos]</a>
-        <a href="/resume.html">[/resume]</a>
-        <a href="/notes.html" class="active">[/notes]</a>
-        <a href="/coolstuff.html">[/cool stuff]</a>
+                <a href="/index.html">[?]</a>
+                <a href="/blog.html">[b!og]</a>
+                <a href="/photos.html">[pho!os]</a>
+                <a href="/resume.html">[re?ume]</a>
+                <a href="/notes.html" class="active">[no!es]</a>
+                <a href="/coolstuff.html">[¿]</a>
             </div>
             <button class="theme-toggle" id="themeToggle">
-                <span class="theme-toggle-light">[☀]</span>
-                <span class="theme-toggle-dark" style="display:none">[☾]</span>
+                <span class="theme-toggle-light">[◐]</span>
+                <span class="theme-toggle-dark" style="display:none">[◐]</span>
             </button>
         </div>
     </nav>
@@ -116,14 +209,15 @@
     </script>
 
     <main>
-        <a href="../notes.html">← /notes</a>
-        <h1 class="title">Landing Page</h1>
-        <div class="meta">2026.04.25 &nbsp;·&nbsp; 8 min read</div>
-
-        <div class="prose">
+        <div class="page-header">
+            <a href="../notes.html" class="back">← /notes</a>
+            <h1 class="title">Landing Page</h1>
+            <div class="meta">2026.04.25 &nbsp;·&nbsp; 8 min read</div>
             <p>With AI growing increasingly powerful, the barrier to building has essentially vanished. Anyone can be a maker now. In that world, your landing page is no longer just a digital brochure — it is your pitch, your storefront, and often your only shot at a first impression before someone moves on.</p>
             <p>A landing page is a lie — in the best possible way. It shows your product in its most optimistic form: the clearest headline you can write, the most believable proof you can show, the most frictionless path to one action. It is not the product. It is the argument that the product is worth trying.</p>
+        </div>
 
+        <div class="prose">
             <h2>What a landing page actually is</h2>
             <p>A landing page is a focused web page with a single conversion goal: a sign-up, a purchase, a download, a demo request. Unlike a homepage — which tries to serve every visitor — a landing page arrives with a specific audience already in mind.</p>
 <pre><code>// Homepage: general entry point
@@ -148,15 +242,12 @@
             <div class="wf-section" onclick="selectWf(this,'Social Proof','Trust is expensive to build — social proof borrows it. Logos from companies the visitor recognises, or testimonials with specific numeric claims. Placement matters: this must appear early, before the visitor has already decided to leave.')">
                 <span class="wf-label">Social Proof</span><span class="wf-hint">click to read →</span>
             </div>
-            <!-- Fixed Features Section -->
-<div class="wf-section" onclick="selectWf(this,'Features','Details for visitors who are already interested. Feature copy should always answer &quot;so what does that mean for me?&quot; — not describe the capability itself, but the outcome it enables.')">
-    <span class="wf-label">Features</span><span class="wf-hint">click to read →</span>
-</div>
-
-<!-- Fixed Testimonials Section -->
-<div class="wf-section" onclick="selectWf(this,'Testimonials','Specific, human proof. The most effective testimonials name a real outcome: &quot;We reduced onboarding time by 40%&quot; beats &quot;Great product, highly recommend.&quot; Vague praise carries no weight.')">
-    <span class="wf-label">Testimonials</span><span class="wf-hint">click to read →</span>
-</div>
+            <div class="wf-section" onclick="selectWf(this,'Features','Details for visitors who are already interested. Feature copy should always answer &quot;so what does that mean for me?&quot; — not describe the capability itself, but the outcome it enables.')">
+                <span class="wf-label">Features</span><span class="wf-hint">click to read →</span>
+            </div>
+            <div class="wf-section" onclick="selectWf(this,'Testimonials','Specific, human proof. The most effective testimonials name a real outcome: &quot;We reduced onboarding time by 40%&quot; beats &quot;Great product, highly recommend.&quot; Vague praise carries no weight.')">
+                <span class="wf-label">Testimonials</span><span class="wf-hint">click to read →</span>
+            </div>
             <div class="wf-section" onclick="selectWf(this,'Footer CTA','A second chance to convert visitors who scrolled all the way down. Repeat the primary CTA. Visitors who reach the footer are high-intent — they read everything and still did not leave.')">
                 <span class="wf-label">Footer CTA</span><span class="wf-hint">click to read →</span>
             </div>
@@ -275,9 +366,10 @@ const cardsHoverSway       = true   // ← visual noise</code></pre>
     <div class="divider"></div>
     <footer>
         <div>
-            <a href="mailto:kvndu@outlook.com" style="margin-right:1rem">email</a>
-            <a href="https://www.linkedin.com/in/kvndu/" target="_blank" rel="noopener noreferrer" style="margin-right:1rem">linkedin</a>
-            <a href="https://www.instagram.com/kvndu/" target="_blank" rel="noopener noreferrer">instagram</a>
+            <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a>
+            <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+            <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+            <a href="pgp\Kavindu Tharushan_0x6D3F8DC9ED4A7F7D_public.asc" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">pgp</a>
         </div>
         <div>@ 2026 Kavindu Tharushan</div>
     </footer>

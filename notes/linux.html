@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Linux Basics - Kavindu Tharushan</title>
+    <script>
+        const theme = (() => {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) return localStorage.getItem('theme');
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+            return 'light';
+        })();
+        if (theme === 'light') document.documentElement.classList.remove('dark');
+        else document.documentElement.classList.add('dark');
+        window.localStorage.setItem('theme', theme);
+    </script>
+    <style>
+        :root {
+            --bg-color: #fff;
+            --text-color: #000;
+            --border-color: #afafaf;
+            --code-bg: #f5f5f5;
+            --subtle: #e8e8e8;
+        }
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #e5e5e5;
+            --border-color: #404040;
+            --code-bg: #1a1a1a;
+            --subtle: #222;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-y: scroll; background-color: var(--bg-color); }
+        body {
+            font-family: 'Geist Mono', monospace;
+            font-size: .75rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--bg-color);
+        }
+        h1, h2, h3 { font-weight: 700; }
+        a { color: var(--text-color); text-decoration: none; }
+        a:hover { opacity: .6; }
+        nav {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a { margin-right: 1rem; opacity: .4; }
+        nav a.active { opacity: 1; }
+        .theme-toggle {
+            cursor: pointer; opacity: .4; background: none; border: none;
+            color: var(--text-color); font-family: 'Geist Mono', monospace;
+            font-size: .75rem; padding: 0;
+        }
+        .theme-toggle:hover { opacity: 1; }
+
+        /* Typography */
+        .page-header p { opacity: 0.8; margin-top: 0.75rem; margin-bottom: 2rem; max-width: 70ch; }
+        .prose { margin-bottom: 2rem; }
+        .prose p { margin-top: 0.5rem; opacity: 0.8; }
+        .prose h2 {
+            font-size: 11px; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase; opacity: .4; margin: 2.5rem 0 .7rem;
+            border-bottom: 1px solid var(--subtle); padding-bottom: .4rem;
+        }
+        .prose ul { padding-left: 1.2rem; margin-bottom: 1rem; margin-top: 0.5rem; }
+        .prose li { margin-bottom: .4rem; opacity: .8; }
+        .prose strong { font-weight: 700; }
+        .back { font-size: 11px; opacity: .4; display: inline-block; margin-bottom: 1.2rem; }
+        h1.title { font-size: 1.5rem; font-weight: 700; line-height: 1.25; margin-bottom: .5rem; }
+        .meta { font-size: 11px; opacity: .35; margin-bottom: 2rem; }
+        .divider { height: 1px; background: var(--border-color); margin: 2rem 0; opacity: .4; }
+
+        /* Code */
+        pre {
+            background: var(--code-bg); border: 1px solid var(--subtle);
+            border-radius: 6px; padding: 1rem; margin: 1rem 0;
+            overflow-x: auto; line-height: 1.7;
+        }
+        pre code { font-size: 11px; opacity: .85; }
+        code {
+            font-family: 'Geist Mono', monospace; font-size: 0.7rem;
+            background: var(--code-bg); padding: 1px 5px;
+            border-radius: 3px; border: 1px solid var(--subtle);
+        }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th {
+            text-align: left; padding: 0.5rem 0.7rem;
+            border-bottom: 1px solid var(--border-color); opacity: .45;
+            font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+        }
+        td { padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--subtle); opacity: .85; vertical-align: top; font-size: 11px; }
+        tr:last-child td { border-bottom: none; }
+
+        /* Playground shell */
+        .playground { border: 1px solid var(--subtle); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+        .pg-head { background: var(--code-bg); padding: .7rem 1rem; border-bottom: 1px solid var(--subtle); display: flex; justify-content: space-between; align-items: center; font-size: 11px; opacity: .7; }
+        .pg-body { padding: 1rem; }
+
+        /* Buttons */
+        .btn { font-family: 'Geist Mono', monospace; font-size: 10px; padding: 3px 11px; border: 1px solid var(--subtle); border-radius: 4px; cursor: pointer; background: var(--bg-color); color: var(--text-color); opacity: .55; transition: all .15s; }
+        .btn:hover { opacity: .9; }
+        .btn.on { opacity: 1; border-color: var(--text-color); font-weight: 700; background: var(--text-color); color: var(--bg-color); }
+        .ctrl-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .7rem; }
+
+        /* ── Filesystem Explorer ── */
+        .fs-tree { font-size: 11px; line-height: 2; }
+        .fs-node { display: flex; align-items: baseline; gap: .5rem; padding: 1px 0; cursor: pointer; border-radius: 3px; padding: 2px 4px; transition: background .12s; }
+        .fs-node:hover { background: var(--code-bg); }
+        .fs-node.sel { background: var(--text-color); color: var(--bg-color); border-radius: 3px; }
+        .fs-node .indent { color: var(--border-color); user-select: none; }
+        .fs-detail { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .75rem 1rem; font-size: 11px; line-height: 1.7; min-height: 3.5rem; margin-top: .6rem; }
+        .fs-detail strong { display: block; margin-bottom: .2rem; font-size: 12px; }
+
+        /* ── Permission Calculator ── */
+        .perm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-bottom: .8rem; }
+        .perm-col { border: 1px solid var(--subtle); border-radius: 6px; overflow: hidden; }
+        .perm-col-head { background: var(--code-bg); padding: .35rem .7rem; font-size: 10px; font-weight: 700; opacity: .65; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--subtle); }
+        .perm-bits { padding: .5rem .7rem; display: flex; flex-direction: column; gap: .35rem; }
+        .perm-bit { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+        .perm-toggle { width: 28px; height: 16px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); cursor: pointer; position: relative; transition: all .2s; flex-shrink: 0; }
+        .perm-toggle.on { background: var(--text-color); border-color: var(--text-color); }
+        .perm-toggle::after { content:''; position: absolute; left: 2px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--border-color); transition: all .2s; }
+        .perm-toggle.on::after { left: 14px; background: var(--bg-color); }
+        .perm-output { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .7rem 1rem; font-size: 13px; font-family: 'Geist Mono', monospace; margin-top: .4rem; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+        .perm-sym { letter-spacing: .15em; font-size: 14px; font-weight: 700; }
+        .perm-octal { opacity: .6; font-size: 12px; }
+        .perm-cmd { opacity: .5; font-size: 11px; }
+
+        /* ── Pipeline Visualizer ── */
+        .pipe-stage { border: 1px solid var(--subtle); border-radius: 6px; padding: .6rem .9rem; font-size: 11px; margin-bottom: .4rem; cursor: pointer; transition: all .15s; display: flex; justify-content: space-between; align-items: center; }
+        .pipe-stage:hover { background: var(--code-bg); }
+        .pipe-stage.active { border-color: var(--text-color); background: var(--code-bg); }
+        .pipe-stage .cmd { font-weight: 700; }
+        .pipe-stage .role { font-size: 10px; opacity: .4; }
+        .pipe-arrow { text-align: center; font-size: 11px; opacity: .3; margin: .1rem 0; user-select: none; }
+        .pipe-data { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .7rem 1rem; font-size: 11px; min-height: 5rem; white-space: pre; overflow-x: auto; line-height: 1.7; margin-top: .6rem; opacity: .85; }
+        .pipe-desc { font-size: 11px; opacity: .65; margin-top: .5rem; line-height: 1.6; }
+
+        /* ── Process State Diagram (Canvas) ── */
+        #proc-canvas { width: 100%; display: block; }
+
+        /* ── Signal Explorer ── */
+        .sig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; margin-bottom: .7rem; }
+        @media(max-width:500px) { .sig-grid { grid-template-columns: repeat(2, 1fr); } .perm-grid { grid-template-columns: 1fr; } }
+        .sig-btn { font-family: 'Geist Mono', monospace; font-size: 10px; padding: .35rem .5rem; border: 1px solid var(--subtle); border-radius: 4px; cursor: pointer; background: var(--bg-color); color: var(--text-color); opacity: .55; text-align: left; transition: all .15s; line-height: 1.4; }
+        .sig-btn:hover { opacity: 1; background: var(--code-bg); }
+        .sig-btn.sel { border-color: var(--text-color); opacity: 1; background: var(--code-bg); }
+        .sig-num { font-weight: 700; display: block; }
+        .sig-name { font-size: 9px; opacity: .6; display: block; }
+        .sig-detail { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .75rem 1rem; font-size: 11px; line-height: 1.7; min-height: 3rem; }
+        .sig-detail strong { display: block; margin-bottom: .2rem; font-size: 12px; }
+
+        /* ── User/Group explorer ── */
+        .passwd-row { display: flex; gap: 0; border: 1px solid var(--subtle); border-radius: 6px; overflow: hidden; margin: .8rem 0; flex-wrap: wrap; }
+        .passwd-field { flex: 1; min-width: 60px; padding: .45rem .5rem; text-align: center; cursor: pointer; transition: all .12s; border-right: 1px solid var(--subtle); font-size: 10px; font-weight: 700; line-height: 1.3; }
+        .passwd-field:last-child { border-right: none; }
+        .passwd-field:hover { background: var(--code-bg); }
+        .passwd-field.sel { background: var(--text-color); color: var(--bg-color); }
+        .passwd-field .fval { font-size: 9px; font-weight: 400; display: block; opacity: .6; margin-top: 1px; }
+        .passwd-detail { background: var(--code-bg); border: 1px solid var(--subtle); border-radius: 6px; padding: .75rem 1rem; font-size: 11px; line-height: 1.7; min-height: 2.5rem; }
+        .passwd-detail strong { margin-right: .5rem; }
+
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); opacity: .6; display: flex; justify-content: space-between; align-items: center; font-size: 11px; flex-wrap: wrap; gap: .5rem; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+                <a href="/index.html">[?]</a>
+                <a href="/blog.html">[b!og]</a>
+                <a href="/photos.html">[pho!os]</a>
+                <a href="/resume.html">[re?ume]</a>
+                <a href="/notes.html" class="active">[no!es]</a>
+                <a href="/coolstuff.html">[¿]</a>
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="theme-toggle-light">[◐]</span>
+                <span class="theme-toggle-dark" style="display:none">[◐]</span>
+            </button>
+        </div>
+</nav>
+
+<main>
+    <a class="back" href="/notes.html">← notes</a>
+    <div class="page-header">
+        <h1 class="title">Linux CLI & System Fundamentals</h1>
+        <div class="meta"> 2026.05.30  ·  15 min read</div>
+        <p>How Linux actually works under the hood — filesystem layout, permissions, processes, piping, and signals. Each section has an interactive widget so you can see the concepts in action.</p>
+    </div>
+
+    
+    <div class="prose">
+        <h2>The filesystem hierarchy</h2>
+        <p>Everything in Linux is a file — including devices, sockets, and kernel state. The Filesystem Hierarchy Standard (FHS) defines where things live. Click any directory below to learn what it contains.</p>
+    </div>
+
+    <div class="playground">
+        <div class="pg-head"><span>filesystem explorer</span><span>click a directory</span></div>
+        <div class="pg-body">
+            <div class="fs-tree" id="fs-tree"></div>
+            <div class="fs-detail" id="fs-detail"><span style="opacity:.4">Select a directory above to see what it contains.</span></div>
+        </div>
+    </div>
+
+    <div class="prose">
+        <p>One subtlety: <code>/proc</code> and <code>/sys</code> are <strong>virtual filesystems</strong>. Nothing is stored on disk — the kernel generates the content on the fly when you read from them. <code>cat /proc/cpuinfo</code> does not read a file; it asks the kernel to describe the CPU.</p>
+
+<pre><code># Real examples — try these in your terminal
+cat /proc/uptime          # seconds since boot
+cat /proc/meminfo         # live memory stats
+ls /proc/$$               # inspect your own shell process
+cat /sys/class/net/eth0/speed   # NIC link speed in Mbps</code></pre>
+    </div>
+
+    <div class="divider"></div>
+
+   
+    <div class="prose">
+        <h2>File permissions</h2>
+        <p>Every file has a 9-bit permission mask split across three groups: <strong>owner</strong>, <strong>group</strong>, and <strong>other</strong>. Each group gets three bits — read, write, execute. Toggle the bits below to build a permission mask.</p>
+    </div>
+
+    <div class="playground">
+        <div class="pg-head"><span>permission calculator</span><span>toggle r/w/x bits</span></div>
+        <div class="pg-body">
+            <div class="perm-grid" id="perm-grid"></div>
+            <div class="perm-output" id="perm-output">
+                <span class="perm-sym" id="perm-sym">----------</span>
+                <span class="perm-octal" id="perm-octal">000</span>
+                <span class="perm-cmd" id="perm-cmd">chmod 000 file</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="prose">
+        <p>The execute bit on a <strong>directory</strong> means something different: it controls whether you can <code>cd</code> into it or traverse its path. A directory with <code>r</code> but no <code>x</code> lets you list names, but not access them.</p>
+
+<pre><code>ls -la /etc/passwd
+# -rw-r--r-- 1 root root 2847 Apr  3 09:21 /etc/passwd
+#  ^  ^  ^
+#  │  │  └── other: r only (world-readable)
+#  │  └───── group: r only
+#  └──────── owner: rw (root can write)
+
+chmod 755 script.sh    # rwxr-xr-x — owner full, others read+exec
+chmod 600 ~/.ssh/id_rsa  # rw------- — private key, owner only
+chown www-data:www-data /var/www/html  # change owner and group</code></pre>
+
+        <h2>setuid, setgid, sticky bit</h2>
+        <p>Three special bits live above the normal nine. <strong>setuid</strong> on an executable runs it as the file's owner (how <code>sudo</code> gains root). <strong>setgid</strong> on a directory makes new files inherit the directory's group. The <strong>sticky bit</strong> on a directory prevents users from deleting files they don't own — that's why <code>/tmp</code> is <code>1777</code>.</p>
+
+<pre><code>ls -la /usr/bin/sudo
+# ---s--x--x 1 root root  — setuid: runs as root regardless of caller
+
+ls -la /tmp
+# drwxrwxrwt — the 't' at the end is the sticky bit</code></pre>
+    </div>
+
+    <div class="divider"></div>
+
+    
+    <div class="prose">
+        <h2>Piping & redirection</h2>
+        <p>The pipe <code>|</code> connects stdout of one process to stdin of the next. Data flows left to right through a chain of single-purpose tools. Click each stage below to see what the data looks like at that point.</p>
+    </div>
+
+    <div class="playground">
+        <div class="pg-head"><span>pipeline visualizer</span><span>click a stage</span></div>
+        <div class="pg-body">
+            <div id="pipe-stages"></div>
+            <div class="pipe-data" id="pipe-data"></div>
+            <div class="pipe-desc" id="pipe-desc"></div>
+        </div>
+    </div>
+
+    <div class="prose">
+        <p>Redirection sends or receives streams to/from files rather than other processes.</p>
+        <table>
+            <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+            <tr><td><code>&gt;</code></td><td>Redirect stdout (overwrite)</td><td><code>ls &gt; out.txt</code></td></tr>
+            <tr><td><code>&gt;&gt;</code></td><td>Redirect stdout (append)</td><td><code>echo hi &gt;&gt; log.txt</code></td></tr>
+            <tr><td><code>2&gt;</code></td><td>Redirect stderr</td><td><code>cmd 2&gt; err.log</code></td></tr>
+            <tr><td><code>2&gt;&amp;1</code></td><td>Merge stderr into stdout</td><td><code>cmd &gt; all.log 2&gt;&amp;1</code></td></tr>
+            <tr><td><code>&lt;</code></td><td>Redirect stdin from file</td><td><code>sort &lt; names.txt</code></td></tr>
+            <tr><td><code>tee</code></td><td>Split stdout to file and pipe</td><td><code>cmd | tee out.txt | wc -l</code></td></tr>
+        </table>
+    </div>
+
+    <div class="divider"></div>
+
+    
+    <div class="prose">
+        <h2>Processes & signals</h2>
+        <p>Every running program is a process with a unique PID. Processes form a tree rooted at <code>init</code> (PID 1). The kernel communicates with processes by sending signals — asynchronous notifications that interrupt normal execution.</p>
+    </div>
+
+    <div class="playground">
+        <div class="pg-head"><span>process state diagram</span><span>canvas</span></div>
+        <div class="pg-body" style="padding: .5rem 0 0">
+            <canvas id="proc-canvas" height="220"></canvas>
+        </div>
+    </div>
+
+    <div class="prose">
+        <h2>Signals</h2>
+        <p>Click a signal to see what it does and when to use it.</p>
+    </div>
+
+    <div class="playground">
+        <div class="pg-head"><span>signal explorer</span><span>click a signal</span></div>
+        <div class="pg-body">
+            <div class="sig-grid" id="sig-grid"></div>
+            <div class="sig-detail" id="sig-detail"><span style="opacity:.4">Select a signal above.</span></div>
+        </div>
+    </div>
+
+    <div class="prose">
+<pre><code># Useful process commands
+ps aux                   # snapshot of all processes
+ps aux | grep nginx      # find a specific process
+top                      # live process monitor (q to quit)
+htop                     # nicer version of top
+
+kill -15 &lt;pid&gt;           # ask nicely (SIGTERM) — default
+kill -9 &lt;pid&gt;            # force kill (SIGKILL) — last resort
+kill -1 &lt;pid&gt;            # reload config (SIGHUP)
+killall nginx            # kill all processes named nginx
+
+# Background jobs
+./long-script.sh &amp;       # run in background
+jobs                     # list background jobs
+fg %1                    # bring job 1 to foreground
+Ctrl+Z                   # suspend foreground process → SIGTSTP
+bg %1                    # resume suspended job in background</code></pre>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ────────────────────────────────────────────────
+         SECTION 5: Users & Groups
+    ──────────────────────────────────────────────── -->
+    <div class="prose">
+        <h2>Users & groups</h2>
+        <p><code>/etc/passwd</code> stores user account info. Despite the name, passwords have not been stored here since the 1980s — they moved to <code>/etc/shadow</code> (readable only by root). Click each field in the entry below to understand the format.</p>
+    </div>
+
+    <div class="playground">
+        <div class="pg-head"><span>/etc/passwd entry explorer</span><span>click a field</span></div>
+        <div class="pg-body">
+            <div class="passwd-row" id="passwd-row"></div>
+            <div class="passwd-detail" id="passwd-detail"><span style="opacity:.4">Click a field to learn what it means.</span></div>
+        </div>
+    </div>
+
+    <div class="prose">
+<pre><code># User management
+whoami                   # your current username
+id                       # uid, gid, and group memberships
+groups                   # list your groups
+
+useradd -m -s /bin/bash alice   # create user with home dir
+passwd alice             # set password
+usermod -aG sudo alice   # add alice to sudo group
+userdel -r alice         # delete user and home directory
+
+# Privilege escalation
+sudo command             # run one command as root
+sudo -i                  # open root shell (use sparingly)
+su - alice               # switch to user alice</code></pre>
+
+        <h2>How sudo works</h2>
+        <p><code>sudo</code> is a setuid binary owned by root. When you run it, it executes as root regardless of who called it. It checks <code>/etc/sudoers</code> to decide whether your user is allowed to run the requested command, then either runs it or refuses. The <code>sudoers</code> file is edited with <code>visudo</code> — which validates syntax before saving, preventing you from locking yourself out.</p>
+
+<pre><code># /etc/sudoers examples
+alice ALL=(ALL:ALL) ALL          # full sudo access
+bob ALL=(ALL) NOPASSWD: /sbin/reboot  # passwordless reboot only
+%developers ALL=(ALL) /usr/bin/docker  # group: docker only</code></pre>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ────────────────────────────────────────────────
+         SECTION 6: Package Management
+    ──────────────────────────────────────────────── -->
+    <div class="prose">
+        <h2>Package management</h2>
+        <p>Different distros use different package managers, but they all do the same thing: download software from repositories, resolve dependencies, and install/remove files in the right places.</p>
+
+        <table>
+            <tr><th>Distro family</th><th>Manager</th><th>Install</th><th>Remove</th><th>Search</th></tr>
+            <tr><td>Debian / Ubuntu</td><td><code>apt</code></td><td><code>apt install pkg</code></td><td><code>apt remove pkg</code></td><td><code>apt search pkg</code></td></tr>
+            <tr><td>Fedora / RHEL</td><td><code>dnf</code></td><td><code>dnf install pkg</code></td><td><code>dnf remove pkg</code></td><td><code>dnf search pkg</code></td></tr>
+            <tr><td>Arch</td><td><code>pacman</code></td><td><code>pacman -S pkg</code></td><td><code>pacman -R pkg</code></td><td><code>pacman -Ss pkg</code></td></tr>
+            <tr><td>Alpine</td><td><code>apk</code></td><td><code>apk add pkg</code></td><td><code>apk del pkg</code></td><td><code>apk search pkg</code></td></tr>
+        </table>
+
+<pre><code># What happens when you run: apt install nginx
+
+1. apt reads /etc/apt/sources.list for repository URLs
+2. Downloads package metadata (if cache is stale)
+3. Resolves dependency graph — pulls everything nginx needs
+4. Downloads .deb packages to /var/cache/apt/archives/
+5. Unpacks files into the filesystem
+6. Runs post-install scripts (creates system user, sets up service)
+7. Updates /var/lib/dpkg/status — the installed packages database</code></pre>
+    </div>
+
+</main>
+
+<div class="divider"></div>
+<footer>
+    <div>
+        <a href="mailto:kvndu@outlook.com" style="margin-right: 1rem;">email</a>
+        <a href="https://www.youtube.com/channel/UCossdC0PP6njFTpKMlbEB1w" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">youtube</a>
+        <a href="https://github.com/Kavindu-Tharushan" target="_blank" rel="noopener noreferrer" style="margin-right: 1rem;">github</a>
+    </div>
+    <div>@ 2026 Kavindu Tharushan</div>
+</footer>
+
+<script>
+    // ── Theme toggle ──
+    function toggleTheme() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        drawProcessDiagram();
+    }
+    function FG()     { return getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim(); }
+    function MUTED()  { return getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim(); }
+    function CODEBG() { return getComputedStyle(document.documentElement).getPropertyValue('--code-bg').trim(); }
+    function SUBTLE() { return getComputedStyle(document.documentElement).getPropertyValue('--subtle').trim(); }
+
+    // ── Filesystem Explorer ──
+    const fsData = [
+        { path: '/',       label: '/',        depth: 0, desc: 'The root of the filesystem. Every single file on a Linux system lives under here — even if it\'s on a different physical disk mounted elsewhere.' },
+        { path: '/bin',    label: 'bin',      depth: 1, desc: 'Essential user binaries: ls, cp, mv, cat, echo, bash. These must be available even before other filesystems are mounted, so they live here rather than /usr/bin.' },
+        { path: '/boot',   label: 'boot',     depth: 1, desc: 'Kernel images, initramfs, and the bootloader (GRUB). Modifying anything here without knowing what you\'re doing will prevent the system from booting.' },
+        { path: '/dev',    label: 'dev',      depth: 1, desc: 'Device files. /dev/sda is your first disk. /dev/null discards everything written to it. /dev/random generates random bytes. /dev/tty1 is the first virtual terminal.' },
+        { path: '/etc',    label: 'etc',      depth: 1, desc: 'System-wide configuration files — plain text, human-editable. /etc/hosts, /etc/fstab, /etc/ssh/sshd_config, /etc/nginx/nginx.conf. No binaries live here.' },
+        { path: '/home',   label: 'home',     depth: 1, desc: 'Home directories for regular users. alice\'s files live at /home/alice. Each user owns their own directory. Root\'s home is /root, not /home/root.' },
+        { path: '/lib',    label: 'lib',      depth: 1, desc: 'Shared libraries (.so files) needed by binaries in /bin and /sbin. Think of these as Linux\'s equivalent of Windows DLLs.' },
+        { path: '/proc',   label: 'proc',     depth: 1, desc: 'A virtual filesystem exposing kernel and process state. /proc/cpuinfo, /proc/meminfo, /proc/1/ (init\'s directory). Nothing here is stored on disk.' },
+        { path: '/root',   label: 'root',     depth: 1, desc: 'Home directory for the root user. Kept separate from /home so root can log in even if /home is on a separate unmounted partition.' },
+        { path: '/run',    label: 'run',      depth: 1, desc: 'Runtime data for processes since last boot: PID files, Unix sockets, lock files. Stored in RAM (tmpfs) and cleared on every reboot.' },
+        { path: '/sbin',   label: 'sbin',     depth: 1, desc: 'System administration binaries intended for root: fdisk, fsck, ip, iptables, mount. Regular users can often call these too with sudo.' },
+        { path: '/srv',    label: 'srv',      depth: 1, desc: 'Service data — web server files, FTP files. Convention says /srv/http for web content. Often empty; many sysadmins use /var/www instead.' },
+        { path: '/sys',    label: 'sys',      depth: 1, desc: 'Virtual filesystem for kernel objects: devices, drivers, power management. More structured than /proc. Writing to /sys files can change kernel settings live.' },
+        { path: '/tmp',    label: 'tmp',      depth: 1, desc: 'Temporary files. World-writable (1777 with sticky bit). Cleared on boot. Never store anything here you want to survive a reboot.' },
+        { path: '/usr',    label: 'usr',      depth: 1, desc: 'Unix System Resources — the bulk of installed software. Has its own bin/, lib/, share/ mirroring the root layout. /usr/bin has most user commands.' },
+        { path: '/usr/bin',label: 'bin',      depth: 2, desc: 'Non-essential user commands installed by the distro or package manager: python3, git, vim, curl, ssh. Usually the largest directory on the system.' },
+        { path: '/usr/local',label:'local',   depth: 2, desc: 'Software installed manually by the sysadmin, outside the package manager. Keeps hand-installed software separate so package updates don\'t overwrite it.' },
+        { path: '/var',    label: 'var',      depth: 1, desc: 'Variable data — things that change while the system runs. Logs, databases, mail spools, package manager state. Grows over time; monitor disk usage here.' },
+        { path: '/var/log',label: 'log',      depth: 2, desc: '/var/log/syslog and /var/log/auth.log are your first stops when debugging. Logs are rotated by logrotate to prevent them from filling the disk.' },
+        { path: '/var/www', label: 'www',     depth: 2, desc: 'Convention for web server document roots. Nginx and Apache serve files from /var/www/html by default. Ownership is usually www-data:www-data.' },
+    ];
+
+    const fsTree = document.getElementById('fs-tree');
+    const fsDetail = document.getElementById('fs-detail');
+
+    fsData.forEach(node => {
+        const el = document.createElement('div');
+        el.className = 'fs-node';
+        const prefix = node.depth === 0 ? '' : node.depth === 1 ? '├─ ' : '│  ├─ ';
+        el.innerHTML = `<span class="indent" style="font-size:11px;opacity:.35;white-space:pre">${prefix}</span><span style="font-size:11px">${node.label}/</span>`;
+        el.onclick = () => {
+            document.querySelectorAll('.fs-node').forEach(n => n.classList.remove('sel'));
+            el.classList.add('sel');
+            fsDetail.innerHTML = `<strong>${node.path}</strong><span style="opacity:.8">${node.desc}</span>`;
+        };
+        fsTree.appendChild(el);
+    });
+
+    // ── Permission Calculator ──
+    const permGroups = ['owner', 'group', 'other'];
+    const permBits   = ['r', 'w', 'x'];
+    const permState  = { owner: [true,true,true], group: [true,false,true], other: [false,false,true] };
+
+    function renderPerms() {
+        const grid = document.getElementById('perm-grid');
+        grid.innerHTML = '';
+        permGroups.forEach(g => {
+            const col = document.createElement('div');
+            col.className = 'perm-col';
+            col.innerHTML = `<div class="perm-col-head">${g}</div><div class="perm-bits" id="perm-bits-${g}"></div>`;
+            grid.appendChild(col);
+            const bitsEl = document.getElementById('perm-bits-' + g);
+            permBits.forEach((b, i) => {
+                const row = document.createElement('div');
+                row.className = 'perm-bit';
+                const tog = document.createElement('div');
+                tog.className = 'perm-toggle' + (permState[g][i] ? ' on' : '');
+                tog.onclick = () => {
+                    permState[g][i] = !permState[g][i];
+                    tog.classList.toggle('on', permState[g][i]);
+                    updatePermOutput();
+                };
+                const labels = { r: 'read (4)', w: 'write (2)', x: 'execute (1)' };
+                row.innerHTML = `<span style="font-size:11px;opacity:.8">${labels[b]}</span>`;
+                row.appendChild(tog);
+                bitsEl.appendChild(row);
+            });
+        });
+        updatePermOutput();
+    }
+
+    function updatePermOutput() {
+        let sym = '-';
+        let octal = '';
+        permGroups.forEach(g => {
+            const [r,w,x] = permState[g];
+            sym += (r ? 'r' : '-') + (w ? 'w' : '-') + (x ? 'x' : '-');
+            octal += String((r?4:0)+(w?2:0)+(x?1:0));
+        });
+        document.getElementById('perm-sym').textContent = sym;
+        document.getElementById('perm-octal').textContent = octal;
+        document.getElementById('perm-cmd').textContent = `chmod ${octal} file`;
+    }
+
+    renderPerms();
+
+    // --- Fix for theme toggle icon sync ---
+const iconLight = document.querySelector('.theme-toggle-light');
+const iconDark = document.querySelector('.theme-toggle-dark');
+
+function syncIcon() {
+    const isDark = document.documentElement.classList.contains('dark');
+    iconLight.style.display = isDark ? 'none' : 'block';
+    iconDark.style.display = isDark ? 'block' : 'none';
+}
+
+// Add event listener to the existing toggle button to update icons
+document.getElementById('themeToggle').addEventListener('click', () => {
+    toggleTheme();
+    syncIcon();
+});
+
+// Run on load
+syncIcon();
+
+    // ── Pipeline Visualizer ──
+    const pipeStages = [
+        {
+            cmd: 'cat /var/log/auth.log',
+            role: 'source',
+            data: `May 30 09:12:01 host sshd[1234]: Failed password for root from 192.168.1.10 port 43210 ssh2
+May 30 09:12:03 host sshd[1234]: Failed password for root from 192.168.1.10 port 43211 ssh2
+May 30 09:13:55 host sshd[5678]: Accepted publickey for alice from 10.0.0.5 port 52000 ssh2
+May 30 09:14:01 host sudo[9012]: alice : TTY=pts/0 ; USER=root ; COMMAND=/usr/bin/apt update
+May 30 09:15:22 host sshd[1234]: Failed password for admin from 203.0.113.5 port 18920 ssh2
+May 30 09:15:23 host sshd[1234]: Failed password for admin from 203.0.113.5 port 18921 ssh2`,
+            desc: 'cat reads the entire auth log and writes it to stdout. All lines flow into the pipe.'
+        },
+        {
+            cmd: 'grep "Failed password"',
+            role: 'filter',
+            data: `May 30 09:12:01 host sshd[1234]: Failed password for root from 192.168.1.10 port 43210 ssh2
+May 30 09:12:03 host sshd[1234]: Failed password for root from 192.168.1.10 port 43211 ssh2
+May 30 09:15:22 host sshd[1234]: Failed password for admin from 203.0.113.5 port 18920 ssh2
+May 30 09:15:23 host sshd[1234]: Failed password for admin from 203.0.113.5 port 18921 ssh2`,
+            desc: 'grep filters stdin, passing through only lines matching "Failed password". Accepted logins and sudo events are dropped.'
+        },
+        {
+            cmd: "awk '{print $11}'",
+            role: 'transform',
+            data: `192.168.1.10
+192.168.1.10
+203.0.113.5
+203.0.113.5`,
+            desc: "awk splits each line on whitespace and prints field $11 — the attacker's IP address. We've gone from full log lines to just IPs."
+        },
+        {
+            cmd: 'sort | uniq -c',
+            role: 'aggregate',
+            data: `      2 192.168.1.10
+      2 203.0.113.5`,
+            desc: 'sort orders the IPs alphabetically so identical ones are adjacent. uniq -c then collapses runs, prefixing each unique line with its count.'
+        },
+        {
+            cmd: 'sort -rn',
+            role: 'rank',
+            data: `      2 203.0.113.5
+      2 192.168.1.10`,
+            desc: 'sort -rn sorts numerically (-n) in reverse (-r), putting the highest count first. Now we have a ranked list of who failed the most logins.'
+        },
+    ];
+
+    const pipeStagesEl = document.getElementById('pipe-stages');
+    const pipeData     = document.getElementById('pipe-data');
+    const pipeDesc     = document.getElementById('pipe-desc');
+
+    pipeStages.forEach((s, i) => {
+        if (i > 0) {
+            const arrow = document.createElement('div');
+            arrow.className = 'pipe-arrow';
+            arrow.textContent = '│ pipe';
+            pipeStagesEl.appendChild(arrow);
+        }
+        const el = document.createElement('div');
+        el.className = 'pipe-stage';
+        el.innerHTML = `<span class="cmd">${s.cmd}</span><span class="role">${s.role}</span>`;
+        el.onclick = () => {
+            document.querySelectorAll('.pipe-stage').forEach(x => x.classList.remove('active'));
+            el.classList.add('active');
+            pipeData.textContent = s.data;
+            pipeDesc.textContent = s.desc;
+        };
+        pipeStagesEl.appendChild(el);
+    });
+    // Select first
+    pipeStagesEl.querySelector('.pipe-stage').click();
+
+    // ── Process State Diagram ──
+    function drawProcessDiagram() {
+        const canvas = document.getElementById('proc-canvas');
+        const W = canvas.offsetWidth || 740;
+        const H = 220;
+        canvas.width = W;
+        canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, W, H);
+
+        const fg = FG();
+        const muted = MUTED();
+        const codebg = CODEBG();
+
+        const states = [
+            { id: 'new',      label: 'NEW',      sub: 'fork() called',     x: .1,  y: .5 },
+            { id: 'ready',    label: 'READY',    sub: 'waiting for CPU',   x: .35, y: .25 },
+            { id: 'running',  label: 'RUNNING',  sub: 'on CPU',            x: .6,  y: .25 },
+            { id: 'waiting',  label: 'WAITING',  sub: 'I/O or sleep',      x: .6,  y: .75 },
+            { id: 'zombie',   label: 'ZOMBIE',   sub: 'exit(), not reaped',x: .85, y: .5 },
+        ];
+
+        const arrows = [
+            { from: 'new',     to: 'ready',   label: 'admitted' },
+            { from: 'ready',   to: 'running', label: 'scheduled' },
+            { from: 'running', to: 'ready',   label: 'preempted' },
+            { from: 'running', to: 'waiting', label: 'I/O request' },
+            { from: 'waiting', to: 'ready',   label: 'I/O done' },
+            { from: 'running', to: 'zombie',  label: 'exit()' },
+        ];
+
+        const pos = {};
+        states.forEach(s => { pos[s.id] = { x: s.x * W, y: s.y * H }; });
+
+        // Draw arrows
+        ctx.font = '9px Courier New';
+        ctx.textAlign = 'center';
+        arrows.forEach(a => {
+            const from = pos[a.from];
+            const to   = pos[a.to];
+            const dx = to.x - from.x, dy = to.y - from.y;
+            const len = Math.sqrt(dx*dx + dy*dy);
+            const ux = dx/len, uy = dy/len;
+            const r = 30;
+            const sx = from.x + ux*r, sy = from.y + uy*r;
+            const ex = to.x   - ux*r, ey = to.y   - uy*r;
+
+            ctx.strokeStyle = muted;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 3]);
+            ctx.beginPath();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(ex, ey);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // arrowhead
+            const angle = Math.atan2(ey - sy, ex - sx);
+            ctx.fillStyle = muted;
+            ctx.beginPath();
+            ctx.moveTo(ex, ey);
+            ctx.lineTo(ex - 8*Math.cos(angle-0.4), ey - 8*Math.sin(angle-0.4));
+            ctx.lineTo(ex - 8*Math.cos(angle+0.4), ey - 8*Math.sin(angle+0.4));
+            ctx.closePath();
+            ctx.fill();
+
+            // label
+            const mx = (sx+ex)/2, my = (sy+ey)/2;
+            ctx.fillStyle = muted;
+            ctx.fillText(a.label, mx, my - 5);
+        });
+
+        // Draw nodes
+        states.forEach(s => {
+            const { x, y } = pos[s.id];
+            ctx.beginPath();
+            ctx.arc(x, y, 28, 0, Math.PI*2);
+            ctx.fillStyle = codebg;
+            ctx.fill();
+            ctx.strokeStyle = fg;
+            ctx.lineWidth = s.id === 'running' ? 2 : 1;
+            ctx.stroke();
+
+            ctx.fillStyle = fg;
+            ctx.font = 'bold 10px Courier New';
+            ctx.textAlign = 'center';
+            ctx.fillText(s.label, x, y + 1);
+
+            ctx.fillStyle = muted;
+            ctx.font = '8px Courier New';
+            ctx.fillText(s.sub, x, y + 13);
+        });
+    }
+
+    window.addEventListener('resize', drawProcessDiagram);
+    setTimeout(drawProcessDiagram, 60);
+
+    // ── Signal Explorer ──
+    const signals = [
+        { num: 1,  name: 'SIGHUP',  title: 'Hang Up', body: 'Originally sent when a terminal disconnect was detected. Today most daemons catch it to mean "reload your config file" — nginx and sshd both do this. kill -1 $(pidof nginx)' },
+        { num: 2,  name: 'SIGINT',  title: 'Interrupt', body: 'Generated by Ctrl+C. Asks the process to stop. Most programs catch it to clean up before exiting. A well-written program flushes buffers and closes files on SIGINT.' },
+        { num: 3,  name: 'SIGQUIT', title: 'Quit + Core', body: 'Like SIGINT but also triggers a core dump. Ctrl+\\ sends this. Useful when you want to debug a misbehaving process — the core dump lets you inspect state post-mortem.' },
+        { num: 9,  name: 'SIGKILL', title: 'Force Kill', body: 'Cannot be caught, blocked, or ignored — the kernel handles it directly. The process has no chance to clean up. Use as a last resort after SIGTERM fails. Data loss is possible.' },
+        { num: 11, name: 'SIGSEGV', title: 'Segfault', body: 'Sent by the kernel when a process accesses memory it shouldn\'t. A segmentation fault. Usually means a bug in the program (null pointer, buffer overflow). Causes a core dump by default.' },
+        { num: 15, name: 'SIGTERM', title: 'Terminate', body: 'The default signal from kill. Asks the process to exit gracefully. The process can catch it, clean up, and exit on its own terms. Always try SIGTERM before SIGKILL.' },
+        { num: 17, name: 'SIGCHLD', title: 'Child Done', body: 'Sent to a parent when a child process exits or stops. The parent should call wait() to reap the child — otherwise it becomes a zombie process consuming a PID slot.' },
+        { num: 18, name: 'SIGCONT', title: 'Continue', body: 'Resumes a process that was stopped by SIGSTOP or SIGTSTP. This is what "bg" and "fg" shell commands use internally to resume background/foreground jobs.' },
+        { num: 19, name: 'SIGSTOP', title: 'Stop', body: 'Pauses a process. Like SIGKILL, it cannot be caught or ignored — the kernel handles it. The process is frozen until SIGCONT is received.' },
+        { num: 20, name: 'SIGTSTP', title: 'Terminal Stop', body: 'The catchable version of SIGSTOP. Ctrl+Z sends this. Unlike SIGSTOP, a process can catch it and do cleanup before pausing. Bash uses this for job control.' },
+        { num: 10, name: 'SIGUSR1', title: 'User Signal 1', body: 'No standard meaning — application-defined. nginx uses it to reopen log files (log rotation). Many daemons use it to trigger diagnostic output or stats dumps.' },
+        { num: 12, name: 'SIGUSR2', title: 'User Signal 2', body: 'Application-defined, same as SIGUSR1. Some apps use it for graceful restart (zero-downtime deploys), others for toggling debug modes. Check the man page for each daemon.' },
+    ];
+
+    const sigGrid   = document.getElementById('sig-grid');
+    const sigDetail = document.getElementById('sig-detail');
+
+    signals.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'sig-btn';
+        el.innerHTML = `<span class="sig-num">SIG${s.name.replace('SIG','')}</span><span class="sig-name">kill -${s.num}</span>`;
+        el.onclick = () => {
+            document.querySelectorAll('.sig-btn').forEach(x => x.classList.remove('sel'));
+            el.classList.add('sel');
+            sigDetail.innerHTML = `<strong>${s.name} (${s.num}) — ${s.title}</strong><span style="opacity:.8">${s.body}</span>`;
+        };
+        sigGrid.appendChild(el);
+    });
+
+    // ── /etc/passwd Explorer ──
+    const passwdFields = [
+        { name: 'username', value: 'alice',         title: 'Login Name', body: 'The username used to log in. Must be unique. Conventions: lowercase, no spaces, max 32 chars. System accounts often use names like www-data or nobody.' },
+        { name: 'password', value: 'x',             title: 'Password Placeholder', body: '"x" means the actual password hash is in /etc/shadow, which is only readable by root. On very old systems this field held the hash directly — a security risk.' },
+        { name: 'uid',      value: '1001',          title: 'User ID (UID)', body: 'The numeric user identifier. 0 = root. 1–999 = system/service accounts. 1000+ = regular users. UIDs are what the kernel uses internally; usernames are just a human-readable alias.' },
+        { name: 'gid',      value: '1001',          title: 'Primary Group ID (GID)', body: 'The user\'s primary group. New files created by this user get this GID by default. Users can also belong to supplementary groups (see /etc/group).' },
+        { name: 'gecos',    value: 'Alice Smith',   title: 'GECOS Field', body: 'Originally from GECOS mainframes — a comma-separated list of: full name, office, phone, other info. finger(1) displays it. Many systems only put the full name here.' },
+        { name: 'home',     value: '/home/alice',   title: 'Home Directory', body: 'The directory the user lands in after login. $HOME is set to this. Created by useradd -m. If it doesn\'t exist, login still works but $HOME points to nowhere.' },
+        { name: 'shell',    value: '/bin/bash',     title: 'Login Shell', body: 'The program launched after login. /bin/bash is most common. System accounts often use /usr/sbin/nologin or /bin/false to prevent interactive login while still existing as a user.' },
+    ];
+
+    const passwdRow    = document.getElementById('passwd-row');
+    const passwdDetail = document.getElementById('passwd-detail');
+
+    passwdFields.forEach((f, i) => {
+        const el = document.createElement('div');
+        el.className = 'passwd-field';
+        el.innerHTML = `${f.name}<span class="fval">${f.value}</span>`;
+        el.onclick = () => {
+            document.querySelectorAll('.passwd-field').forEach(x => x.classList.remove('sel'));
+            el.classList.add('sel');
+            passwdDetail.innerHTML = `<strong>${f.name}:</strong><span style="opacity:.8">${f.body}</span>`;
+        };
+        passwdRow.appendChild(el);
+        if (i < passwdFields.length - 1) {
+            const sep = document.createElement('div');
+            sep.style.cssText = 'display:flex;align-items:center;padding:0 2px;font-size:12px;opacity:.3;border-right:1px solid var(--subtle);';
+            sep.textContent = ':';
+            passwdRow.appendChild(sep);
+        }
+    });
+</script>
+</body>
+</html>
